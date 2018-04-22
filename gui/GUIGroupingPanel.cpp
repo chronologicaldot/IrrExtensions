@@ -139,7 +139,10 @@ void GUIGroupingPanel::updateImageCache()
 	ULtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_UL" );
 	if ( ULtexture )
 	{
-		vid->setRenderTarget( ULtexture );
+		// Irrlicht 5104
+		//vid->setRenderTarget( ULtexture );
+		// Irrlicht 5589
+		vid->setRenderTarget( ULtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
 		vid->draw2DPolygon( vector2di( borderRadius+1 ), borderRadius, shadowColor, 40 );
 		vid->draw2DPolygon( vector2di( borderRadius, borderRadius ), borderRadius, color, 40 );
 	}
@@ -147,7 +150,10 @@ void GUIGroupingPanel::updateImageCache()
 	URtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_UR" );
 	if ( URtexture )
 	{
-		vid->setRenderTarget( URtexture );
+		// Irrlicht 5104
+		//vid->setRenderTarget( URtexture );
+		// Irrlicht 5589
+		vid->setRenderTarget( URtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
 		vid->draw2DPolygon( vector2di( -1, borderRadius+1 ), borderRadius, shadowColor, 40 );
 		vid->draw2DPolygon( vector2di( 0, borderRadius ), borderRadius, color, 40 );
 	}
@@ -155,7 +161,10 @@ void GUIGroupingPanel::updateImageCache()
 	LLtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_LL" );
 	if ( LLtexture )
 	{
-		vid->setRenderTarget( LLtexture );
+		// Irrlicht 5104
+		//vid->setRenderTarget( LLtexture );
+		// Irrlicht 5589
+		vid->setRenderTarget( LLtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
 		vid->draw2DPolygon( vector2di( borderRadius+1, -1 ), borderRadius, shadowColor, 40 );
 		vid->draw2DPolygon( vector2di( borderRadius, 0 ), borderRadius, color, 40 );
 	}
@@ -163,7 +172,10 @@ void GUIGroupingPanel::updateImageCache()
 	LRtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_LR" );
 	if ( LRtexture )
 	{
-		vid->setRenderTarget( LRtexture );
+		// Irrlicht 5104
+		//vid->setRenderTarget( LRtexture );
+		// Irrlicht 5589
+		vid->setRenderTarget( LRtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
 		vid->draw2DPolygon( vector2di( -1 ), borderRadius, shadowColor, 40 );
 		vid->draw2DPolygon( vector2di( 0 ), borderRadius, color, 40 );
 	}
