@@ -41,6 +41,9 @@ public:
 	SColor getColor();
 	void setColor( SColor pColor, bool notifyParent=true );
 
+	// Set the numeric text
+	virtual void setText(const wchar_t* text);
+
 	/* Handles user events.
 	Because of how this element refreshes, the data/color should NOT
 	be taken from this element until this element has lost focus,

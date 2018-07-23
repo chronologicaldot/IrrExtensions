@@ -56,6 +56,9 @@ public:
 	/* Draws the border of this element. */
 	virtual void draw();
 
+	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const;
+	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
+
 protected:
 	//! Update image cache
 	/* Creates images to be drawn around the border. These are the corners. */

@@ -216,9 +216,26 @@ void GUIScrollPane::draw()
 		verticalScrollBar->draw();
 }
 */
+
+void
+GUIScrollPane::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const {
+	IGUIElement::serializeAttributes(out, options);
+
+	out->addBool("ShowHorizontalBar", horizontalScrollBar->isVisible() );
+	out->addBool("ShowVerticalBar", verticalScrollBar->isVisible() );
+}
+
+void
+GUIScrollPane::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) {
+	IGUIElement::deserializeAttributes(in, options);
+
+	showHorizontalScrollBar( out->getAttributeAsBool("ShowHorizontalBar", false) );
+	showVerticalScrollBar( out->getAttributeAsBool("ShowVerticalBar", true) );
+}
+
 void GUIScrollPane::recalculateChildBounds()
 {
-	if ( childWrapper->getChildren().size() == 0 ) {
+	if ( childWrapper->getChildren().size() == 0 ) {ShowVerticalBar
 		childBounds = core::rect<s32>();
 		return;
 	}

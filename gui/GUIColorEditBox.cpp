@@ -44,6 +44,24 @@ void GUIColorEditBox::setColor( SColor pColor, bool notifyParent )
 	}
 }
 
+void
+GUIColorEditBox::setText(const wchar_t* text)
+{
+	Text = text;
+	if ( Text.size() > 6 ) {
+		Text = Text.substring(0,6);
+	}
+	u32 i=0;
+	for (; i < 6; ++i) {
+		if ( Text[i] < '0' )
+			Text[i] = '0';
+
+		else if ( Text[i] > 'f' )
+			Text[i] = 'f';
+	}
+	convertTextToColor();
+}
+
 bool GUIColorEditBox::OnEvent( const SEvent& event )
 {
 	SEvent newEvent;

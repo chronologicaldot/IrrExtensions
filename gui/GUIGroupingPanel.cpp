@@ -183,6 +183,23 @@ void GUIGroupingPanel::updateImageCache()
 	vid->setRenderTarget(0); // Should restore old target
 }
 
+void
+GUIGroupingPanel::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const {
+	IGUIElement::serializeAttributes(out, options);
+
+	out->addBool("ShowBorder", showBorder );
+	out->addFloat("BorderRadius", borderRadius );
+}
+
+void
+GUIGroupingPanel::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) {
+	IGUIElement::deserializeAttributes(in, options);
+
+	setText( in->getAttributeAsString("Caption", L"") ); // Required so that the text size can be precalculated
+	showBorder = in->getAttributeAsBool("ShowBorder", true);
+	borderRadius = in->getAttributeAsFloat("BorderRadius", 6);
+}
+
 }}
 
 #endif // #ifndef GUI_GROUPING_PANEL_CPP
