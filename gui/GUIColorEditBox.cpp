@@ -49,7 +49,7 @@ GUIColorEditBox::setText(const wchar_t* text)
 {
 	Text = text;
 	if ( Text.size() > 6 ) {
-		Text = Text.substring(0,6);
+		Text = Text.subString(0,6);
 	}
 	u32 i=0;
 	for (; i < 6; ++i) {
