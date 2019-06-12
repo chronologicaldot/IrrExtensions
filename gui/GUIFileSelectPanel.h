@@ -119,13 +119,6 @@ public:
 	the parent to perhaps update some file-related information being displayed. */
 	void setNotifyWhenEditBoxChanges(bool yes);
 
-	//! Restore working directory when done
-	/* Only works when deactivited. */
-	void setRestoreDirWhenDone(bool yes);
-
-	//! Restore working directory when cancelled
-	void setRestoreDirWhenCancelled(bool yes);
-
 	//!
 	io::path getCurrentWorkingDirectory();
 	//! Is the selected file or folder real
@@ -140,11 +133,12 @@ public:
 	io::path getSelectedFileRelativePath();
 
 	//! Activate
-	/* If this element isn't deleted, then it will need to call this to be reset its working directory. */
+	/* Restores this instance's current working directory. */
 	void reactivate();
 
 	//! Done
-	/* This should be called when the element is done being used but won't be deleted. */
+	/* This should be called when the element is done being used but won't be deleted.
+	It restores the initial directory. */
 	void deactivate();
 
 	/* IMPORTANT NOTE:

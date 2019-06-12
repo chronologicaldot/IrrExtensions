@@ -36,8 +36,6 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 	, isFileSelectedFromList(false)
 	, lastFileSelectPanelEvent(EGFSPE_NONE)
 	, notifyWhenEditBoxChanges(false)
-	, restoreDirWhenDone(true)
-	, restoreDirWhenCancelled(true)
 	, drawBack(true)
 {
 	fileSystem = Environment->getFileSystem();
@@ -138,8 +136,6 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 		{
 			lastFileSelectPanelEvent = EGFSPE_CANCEL;
 			sendGUIEvent( EGET_FILE_CHOOSE_DIALOG_CANCELLED );
-			//if ( restoreDirWhenDone || restoreDirWhenCancelled ) // DO NOT RESTORE (see above note)
-			//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -162,8 +158,6 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			lastFileSelectPanelEvent = EGFSPE_FILE_CONFIRMED;
 			//sendGUIEvent( EGET_EDITBOX_ENTER, fileNameEditBox ); // Doesn't allow file_selected filtering in parent OnEvent
 			sendGUIEvent( EGET_FILE_SELECTED );
-			//if ( restoreDirWhenDone ) // DO NOT RESTORE (see above note)
-			//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -188,8 +182,6 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			{
 				//sendGUIEvent( EGET_LISTBOX_SELECTED_AGAIN, fileListBox ); // Doesn't allow file_selected filtering in parent OnEvent
 				sendGUIEvent( EGET_FILE_SELECTED );
-				//if ( restoreDirWhenDone ) // DO NOT RESTORE (see above note)
-				//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 				return true;
 			} else {
 				// Selected is real (since it's in the list), but it is a directory
@@ -224,16 +216,6 @@ void GUIFileSelectPanel::sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* 
 void GUIFileSelectPanel::setNotifyWhenEditBoxChanges(bool yes)
 {
 	notifyWhenEditBoxChanges = yes;
-}
-
-void GUIFileSelectPanel::setRestoreDirWhenDone(bool yes)
-{
-	restoreDirWhenDone = yes;
-}
-
-void GUIFileSelectPanel::setRestoreDirWhenCancelled(bool yes)
-{
-	restoreDirWhenCancelled = yes;
 }
 
 io::path GUIFileSelectPanel::getCurrentWorkingDirectory()
