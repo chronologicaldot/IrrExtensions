@@ -25,7 +25,6 @@ class GUIDropdownSelector : public IGUIElement
 	IGUIContextMenu* menu;
 	bool dirty;
 	bool wasMenuFocus;
-	bool skipClick;
 	rect<s32> iconRect;
 	static const s32 arrowHeight = 8;
 public:
@@ -39,24 +38,27 @@ public:
 	virtual void setToolTipText(const wchar_t* text);
 
 	/* Returns the index of the selected item. */
-	s32 getSelected();
+	s32 getSelected() const;
 
 	/* Returns the text of the selected item. */
-	const wchar_t* getSelectedText();
+	const wchar_t* getSelectedText() const;
 
-	const wchar_t* getItemText( u32 pIndex );
+	const wchar_t* getItemText( u32 pIndex ) const;
 	void setItemText( u32 pIndex, const wchar_t* pText );
 	void setItemEnabled( u32 pIndex, bool pEnable );
-	bool isItemEnabled( u32 pIndex );
+	bool isItemEnabled( u32 pIndex ) const;
+	u32 getItemCount() const;
 
 	void removeItem( u32 pIndex );
 	void removeAllItems();
 
 	void addItem( const wchar_t* pText, bool pEnabled=true );
 
-	virtual void updateAbsolutePosition();
-	virtual bool OnEvent( const SEvent& event );
-	virtual void draw();
+	virtual void updateAbsolutePosition()  _IRR_OVERRIDE_;
+	virtual bool OnEvent( const SEvent& event )  _IRR_OVERRIDE_;
+	virtual void draw()  _IRR_OVERRIDE_;
+	virtual void serializeAttributes( io::IAttributes* out, io::SAttributeReadWriteOptions* options ) const  _IRR_OVERRIDE_;
+	virtual void deserializeAttributes( io::IAttributes* in, io::SAttributeReadWriteOptions* options )  _IRR_OVERRIDE_;
 
 protected:
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement=0 );

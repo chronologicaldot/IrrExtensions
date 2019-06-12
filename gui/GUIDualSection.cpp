@@ -281,9 +281,9 @@ GUIDualSection::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWri
 {
 	IGUIElement::deserializeAttributes(in, options);
 
-	setVertical( in->getAttributeAsBool( "IsVertical", false ) );
-	dragBarSize = in->getAttributeAsInt( "DragBarSize", 10 );
-	setShiftPercentage( in->getAttributeAsFloat( "Shift", 50 ) );
+	setVertical( in->getAttributeAsBool( "IsVertical", vertical ) );
+	dragBarSize = in->getAttributeAsInt( "DragBarSize", dragBarSize );
+	setShiftPercentage( in->getAttributeAsFloat( "Shift", currShift ) );
 }
 
 }}

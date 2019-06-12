@@ -120,6 +120,7 @@ public:
 	void setNotifyWhenEditBoxChanges(bool yes);
 
 	//! Restore working directory when done
+	/* Only works when deactivited. */
 	void setRestoreDirWhenDone(bool yes);
 
 	//! Restore working directory when cancelled
@@ -137,6 +138,14 @@ public:
 	io::path getSelectedFilePath();
 	//! Relative path from initial directory
 	io::path getSelectedFileRelativePath();
+
+	//! Activate
+	/* If this element isn't deleted, then it will need to call this to be reset its working directory. */
+	void reactivate();
+
+	//! Done
+	/* This should be called when the element is done being used but won't be deleted. */
+	void deactivate();
 
 	/* IMPORTANT NOTE:
 	If ever IGUIFileOpenDialog is to be inherited (unlikely),

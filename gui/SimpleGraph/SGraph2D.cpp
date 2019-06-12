@@ -619,36 +619,39 @@ void irr::gui::SGraph2D::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes( in, options );
 
-	irr::core::recti win = in->getAttributeAsRect( "Window" );
-	window.UpperLeftCorner.X = (irr::f32)(win.UpperLeftCorner.X);
-	window.UpperLeftCorner.Y = (irr::f32)(win.UpperLeftCorner.Y);
-	window.LowerRightCorner.X = (irr::f32)(win.LowerRightCorner.X);
-	window.LowerRightCorner.Y = (irr::f32)(win.LowerRightCorner.Y);
+	irr::core::recti win;
+	if ( in->existsAttribute("Window") ) {
+		win = in->getAttributeAsRect( "Window" );
+		window.UpperLeftCorner.X = (irr::f32)(win.UpperLeftCorner.X);
+		window.UpperLeftCorner.Y = (irr::f32)(win.UpperLeftCorner.Y);
+		window.LowerRightCorner.X = (irr::f32)(win.LowerRightCorner.X);
+		window.LowerRightCorner.Y = (irr::f32)(win.LowerRightCorner.Y);
+	}
 
-	hasBackground		=	in->getAttributeAsBool( "FillBackground" );
-	background_color	=	in->getAttributeAsColor( "BGColor" );
-	xaxis_color			=	in->getAttributeAsColor( "XAxisColor" );
-	yaxis_color			=	in->getAttributeAsColor( "YAxisColor" );
-	point_color			=	in->getAttributeAsColor( "PointColor" );
-	xmark_color			=	in->getAttributeAsColor( "XAxisTickColor" );
-	ymark_color			=	in->getAttributeAsColor( "YAxisTickColor" );
+	hasBackground		=	in->getAttributeAsBool( "FillBackground", hasBackground );
+	background_color	=	in->getAttributeAsColor( "BGColor", background_color );
+	xaxis_color			=	in->getAttributeAsColor( "XAxisColor", xaxis_color );
+	yaxis_color			=	in->getAttributeAsColor( "YAxisColor", yaxis_color );
+	point_color			=	in->getAttributeAsColor( "PointColor", point_color );
+	xmark_color			=	in->getAttributeAsColor( "XAxisTickColor", xmark_color );
+	ymark_color			=	in->getAttributeAsColor( "YAxisTickColor", ymark_color );
 
-	UseMarkers			=	in->getAttributeAsBool( "UseMarkers" );
-	UseTicks			=	in->getAttributeAsBool( "UseTicks" );
-	markXgap			=	in->getAttributeAsFloat( "MarkerXSpacing" );
-	markYgap			=	in->getAttributeAsFloat( "MarkerYSpacing" );
+	UseMarkers			=	in->getAttributeAsBool( "UseMarkers", UseMarkers );
+	UseTicks			=	in->getAttributeAsBool( "UseTicks", UseTicks );
+	markXgap			=	in->getAttributeAsFloat( "MarkerXSpacing", markXgap );
+	markYgap			=	in->getAttributeAsFloat( "MarkerYSpacing", markXgap );
 
-	showXaxis			=	in->getAttributeAsBool( "ShowXAxis" );
-	showYaxis			=	in->getAttributeAsBool( "ShowYAxis" );
+	showXaxis			=	in->getAttributeAsBool( "ShowXAxis", showXaxis );
+	showYaxis			=	in->getAttributeAsBool( "ShowYAxis", showYaxis );
 
-	UseXTickLabels		=	in->getAttributeAsBool( "ShowXAxisLabels" );
-	UseYTickLabels		=	in->getAttributeAsBool( "ShowYAxisLabels" );
+	UseXTickLabels		=	in->getAttributeAsBool( "ShowXAxisLabels", UseXTickLabels );
+	UseYTickLabels		=	in->getAttributeAsBool( "ShowYAxisLabels", UseYTickLabels );
 
-	clipPoints			=	in->getAttributeAsBool( "ClipDrawingRegion" );
+	clipPoints			=	in->getAttributeAsBool( "ClipDrawingRegion", clipPoints );
 
-	usePolyPts			=	in->getAttributeAsBool( "UsePolygons" );
-	polyRadius			=	in->getAttributeAsFloat( "PolygonRadius" );
-	polyPts				=	in->getAttributeAsInt( "PolygonVertices" );
+	usePolyPts			=	in->getAttributeAsBool( "UsePolygons", usePolyPts );
+	polyRadius			=	in->getAttributeAsFloat( "PolygonRadius", polyRadius );
+	polyPts				=	in->getAttributeAsInt( "PolygonVertices", polyPts );
 }
 
 void irr::gui::SGraph2D::drawOnGraph(

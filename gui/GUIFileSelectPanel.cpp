@@ -67,7 +67,7 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 	fileNameEditBox->setSubElement(true);
 	fileNameEditBox->grab();
 
-	initialWorkingDir = fileSystem->getWorkingDirectory();
+	initialWorkingDir = fileSystem->getAbsolutePath( fileSystem->getWorkingDirectory() );
 	if ( pStartDirectory.size() )
 	{
 		fileSystem->changeWorkingDirectoryTo( pStartDirectory );
@@ -80,6 +80,8 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 
 GUIFileSelectPanel::~GUIFileSelectPanel()
 {
+	fileSystem->changeWorkingDirectoryTo( initialWorkingDir );
+
 	if ( selectButton )
 		selectButton->drop();
 	if ( cancelButton )
@@ -116,6 +118,11 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 	isSelectedFileReal() indicates if the selected file is taken from the list.
 	*/
 
+	/*
+	DO NOT RESTORE THE DIRECTORY AFTER SELECTION.
+	It doesn't make sense to restore the directory before the file path has been obtained by the user.
+	*/
+
 	switch ( event.GUIEvent.EventType )
 	{
 	case EGET_BUTTON_CLICKED:
@@ -131,8 +138,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 		{
 			lastFileSelectPanelEvent = EGFSPE_CANCEL;
 			sendGUIEvent( EGET_FILE_CHOOSE_DIALOG_CANCELLED );
-			if ( restoreDirWhenDone || restoreDirWhenCancelled )
-				fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
+			//if ( restoreDirWhenDone || restoreDirWhenCancelled ) // DO NOT RESTORE (see above note)
+			//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -155,8 +162,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			lastFileSelectPanelEvent = EGFSPE_FILE_CONFIRMED;
 			//sendGUIEvent( EGET_EDITBOX_ENTER, fileNameEditBox ); // Doesn't allow file_selected filtering in parent OnEvent
 			sendGUIEvent( EGET_FILE_SELECTED );
-			if ( restoreDirWhenDone )
-				fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
+			//if ( restoreDirWhenDone ) // DO NOT RESTORE (see above note)
+			//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -181,8 +188,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			{
 				//sendGUIEvent( EGET_LISTBOX_SELECTED_AGAIN, fileListBox ); // Doesn't allow file_selected filtering in parent OnEvent
 				sendGUIEvent( EGET_FILE_SELECTED );
-				if ( restoreDirWhenDone )
-					fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
+				//if ( restoreDirWhenDone ) // DO NOT RESTORE (see above note)
+				//	fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 				return true;
 			} else {
 				// Selected is real (since it's in the list), but it is a directory
@@ -275,6 +282,16 @@ io::path GUIFileSelectPanel::getSelectedFilePath()
 io::path GUIFileSelectPanel::getSelectedFileRelativePath()
 {
 	return fileSystem->getRelativeFilename( getSelectedFile(), initialWorkingDir );
+}
+
+void GUIFileSelectPanel::reactivate()
+{
+	fileSystem->changeWorkingDirectoryTo( currentWorkingDir );
+}
+
+void GUIFileSelectPanel::deactivate()
+{
+	fileSystem->changeWorkingDirectoryTo( initialWorkingDir );
 }
 
 void GUIFileSelectPanel::openSelectedDirectory()

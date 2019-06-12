@@ -20,10 +20,10 @@ GUIDropdownSelector::GUIDropdownSelector( IGUIEnvironment* pEnvironment, IGUIEle
 	: IGUIElement( EGUIET_ELEMENT, pEnvironment, pParent, id, pRect )
 	, dirty( true )
 	, wasMenuFocus( false )
-	, skipClick( false )
 	, iconRect()
 {
 	button = pEnvironment->addButton( rect<s32>(pRect.getSize()), this, -1, L"", L"Click to select" );
+	button->setAlignment(EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT);
 	button->setDrawBorder(true);
 	recalculateAbsolutePosition(false);
 	menu = pEnvironment->addContextMenu(
@@ -62,12 +62,12 @@ void GUIDropdownSelector::setToolTipText(const wchar_t* text)
 	button->setToolTipText(text);
 }
 
-s32 GUIDropdownSelector::getSelected()
+s32 GUIDropdownSelector::getSelected() const
 {
 	return menu->getSelectedItem();
 }
 
-const wchar_t* GUIDropdownSelector::getSelectedText()
+const wchar_t* GUIDropdownSelector::getSelectedText() const
 {
 	s32 i = menu->getSelectedItem();
 	if ( i != -1 && !dirty )
@@ -77,7 +77,7 @@ const wchar_t* GUIDropdownSelector::getSelectedText()
 	return L"";
 }
 
-const wchar_t* GUIDropdownSelector::getItemText( u32 pIndex )
+const wchar_t* GUIDropdownSelector::getItemText( u32 pIndex ) const
 {
 	return menu->getItemText( pIndex );
 }
@@ -92,9 +92,13 @@ void GUIDropdownSelector::setItemEnabled( u32 pIndex, bool pEnable )
 	menu->setItemEnabled( pIndex, pEnable );
 }
 
-bool GUIDropdownSelector::isItemEnabled( u32 pIndex )
+bool GUIDropdownSelector::isItemEnabled( u32 pIndex ) const
 {
 	return menu->isItemEnabled( pIndex );
+}
+
+u32 GUIDropdownSelector::getItemCount() const {
+	return menu->getItemCount();
 }
 
 void GUIDropdownSelector::removeItem( u32 pIndex )
@@ -182,7 +186,7 @@ bool GUIDropdownSelector::OnEvent( const SEvent& event )
 		{
 			dirty = false;
 			button->setText( getSelectedText() );
-			sendGUIEvent( EGET_LISTBOX_CHANGED );
+			sendGUIEvent( EGET_COMBO_BOX_CHANGED );
 			return true;
 		}
 
@@ -225,6 +229,68 @@ void GUIDropdownSelector::sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement*
 	event.GUIEvent.EventType = pEventType;
 
 	Parent->OnEvent( event );
+}
+
+void GUIDropdownSelector::serializeAttributes( io::IAttributes* out, io::SAttributeReadWriteOptions* options ) const {
+	IGUIElement::serializeAttributes(out, options);
+
+	out->addInt("Selected", getSelected());
+	out->addString("SelectedText", getSelectedText());
+
+	if ( ! io::isReadWriteForOftenCheckedAttrs(options) )
+		return;
+
+	out->addInt("ItemCount", menu->getItemCount());
+	u32 i = 0;
+	for (; i < getItemCount(); ++i) {
+		core::stringc name("Item");
+		name += i;
+		name += "Text";
+		out->addString(name.c_str(), getItemText(i));
+		core::stringc label("Item");
+		label += i;
+		label += "Enabled";
+		out->addBool(label.c_str(), isItemEnabled(i));
+	}
+}
+
+void GUIDropdownSelector::deserializeAttributes( io::IAttributes* in, io::SAttributeReadWriteOptions* options ) {
+	IGUIElement::deserializeAttributes(in, options);
+
+	dirty = true;
+
+	u32 selected = -1;
+	s32 itemCount = 0;
+	s32 i=0;
+	bool enabled;
+
+	if ( ! io::isReadWriteForOftenCheckedAttrs(options) ) {
+
+		//selected = in->getAttributeAsInt("Selected", -1);
+		// UNAVAILABLE: IContextMenu doesn't allowing setting the Highlighted menu item.
+
+		removeAllItems();
+
+		itemCount = in->getAttributeAsInt("ItemCount", 0);
+		if ( itemCount > 0 ) {
+			for (; i < itemCount; ++i) {
+				core::stringc label("Item");
+				label += i;
+				label += "Enabled";
+				core::stringc name("Item");
+				name += i;
+				name += "Text";
+				enabled = in->getAttributeAsBool(label.c_str(), false);
+				addItem( in->getAttributeAsStringW(name.c_str()).c_str(), enabled );
+			}
+		}
+	}
+
+	updateAbsolutePosition();
+	menu->setRelativePosition(AbsoluteRect + core::vector2d<s32>(0, RelativeRect.getHeight() )); 
+	wasMenuFocus = ( Environment->getFocus() == menu );
+	if ( wasMenuFocus )
+		Environment->setFocus(0);
 }
 
 }}

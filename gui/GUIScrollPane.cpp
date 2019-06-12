@@ -188,35 +188,6 @@ bool GUIScrollPane::OnEvent(const SEvent& event)
 	return IGUIElement::OnEvent( event );
 }
 
-/*
-	Technically, the children should be in a separate, sub GUI element that is
-	expanded depending on if the scroll bars are displayed or not.
-	That way, the GUI elements covered by the scroll bars aren't drawn,
-	the GUI draw function isn't this complicated (and I don't have to override it)
-	and the GUI events don't interfere.
-
-	I think I want that, but I have to do it later.
-*/
-/*
-void GUIScrollPane::draw()
-{
-	core::list<IGUIElement*>::Iterator kid;
-	for ( ; kid != Children.end(); ++kid )
-	{
-		if ( *kid != horizontalScrollBar
-			&& *kid != verticalScrollBar ) {
-			(*kid)->draw();
-		}
-	}
-
-	if ( horizontalScrollBar )
-		horizontalScrollBar->draw();
-
-	if ( verticalScrollBar )
-		verticalScrollBar->draw();
-}
-*/
-
 void
 GUIScrollPane::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const {
 	IGUIElement::serializeAttributes(out, options);
@@ -229,13 +200,13 @@ void
 GUIScrollPane::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) {
 	IGUIElement::deserializeAttributes(in, options);
 
-	showHorizontalScrollBar( out->getAttributeAsBool("ShowHorizontalBar", false) );
-	showVerticalScrollBar( out->getAttributeAsBool("ShowVerticalBar", true) );
+	showHorizontalScrollBar( out->getAttributeAsBool("ShowHorizontalBar", horizontalScrollBar->isVisible()) );
+	showVerticalScrollBar( out->getAttributeAsBool("ShowVerticalBar", verticalScrollBar->isVisible()) );
 }
 
 void GUIScrollPane::recalculateChildBounds()
 {
-	if ( childWrapper->getChildren().size() == 0 ) {ShowVerticalBar
+	if ( childWrapper->getChildren().size() == 0 ) {
 		childBounds = core::rect<s32>();
 		return;
 	}
@@ -244,10 +215,6 @@ void GUIScrollPane::recalculateChildBounds()
 	core::rect<s32> bound;
 	for ( ; iter != childWrapper->getChildren().end(); ++iter )
 	{
-		/*if ( *iter == horizontalScrollBar
-			|| *iter == verticalScrollBar ) {
-			continue;
-		}*/
 		bound = (*iter)->getRelativePosition();
 		childBounds.addInternalPoint( bound.UpperLeftCorner );
 		childBounds.addInternalPoint( bound.LowerRightCorner );
@@ -279,7 +246,7 @@ void GUIScrollPane::shiftChildrenToPosition( s32 x, s32 y )
 		}
 	}
 	currShift = startPos - bound.UpperLeftCorner;
-	//newShift.set( currShift.X - x, currShift.Y - y );
+	//newShift.set( currShift.X - x, currShift.Y - y ); // TODO: Uncomment and comment out the next line?? What was wrong?
 	newShift.set( 0, currShift.Y - y );
 
 	for ( ; iter != childWrapper->getChildren().end(); ++iter )

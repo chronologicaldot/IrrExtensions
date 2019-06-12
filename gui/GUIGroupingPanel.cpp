@@ -195,9 +195,10 @@ void
 GUIGroupingPanel::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) {
 	IGUIElement::deserializeAttributes(in, options);
 
-	setText( in->getAttributeAsString("Caption", L"") ); // Required so that the text size can be precalculated
-	showBorder = in->getAttributeAsBool("ShowBorder", true);
-	borderRadius = in->getAttributeAsFloat("BorderRadius", 6);
+	// Required so that the text size can be precalculated - NO LONGER NEEDED
+	//setText( in->getAttributeAsString("Caption", L"") );
+	showBorder = in->getAttributeAsBool("ShowBorder", showBorder);
+	borderRadius = in->getAttributeAsFloat("BorderRadius", borderRadius);
 }
 
 }}
