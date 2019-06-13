@@ -74,7 +74,7 @@ void GUIGroupingPanel::draw()
 	vector2di corner( 0, AbsoluteRect.getHeight() - borderRadius );
 	vid->draw2DImage( LLtexture, corner + AbsoluteRect.UpperLeftCorner, cornerSource, &AbsoluteClippingRect, SColor(-1), true );
 
-	corner2.move( 0, AbsoluteRect.getHeight() - borderRadius );
+	corner2 += vector2di( 0, AbsoluteRect.getHeight() - borderRadius ); // Use .move() in custom Irrlicht
 	vid->draw2DImage( LRtexture, corner2 + AbsoluteRect.UpperLeftCorner, cornerSource, &AbsoluteClippingRect, SColor(-1), true );
 
 	// Draw border walls
@@ -90,7 +90,7 @@ void GUIGroupingPanel::draw()
 
 		// Top side
 	vector2di hline( AbsoluteRect.UpperLeftCorner );
-	hline.move( borderRadius + textPad*2 + textSize.Width, textSize.Height / 2 );
+	hline += vector2di( borderRadius + textPad*2 + textSize.Width, textSize.Height / 2 ); // Use .move() in custom Irrlicht
 	vector2di hlineEnd( AbsoluteRect.LowerRightCorner.X - borderRadius, AbsoluteRect.UpperLeftCorner.Y + (textSize.Height / 2) );
 
 	vid->draw2DLine( hline, hlineEnd, color );

@@ -30,19 +30,24 @@ GUIVectorPanel::GUIVectorPanel( IGUIEnvironment* pEnvironment, IGUIElement* pPar
 		coordBoxWidth = (pRect.getWidth() - pad) / 2;
 	}
 	rect<s32> valueRect( 0, 0, coordBoxWidth, pRect.getHeight() );
+	core::vector2di valueRectShift( coordBoxWidth + pad, 0 );
 
 	xEdit = pEnvironment->addSpinBox( L"0.0", valueRect, true, this );
 	xEdit->setAlignment( EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT );
 	xEdit->setStepSize(0.1f);
 	xEdit->setValidateOn(EGUI_SBV_CHANGE); // Requirement for irrlicht 1.9 to update on any change to the spin box
 
-	valueRect.move( coordBoxWidth + pad, 0 );
+	//valueRect.move( coordBoxWidth + pad, 0 ); // custom Irrlicht
+	valueRect.UpperLeftCorner += valueRectShift;
+	valueRect.LowerRightCorner += valueRectShift;
 	yEdit = pEnvironment->addSpinBox( L"0.0", valueRect, true, this );
 	yEdit->setAlignment( EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT );
 	yEdit->setStepSize(0.1f);
 	yEdit->setValidateOn(EGUI_SBV_CHANGE); // Requirement for irrlicht 1.9 to update on any change to the spin box
 
-	valueRect.move( coordBoxWidth + pad, 0 );
+	//valueRect.move( coordBoxWidth + pad, 0 ); // custom Irrlicht
+	valueRect.UpperLeftCorner += valueRectShift;
+	valueRect.LowerRightCorner += valueRectShift;
 	zEdit = pEnvironment->addSpinBox( L"0.0", valueRect, true, this );
 	zEdit->setAlignment( EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT, EGUIA_UPPERLEFT, EGUIA_LOWERRIGHT );
 	zEdit->setStepSize(0.1f);
@@ -146,12 +151,18 @@ void GUIVectorPanel::updateAbsolutePosition()
 
 		xEdit->setRelativePositionProportional( valueRect );
 
-		valueRect.move( coordBoxScale + fpad, 0.f );
+		core::vector2df valueRectShift( coordBoxScale + fpad, 0.f );
+
+		//valueRect.move( coordBoxScale + fpad, 0.f ); // custom Irrlicht
+		valueRect.UpperLeftCorner += valueRectShift;
+		valueRect.LowerRightCorner += valueRectShift;
 		yEdit->setRelativePositionProportional( valueRect );
 
 		if ( edit3D )
 		{
-			valueRect.move( coordBoxScale + fpad, 0.f );
+			//valueRect.move( coordBoxScale + fpad, 0.f ); // custom Irrlicht
+			valueRect.UpperLeftCorner += valueRectShift;
+			valueRect.LowerRightCorner += valueRectShift;
 			zEdit->setRelativePositionProportional( valueRect );
 		} else {
 			zEdit->setVisible(false);

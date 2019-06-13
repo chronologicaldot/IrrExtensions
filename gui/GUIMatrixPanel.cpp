@@ -14,7 +14,7 @@ namespace irr {
 namespace gui {
 
 using core::dimension2d;
-using core::vector2d;
+using core::vector2di;
 
 GUIMatrixPanel::GUIMatrixPanel( bool pRotateInDegrees, IGUIEnvironment* pEnvironment, IGUIElement* pParent, rect<s32> pRect, s32 id )
 	: IGUIElement( EGUIET_ELEMENT, pEnvironment, pParent, id, pRect )
@@ -40,21 +40,21 @@ GUIMatrixPanel::GUIMatrixPanel( bool pRotateInDegrees, IGUIEnvironment* pEnviron
 	s32 xyzSpan = ( pRect.getWidth() - (s32)labelSpan.Width - (pad*2) ) / 3;
 	rect<s32> labelRect( 0, boxH, labelSpan.Width, boxH*2 ); // for "Translate", "Rotate", and "Scale"
 	rect<s32> textRect( 0, 0, boxH, boxH ); // for "X", "Y", and "Z"
-	textRect += vector2d<s32>( xyzSpan/2 - 3, boxH/2 - 3 ); // text centering
+	textRect += vector2di( xyzSpan/2 - 3, boxH/2 - 3 ); // text centering
 
 	// Add labels of X, Y, and Z to the top
 	// Note the first is indented so it doesn't hover over the labels
-	textRect.move( labelSpan.Width + pad, 0 );
+	textRect += vector2di( labelSpan.Width + pad, 0 ); // Use .move() with custom Irrlicht
 	IGUIStaticText* textElem =
 		pEnvironment->addStaticText( L"X", textRect, false, false, this, -1, false ); // no border, wordwrap, nor fill
 	textElem->setAlignment( EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
 
-	textRect.move( xyzSpan, 0 );
+	textRect += vector2di( xyzSpan, 0 ); // Use .move() with custom Irrlicht
 	textElem =
 		pEnvironment->addStaticText( L"Y", textRect, false, false, this, -1, false ); // no border, wordwrap, nor fill
 	textElem->setAlignment( EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
 
-	textRect.move( xyzSpan, 0 );
+	textRect += vector2di( xyzSpan, 0 ); // Use .move() with custom Irrlicht
 	textElem = pEnvironment->addStaticText( L"Z", textRect, false, false, this, -1, false ); // no border, wordwrap, nor fill
 	textElem->setAlignment( EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
 
@@ -62,11 +62,11 @@ GUIMatrixPanel::GUIMatrixPanel( bool pRotateInDegrees, IGUIEnvironment* pEnviron
 	textElem = pEnvironment->addStaticText( L"Translate", labelRect, false, false, this, -1, false );
 	textElem->setAlignment( EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE );
 
-	labelRect.move( 0, boxH + pad );
+	labelRect += vector2di( 0, boxH + pad ); // Use .move() with custom Irrlicht
 	textElem = pEnvironment->addStaticText( L"Rotate", labelRect, false, false, this, -1, false );
 	textElem->setAlignment( EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE );
 
-	labelRect.move( 0, boxH + pad );
+	labelRect += vector2di( 0, boxH + pad ); // Use .move() with custom Irrlicht
 	textElem = pEnvironment->addStaticText( L"Scale", labelRect, false, false, this, -1, false );
 	textElem->setAlignment( EGUIA_UPPERLEFT, EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE );
 
@@ -76,12 +76,12 @@ GUIMatrixPanel::GUIMatrixPanel( bool pRotateInDegrees, IGUIEnvironment* pEnviron
 	translationVectorPanel = new GUIVectorPanel( pEnvironment, this, vectorPanelRect, true );
 	//translationVectorPanel->setAlignment( EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
 
-	vectorPanelRect.move( 0, boxH + pad );
+	vectorPanelRect += vector2di( 0, boxH + pad ); // Use .move() with custom Irrlicht
 
 	rotationVectorPanel = new GUIVectorPanel( pEnvironment, this, vectorPanelRect, true );
 	//rotationVectorPanel->setAlignment( EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
 
-	vectorPanelRect.move( 0, boxH + pad );
+	vectorPanelRect += vector2di( 0, boxH + pad ); // Use .move() with custom Irrlicht
 
 	scaleVectorPanel = new GUIVectorPanel( pEnvironment, this, vectorPanelRect, true );
 	//scaleVectorPanel->setAlignment( EGUIA_UPPERLEFT, EGUIA_SCALE, EGUIA_SCALE, EGUIA_SCALE );
