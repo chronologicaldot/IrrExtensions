@@ -13,6 +13,9 @@
 #include <IGUIListBox.h>
 #include <IGUIEditBox.h>
 
+
+#include <cstdio>
+
 namespace irr {
 namespace gui {
 
@@ -119,6 +122,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 	/*
 	DO NOT RESTORE THE DIRECTORY AFTER SELECTION.
 	It doesn't make sense to restore the directory before the file path has been obtained by the user.
+	EDIT:
+	I can change this if I use getFullFileName() from the fileList, which saves the directory.
 	*/
 
 	switch ( event.GUIEvent.EventType )
@@ -136,6 +141,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 		{
 			lastFileSelectPanelEvent = EGFSPE_CANCEL;
 			sendGUIEvent( EGET_FILE_CHOOSE_DIALOG_CANCELLED );
+			if ( restoreDirWhenCancelled )
+				fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -158,6 +165,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			lastFileSelectPanelEvent = EGFSPE_FILE_CONFIRMED;
 			//sendGUIEvent( EGET_EDITBOX_ENTER, fileNameEditBox ); // Doesn't allow file_selected filtering in parent OnEvent
 			sendGUIEvent( EGET_FILE_SELECTED );
+			if ( restoreDirWhenDone )
+				fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 			return true;
 		}
 		break;
@@ -182,6 +191,8 @@ bool GUIFileSelectPanel::OnEvent( const SEvent& event )
 			{
 				//sendGUIEvent( EGET_LISTBOX_SELECTED_AGAIN, fileListBox ); // Doesn't allow file_selected filtering in parent OnEvent
 				sendGUIEvent( EGET_FILE_SELECTED );
+				if ( restoreDirWhenDone )
+					fileSystem->changeWorkingDirectoryTo(initialWorkingDir);
 				return true;
 			} else {
 				// Selected is real (since it's in the list), but it is a directory
@@ -249,7 +260,7 @@ io::path GUIFileSelectPanel::getSelectedFile()
 {
 	if ( isFileSelectedFromList )
 	{
-		return io::path( fileListBox->getListItem( fileListBox->getSelected() ) );
+		return fileList->getFileName( fileListBox->getSelected() );
 	}
 	io::path filename = fileNameEditBox->getText();
 	fileSystem->flattenFilename( filename );
@@ -258,12 +269,29 @@ io::path GUIFileSelectPanel::getSelectedFile()
 
 io::path GUIFileSelectPanel::getSelectedFilePath()
 {
+	if ( isFileSelectedFromList )
+	{
+		return fileList->getFullFileName( fileListBox->getSelected() );
+	}
+
 	return fileSystem->getAbsolutePath( getSelectedFile() );
 }
 
 io::path GUIFileSelectPanel::getSelectedFileRelativePath()
 {
-	return fileSystem->getRelativeFilename( getSelectedFile(), initialWorkingDir );
+	return fileSystem->getRelativeFilename( getSelectedFilePath(), initialWorkingDir );
+}
+
+//! Restore the working directory to the initial directory when a file is selected
+void GUIFileSelectPanel::setRestoreDirectoryWhenDone(bool yes)
+{
+	restoreDirWhenDone = yes;
+}
+
+//! Restore the working directory to the initial directory when cancelling
+void GUIFileSelectPanel::setRestoreDirectoryWhenCancelled(bool yes)
+{
+	restoreDirWhenCancelled = yes;
 }
 
 void GUIFileSelectPanel::reactivate()
@@ -278,13 +306,31 @@ void GUIFileSelectPanel::deactivate()
 
 void GUIFileSelectPanel::openSelectedDirectory()
 {
-	fileSystem->changeWorkingDirectoryTo(
-				currentWorkingDir + io::path("/") +
-				io::path(fileListBox->getListItem( fileListBox->getSelected() ))
-				);
-	currentWorkingDir = fileSystem->getWorkingDirectory();
+	if ( ! fileList )
+		return;
 
-	fillFileList();
+	//const io::path  entry = fileList->getFullFileName( fileListBox->getSelected() );
+	const io::path  entry = fileList->getFileName( fileListBox->getSelected() );
+
+	if ( entry.size() > 0 )
+	{
+		fileSystem->changeWorkingDirectoryTo( entry );
+		currentWorkingDir = fileSystem->getWorkingDirectory();
+		fillFileList();
+	}
+}
+
+void GUIFileSelectPanel::pathToStringW(irr::core::stringw& result, const irr::io::path& p)
+{
+	// Taken from Irrlicht trunk 5823, probably added by CuteAlien.
+#ifndef _IRR_WCHAR_FILESYSTEM
+	char* oldLocale = setlocale(LC_CTYPE, NULL);
+	setlocale(LC_CTYPE,"");	// multibyteToWString is affected by LC_CTYPE. Filenames seem to need the system-locale.
+	core::multibyteToWString(result, p);
+	setlocale(LC_CTYPE, oldLocale);
+#else
+	result = p.c_str();
+#endif
 }
 
 void GUIFileSelectPanel::fillFileList()
@@ -293,31 +339,28 @@ void GUIFileSelectPanel::fillFileList()
 	setlocale(LC_ALL,"");
 #endif
 
-	if ( fileList )
+	if ( fileList ) {
 		fileList->drop();
+		fileList = 0;
+	}
+
 	fileList = fileSystem->createFileList();
+
+	if ( !fileList ) // FIXME: Should throw, but this should also never happen
+		return;
+
 	fileListBox->clear();
 	s32 folderIcon = Environment->getSkin()->getIcon(EGDI_DIRECTORY);
+	s32 fileIcon = Environment->getSkin()->getIcon(EGDI_FILE);
 	stringw filterText(fileNameEditBox->getText());
 	stringw fileNameTemp;
 
 	for ( u32 i=0; i < fileList->getFileCount(); i++ )
 	{
-		// Some code from CGUIFileOpenDialog.cpp by Nikolaus Gebhardt
-#ifndef _IRR_WCHAR_FILESYSTEM
-		const c8 *cs = (const c8 *)fileList->getFileName(i).c_str();
-		wchar_t *ws = new wchar_t[strlen(cs) + 1];
-		int len = mbstowcs(ws,cs,strlen(cs));
-		//mbstowcs_s( ptr_num_chars_converted, destination_buffer, source_buffer, max_char_count )
-		ws[len] = 0;
-		fileNameTemp = ws;
-		delete [] ws;
-#else
-		fileNameTemp = fileList->getFileName(i).c_str();
-#endif
+		pathToStringW(fileNameTemp, fileList->getFileName(i));
 
 		if ( filterText.size() == 0
-			|| fileNameTemp.subString(0,filterText.size()) == filterText
+			|| ( filterText.size() > 0 && fileNameTemp.subString(0,filterText.size()) == filterText )
 			)
 		{
 			fileListBox->addItem(

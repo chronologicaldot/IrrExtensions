@@ -132,6 +132,12 @@ public:
 	//! Relative path from initial directory
 	io::path getSelectedFileRelativePath();
 
+	//! Restore the working directory to the initial directory when a file is selected
+	void setRestoreDirectoryWhenDone(bool);
+
+	//! Restore the working directory to the initial directory when cancelling
+	void setRestoreDirectoryWhenCancelled(bool);
+
 	//! Activate
 	/* Restores this instance's current working directory. */
 	void reactivate();
@@ -157,6 +163,10 @@ protected:
 	//! Fill file list
 	/* Fills the file list. */
 	void fillFileList();
+
+	//! Path conversion
+	/* Converts a path from multibyte to widechar. */
+	void pathToStringW(irr::core::stringw&, const irr::io::path&);
 
 public:
 	//! Draw
