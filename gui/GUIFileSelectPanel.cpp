@@ -1,9 +1,10 @@
-// (c) 2015 Nicolaus Anderson
+// (c) 2015-2019 Nicolaus Anderson
 
 #ifndef GUI_FILE_SELECT_PANEL_CPP
 #define GUI_MATERIAL_PANEL_CPP
 
 #include "GUIFileSelectPanel.h"
+#include <irrArray.h>
 #include <IGUIEnvironment.h>
 #include <IFileSystem.h>
 #include <IFileList.h>
@@ -13,8 +14,6 @@
 #include <IGUIListBox.h>
 #include <IGUIEditBox.h>
 
-
-#include <cstdio>
 
 namespace irr {
 namespace gui {
@@ -32,6 +31,7 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 	: IGUIElement( EGUIET_ELEMENT, pEnvironment, pParent, id, pRect )
 	, fileSystem(0)
 	, fileList(0)
+	, filesIndex()
 	, selectButton(0)
 	, cancelButton(0)
 	, fileListBox(0)
@@ -39,6 +39,10 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 	, isFileSelectedFromList(false)
 	, lastFileSelectPanelEvent(EGFSPE_NONE)
 	, notifyWhenEditBoxChanges(false)
+	, restoreDirWhenDone(true)
+	, restoreDirWhenCancelled(true)
+	, initialWorkingDir()
+	, currentWorkingDir()
 	, drawBack(true)
 {
 	fileSystem = Environment->getFileSystem();
@@ -81,7 +85,8 @@ GUIFileSelectPanel::GUIFileSelectPanel(
 
 GUIFileSelectPanel::~GUIFileSelectPanel()
 {
-	fileSystem->changeWorkingDirectoryTo( initialWorkingDir );
+	//if ( restoreDirWhenDone )
+	//	fileSystem->changeWorkingDirectoryTo( initialWorkingDir );
 
 	if ( selectButton )
 		selectButton->drop();
@@ -260,7 +265,7 @@ io::path GUIFileSelectPanel::getSelectedFile()
 {
 	if ( isFileSelectedFromList )
 	{
-		return fileList->getFileName( fileListBox->getSelected() );
+		return fileList->getFileName( getSelectedFileIndex() );
 	}
 	io::path filename = fileNameEditBox->getText();
 	fileSystem->flattenFilename( filename );
@@ -271,7 +276,7 @@ io::path GUIFileSelectPanel::getSelectedFilePath()
 {
 	if ( isFileSelectedFromList )
 	{
-		return fileList->getFullFileName( fileListBox->getSelected() );
+		return fileList->getFullFileName( getSelectedFileIndex() );
 	}
 
 	return fileSystem->getAbsolutePath( getSelectedFile() );
@@ -304,13 +309,18 @@ void GUIFileSelectPanel::deactivate()
 	fileSystem->changeWorkingDirectoryTo( initialWorkingDir );
 }
 
+s32 GUIFileSelectPanel::getSelectedFileIndex()
+{
+	return filesIndex[ fileListBox->getSelected() ];
+}
+
 void GUIFileSelectPanel::openSelectedDirectory()
 {
 	if ( ! fileList )
 		return;
 
-	//const io::path  entry = fileList->getFullFileName( fileListBox->getSelected() );
-	const io::path  entry = fileList->getFileName( fileListBox->getSelected() );
+	//const io::path  entry = fileList->getFullFileName( getSelectedFileIndex() );
+	const io::path  entry = fileList->getFileName( getSelectedFileIndex() );
 
 	if ( entry.size() > 0 )
 	{
@@ -349,6 +359,7 @@ void GUIFileSelectPanel::fillFileList()
 	if ( !fileList ) // FIXME: Should throw, but this should also never happen
 		return;
 
+	filesIndex.clear();
 	fileListBox->clear();
 	s32 folderIcon = Environment->getSkin()->getIcon(EGDI_DIRECTORY);
 	s32 fileIcon = Environment->getSkin()->getIcon(EGDI_FILE);
@@ -367,6 +378,7 @@ void GUIFileSelectPanel::fillFileList()
 							fileNameTemp.c_str(),
 							(fileList->isDirectory(i)?folderIcon:0)
 							);
+			filesIndex.push_back(i);
 		}
 	}
 }

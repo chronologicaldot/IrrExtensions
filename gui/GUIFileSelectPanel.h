@@ -1,4 +1,4 @@
-// (c) 2015 Nicolaus Anderson
+// (c) 2015-2019 Nicolaus Anderson
 
 #ifndef GUI_FILE_SELECT_PANEL_H
 #define GUI_MATERIAL_PANEL_H
@@ -16,6 +16,7 @@ namespace gui {
 
 using core::stringw;
 using core::recti;
+using core::array;
 using io::IFileSystem;
 using io::IFileList;
 
@@ -70,6 +71,7 @@ class GUIFileSelectPanel : public IGUIElement
 protected:
 	IFileSystem* fileSystem;
 	IFileList* fileList;
+	array<u32> filesIndex;
 	IGUIButton* selectButton;
 	IGUIButton* cancelButton;
 	IGUIListBox* fileListBox;
@@ -156,6 +158,9 @@ public:
 	*/
 
 protected:
+	//! Returns the saved file index of the visible file
+	s32 getSelectedFileIndex();
+
 	//! Open selected directory
 	/* Attempts to open the selected directory. */
 	void openSelectedDirectory();
