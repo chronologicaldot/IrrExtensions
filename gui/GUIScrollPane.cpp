@@ -200,8 +200,8 @@ void
 GUIScrollPane::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) {
 	IGUIElement::deserializeAttributes(in, options);
 
-	showHorizontalScrollBar( out->getAttributeAsBool("ShowHorizontalBar", horizontalScrollBar->isVisible()) );
-	showVerticalScrollBar( out->getAttributeAsBool("ShowVerticalBar", verticalScrollBar->isVisible()) );
+	showHorizontalScrollBar( in->getAttributeAsBool("ShowHorizontalBar", horizontalScrollBar->isVisible()) );
+	showVerticalScrollBar( in->getAttributeAsBool("ShowVerticalBar", verticalScrollBar->isVisible()) );
 }
 
 void GUIScrollPane::recalculateChildBounds()
