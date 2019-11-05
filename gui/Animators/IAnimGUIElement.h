@@ -72,13 +72,15 @@ public:
 
 	//! On Post Render
 	/* Applies the animators */
-	void OnPostRender( irr::u32 timeMs )
+	virtual void OnPostRender( irr::u32 timeMs )
 	{
 		irr::core::list<IAnimGUIAnimator*>::Iterator it;
 		for ( ; it != Animators.end(); ++it )
 		{
 			(*it)->OnPostRender( timeMs, this );
 		}
+
+		IGUIElement::OnPostRender(timeMs);
 	}
 };
 
