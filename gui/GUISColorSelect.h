@@ -4,7 +4,7 @@
 #define GUISCOLORSELECT_H
 
 #include "IGUISColorSelect.h"
-#include "../utils/Colors.h"
+#include "../video/Colors.h"
 
 /*
 
