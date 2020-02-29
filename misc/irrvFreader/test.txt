@@ -1,0 +1,11 @@
+
+
+/*This is some test text. */
+
+"Maybe quotes will be seen."
+
+0.32
+
+21.3
+
+51

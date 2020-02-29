@@ -1,0 +1,2 @@
+g++ -c irrTree.h irrTree.cpp -I/usr/local/include/irrlicht
+

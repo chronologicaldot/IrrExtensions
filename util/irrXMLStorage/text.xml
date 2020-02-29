@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<root>
+
+	<nodetype id="1">
+farse
+
+		<subnode sid="1">
+			Some interior text.
+		</subnode>
+	</nodetype>
+	
+	<nodetype id="2" flab="6">
+		<subnode sid="2" crock="wat" blarg="itself">
+		</subnode>
+	</nodetype>
+
+</root>
