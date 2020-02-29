@@ -2,6 +2,7 @@
 Range class
 (c) Nicolaus Anderson
 Created Jan 10, 2013
+Modified Nov 8, 2019
 
 License: zlib
 */
@@ -40,29 +41,12 @@ public:
 
 	//------- division
 
-	// Overridden by operator T() and operator/(T& value)
-	/*
-	T operator/ ( Range<T>& other )
-	{
-		if ( other.Length() != 0 )
-			return ( end - start ) / ( other.end - other.start );
-
-		return T(0);
-	}
-	*/
-
 	T operator/ ( T& value )
 	{
 		if ( value != 0 )
 			return Length()/value;
 
 		return 0;
-	}
-
-	Range<T>& operator/= ( Range<T>& other )
-	{
-		end = start + Length()/other.Length();
-		return *this;
 	}
 
 	Range<T>& operator/= ( T& value )
@@ -81,12 +65,6 @@ public:
 	T operator* ( T& value )
 	{
 		return Length()*value;
-	}
-
-	Range<T>& operator*= ( Range<T>& other )
-	{
-		end = start + Length()*other.Length();
-		return *this;
 	}
 
 	Range<T>& operator*= ( T& value )
@@ -132,13 +110,11 @@ public:
 	included in the range. */
 	bool inRange( T& value, bool bound_inclusive=true )
 	{
-		if ( (bound_inclusive? min<=value : min<value) )
-			if ( (bound_inclusive? value<=max : value<max) )
-				return true;
+		if ( bound_inclusive )
+			return min <= value && value <= max;
 
-		return false;
+		else return min < value && value < max;
 	}
-
 
 	// ***************** With other types *******************
 
@@ -156,18 +132,6 @@ public:
 
 	//-------- division
 
-	// Overridden by operator T() and operator/(T& value)
-	/*
-	template<class T2>
-	T operator/ ( Range<T2>& other )
-	{
-		if ( other.Length() != 0 )
-			return ( end - start ) / (T)( other.end - other.start );
-
-		return T(0);
-	}
-	*/
-
 	template<class T2>
 	T operator/ ( T2& value )
 	{
@@ -175,13 +139,6 @@ public:
 			return Length()/(T)value;
 		
 		return 0;
-	}
-
-	template<class T2>
-	Range<T>& operator/= ( Range<T2>& other )
-	{
-		end = start + Length()/(T)other.Length();
-		return *this;
 	}
 
 	template<class T2>
@@ -203,13 +160,6 @@ public:
 	T operator* ( T2& value )
 	{
 		return Length()*(T)value;
-	}
-
-	template<class T2>
-	Range<T>& operator*= ( Range<T2>& other )
-	{
-		end = start + Length()*other.Length();
-		return *this;
 	}
 
 	template<class T2>

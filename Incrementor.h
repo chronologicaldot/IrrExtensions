@@ -1,33 +1,38 @@
 /*
 (c) 2012-2013 Nicolaus Anderson
 Created: Dec 24, 2012
+Modified Nov 11, 2019
 
 Incrementor - A simple incrementing class for keeping track of changes in a value
 with fewer keystrokes.
 */
 
-#include "stdtypes.h"
+//#include "stdtypes.h"
+#include <irrTypes.h>
+typedef irr::s32			stds32;
+typedef irr::u32			stdu32;
 
 #ifndef __INCREMENTOR__
 #define __INCREMENTOR__
 
-
-enum ECycleType
-{
-	/* This incrementor is to act like a boolean value, switching back and forth
-	between 0 and 1. */
-	CYC_BOOLEAN = 0,
-	
-	/* This incrementor must be set to the min value after reaching the max value
-	or must be set to the max value if decremented from the min value. */
-	CYC_REPEAT,
-	
-	/* This incrementor counts up and down like an ordinary integer. */
-	CYC_DEFAULT
-};
-
 class Inc
 {
+public:
+	enum ECycleType
+	{
+		/* This incrementor is to act like a boolean value, switching back and forth
+		between 0 and 1. */
+		CYC_BOOLEAN = 0,
+	
+		/* This incrementor must be set to the min value after reaching the max value
+		or must be set to the max value if decremented from the min value. */
+		CYC_REPEAT,
+	
+		/* This incrementor counts up and down like an ordinary integer. */
+		CYC_DEFAULT
+	};
+
+private:
 	stds32 value;
 	stds32 step;
 	stds32 min;
@@ -63,19 +68,19 @@ public:
 	}
 	
 	//! Set the cycle type to the default
-	void ctDef()
+	void cycleDefault()
 	{
 		cycle = CYC_DEFAULT;
 	}
 	
 	//! Set the cycle type to boolean
-	void ctBool()
+	void cycleBoolean()
 	{
 		cycle = CYC_BOOLEAN;
 	}
 	
 	//! Set the cycle type to repeat
-	void ctRpt()
+	void cycleRepeat()
 	{
 		cycle = CYC_REPEAT;
 	}
@@ -119,8 +124,7 @@ public:
 		return false;
 	}
 
-
-//******* Getters and setters **********
+	//******* Getters and setters **********
 
 	stds32& Val()
 	{
@@ -234,8 +238,7 @@ public:
 			value = max;
 	}
 
-
-// ********* Shortcut operators ***********
+	// ********* Shortcut operators ***********
 	
 	bool operator++ ()
 	{
@@ -338,18 +341,7 @@ public:
 		return *this;
 	}
 
-	/* REMOVED
-	Reason: Working with operator=( stds32 val ) it overrides
-	the role of operator=( Inc& other )
-
-	template<class T>
-	operator T ()
-	{
-		return (T)value;
-	}
-	*/
-
-//****** assignment operators *******
+	//****** assignment operators *******
 
 	Inc& operator+=( Inc& other )
 	{
