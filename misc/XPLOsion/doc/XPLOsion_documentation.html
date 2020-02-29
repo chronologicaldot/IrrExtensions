@@ -1,0 +1,855 @@
+<!-- Created by Nicolaus Anderson, 2012 -->
+
+<html>
+
+<head>
+
+	<meta content="Nicolaus Anderson" name="author"></meta>
+	<meta content="September 21, 2012" name="created"></meta>
+	
+	<link rel="stylesheet" type="text/css" href="codeboxes.css"></link>
+
+</head>
+
+<body>
+
+	<div style="position:fixed; right:0px; bottom:0px; width:120px; height:50px; background-color:#eeeeee;">
+		<a href="#headerbox" style="padding:20px;">back to top</a>
+	</div>
+
+	<div id="headerbox">
+		<h1>XPLOsion Documentation</h1>
+	</div>
+	
+	<h2>Table of Contents</h2>
+	<ul>
+		<li><a href="#CO_whatisthis" >What is this?</a></li>
+		<li><a href="#CO_format" >XML Node Format</a></li>
+		<li><a href="#CO_validtypenames" >Valid XML Type Names</a></li>
+		<li><a href="#CO_functionsandexampleusage" >Functions and Example Usage</a></li>
+		<li><a href="#CO_knownbugs" >Known Bugs</a></li>
+		<li><a href="#CO_othertodo" >Other To-Dos</a></li>
+	</ul>
+	
+	
+	<!-- ****************** What is this ******************** -->
+	
+	<h2 id="CO_whatisthis">What is this?</h2>
+	<p>
+		"XPLOsion" is short for "XML Program Layout Organizer". <!--Arranger-->
+		This class allows you to load XML files or trees that contain information about how your program's GUI
+		should appear. This class converts that information into GUI elements that are native to irrlicht.
+		After the program's GUI has been loaded, you can safely delete this class without the risk of
+		losing the interface and thus save heap space.
+	</p>
+	<p>
+		The format of the XML files is meant to be similar to HTML and complimented with files that are
+		formatted similar to CSS. The layouts of the files are identical to their web counterparts with the
+		exception of the commands being different. <a href="#CO_format" >See format for details</a>.
+	</p>
+	<p>
+		To set up the GUI elements, the function IGUIElement::deserializeAttributes() is utilized.
+		The parameters for the GUI elements are given as CSS parameters (such as "position", "left", "right", "overflow").
+	</p>
+	<p>
+		<h4>Order of function calls</h4>
+		<ul>
+			<li><code>XPLOsion::XPLOsion( irr::IrrlichtDevice*, bool =false )</code></li>
+			<li><code>XPLOsion::setCSSDataPointer( CSSLibrary* )</code> <i style="color:green;">optional</i></li>
+			<li><code>XPLOsion::setFunctionFireList( GUIFunctionFire* )</code> <i style="color:green;">optional</i></li>
+			<li>For loading by files:
+				<ul>
+					<li><code>XPLOsion::LoadFile( irr::io::path )</code> <br>
+						<i style="color:green;"> -OR- </i> <br>
+						<code>XPLOsion::setXMLDataPointer( irrXMLStorage* )</code>
+							<i style="color:green;">optional</i> <br> </li>
+					<li><code>XPLOsion::ParseFile( irr::gui::IGUIElement* =0 )</code></li>
+				</ul>
+			</li>
+			<li>For loading straight from an irrXMLTreeNode:
+				<ul>
+					<li><code>XPLOsion::TranslateXMLNode( irrXMLTreeNode*, irr::gui::IGUIElement* , bool =false )</code></li>
+				</ul>
+			</li>
+
+		</ul>
+	</p>
+	
+	
+	<!-- ****************** XML Node Format ******************** -->
+	
+	<h2 id="CO_format">XML Node Format</h2>
+	<p>
+		<div class="codebox"> <code>
+			<tag_text><!><</!>Type</tag_text>
+			class=<quote>"class_name"</quote>
+			id=<quote>"id_name"</quote>
+			[anything else]=<quote>"style_tag_name"</quote>
+			style=<quote>"css_style"</quote>
+			onClick=<quote>"function_id"</quote>
+			<tag_text><!>></!></tag_text>
+			Text
+			<tag_text><!><</!>/Type<!>></!></tag_text>
+		</code> </div>
+		<ul>
+			<li><b>Type</b> - Instead of the node type, the name of the GUI element is here.
+				<a href="#CO_validtypenames" >A list of valid GUI element names to be used as type names is available</a>. </li>
+			<li><b>class</b> - Each node may have a single class reference, which means XPLOsion will search the CSS library for
+				the appropriate class with matching name. </li>
+			<li><b>id</b> - Each node may have a single id reference, which means XPLOsion will search the CSS library for
+				the appropriate id with matching name. <i>NOTE: This is NOT the same as irrlicht's ID for GUI elements,
+				which can be set as a parameter in the CSS file.</i> </li>
+			<li><b>[anything else]</b> - Each node may have as many randomly named attributes as they wish. These attributes
+				must not be given the same name or subsequent identical ones will be ignored. Each time one of these attributes is found,
+				the CSS tag whose name matches the given value is applied to the GUI element, as it is with "class" and "id".
+				However, preference cannot be made as to whether a class or an id is searched for, and thus the first
+				match will be returned. </li>
+			<li><b>style</b> - Each node may have a single attribute (this one) interpreted as CSS parameters.
+				This allows for XPLOsion to do inline styling without the need of a pre-assigned or preloaded CSSLibrary. </li>
+			<li><b>onClick</b> or <b>onPress</b> - Analogous to HTML calling of a Javascript function except that
+				in this case, the function association is handled by the class GUIFunctionFire. </li>
+		</ul>
+	</p>
+	
+	
+	<!-- ****************** Valid Type Names ******************** -->
+	
+	<h2 id="CO_validtypenames">Valid XML Type Names</h2>
+	<p>
+		Type names are case-sensitive.
+		
+		<ul>
+			<b>Short list:</b>
+			<li><a href="#vt_div" >div</a></li>
+			<li><a href="#vt_text" >text</a></li>
+			<li><a href="#vt_basic" >basic (empty element)</a></li>
+			<li><a href="#vt_button" >button</a></li>
+			<li><a href="#vt_editbox" >editbox</a></li>
+			<li><a href="#vt_window" >window</a></li>
+			<li><a href="#vt_contextmenu" >menu</a></li>
+			<li><a href="#vt_menubar" >menubar</a></li>
+			<li><a href="#vt_messagebox" >messagebox</a></li>
+			<li><a href="#vt_modalscreen" >modalscreen</a></li>
+			<li><a href="#vt_checkbox" >checkbox</a></li>
+			<li><a href="#vt_combobox" >combobox</a></li>
+			<li><a href="#vt_fileopendialog" >fileopendialog</a></li>
+			<li><a href="#vt_listbox" >listbox</a></li>
+			<li><a href="#vt_colorselectdialog" >colorselectdialog</a></li>
+			<li><a href="#vt_inoutfader" >inoutfader</a></li>
+			<li><a href="#vt_scrollbar" >scrollbar</a></li>
+			<li><a href="#vt_slider" >slider</a></li>
+			<li><a href="#vt_tabcontrol" >tabcontrol</a></li>
+			<li><a href="#vt_tab" >tab</a></li>
+			<li><a href="#vt_spinbox" >spinbox</a></li>
+		</ul>
+		
+		<br>
+		
+		<p>
+			It is helpful to note that the CSS parameters that apply to all GUI elements are: <br>
+			<ul>
+				<li>position</li>
+				<li>left</li>
+				<li>right</li>
+				<li>top</li>
+				<li>bottom</li>
+				<li>height</li>
+				<li>width</li>
+				<li>Rect</li>
+				<li>Id</li>
+				<li>Visible - Defaulted to true</li>
+				<li>Enabled</li>
+				<li>Caption</li>
+				<li>TabStop</li>
+				<li>TabGroup</li>
+				<li>TabOrder</li>
+			</ul>
+			The parameters left, right, top, bottom, height, width, and Rect do essentially the same job and thus
+			it is not required that all be defined. <br>
+			As an aside, divs do not utilize the parameter Enabled.
+		</p>
+		
+		<br>
+		
+		<ul>
+		
+			<li id="vt_div"><h3>div</h3>
+				Creates a divBox instance that acts like a division in HTML. It can be assigned a background color and/or image;
+				clicked on to activate an assigned function as buttons do (requires using GUIfunctionFire class); and handles overflow
+				of other elements with scroll bars based on overflow.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>position</b> - While all GUI elements will have "position" applied to them, only this class stores it.</li>
+					<li><b>background-color</b> - Sets the background color of the division.</li>
+					<li><b>background-image</b> - Sets the background image of the division. Requires a path be given.</li>
+					<li><b>background-repeat</b> - Indicates how the background image is to be repeated over the back
+						of the division.
+						Note that the background image will not overflow the division, but, at the current time, it does not move
+						with scrolling.</li>
+					<li><b>overflow</b> - Indicates how to handle the displaying of child nodes when their positions are
+						outside of the display boundaries of this division.</li>
+					<li><b>Border</b> - Indicates whether to have an outline around the division.</li>
+					<li><b>outline-color</b> - Indicates what to color the outline around the division if there is an outline
+						(which is set by "Border").</li>
+					<li><b>scrollbar-width</b> - Sets the width of the scrollbars that appear when there is overflow.</li>
+				</ul>
+			</li>
+				
+			<li id="vt_text"><h3>text</h3>
+				Creates a CGUIStaticText instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Border</b> - Indicates whether to have an outline around this GUI element.</li>
+					<li><b>OverrideColorEnabled</b> - Indicates if there is a color for this element's text that
+						overrides the default text color.</li>
+					<li><b>OverrideColor</b> - Color for the text specific to this GUI element.</li>
+					<li><b>OverrideBGColorEnabled</b> - Indicates if there is a color for this element's background that
+						overrides the default background color.</li>
+					<li><b>OverrideBGColor</b> - Color for the background specific to this GUI element.</li>
+					<li><b>WordWrap</b> - Indicates if words should wrap if they reach the edge of the element.
+						There is no element resizing.</li>
+					<li><b>Background</b> - Sets whether there should be a background to the element
+						(needed if there is to be a background color).</li>
+					<li><b>HTextAlign</b> - Sets how the text is to be placed horizontally within the GUI element
+						(aligned left, aligned right, or in the middle).</li>
+					<li><b>VTextAlign</b> - Sets how the text is to be placed vertically within the GUI element
+						(starting from the top, placed at the bottom with respect to its finish point, or centered).</li>
+				</ul>
+			</li>
+
+			<li id="vt_basic"><h3>basic</h3>
+				Creates an instance of an empty element. Useful as a container.
+				<p>Receives all common CSS Parameters.</p>
+			</li>
+			
+			<li id="vt_button"><h3>button</h3>
+				Creates a CGUIButton instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>PushButton</b> - Indicates if this button can have two states (pressed or not pressed)
+						as opposed to having one state.</li>
+					<li><b>Pressed</b> - Indicates if the starting state for the button is "pressed"
+						(only applies to buttons with PushButton set to true).</li>
+					<li><b>ImageRect</b> - Clipping rectangle for the background image of the button in its normal state.
+						It is unecessary to specify this if the image is not to be clipped. If this is left unspecified, the image's
+						rectangular boundaries will be formed by the image's original size.</li>
+					<li><b>Image</b> - Background image of the button in its normal state.</li>
+					<li><b>PressedImageRect</b> - Clipping rectangle for the background image of the button in its pressed state.
+						It is unecessary to specify this if the image is not to be clipped. If this is left unspecified, the image's
+						rectangular boundaries will be formed by the image's original size.</li>
+					<li><b>PressedImage</b> - Background image of the button in its pressed state.</li>
+					<li><b>Border</b> - Indicates whether to have an outline around this GUI element.
+						Note that for buttons, the border will also add a background box made from the default skin.
+						<br><redtext>Currently, Border needs to be set to true to see the button because images aren't displaying.</redtext>
+						</li>
+					<li><b>UseAlphaChannel</b> - Indicates if the alpha channels of the background images should be
+						taken into account when drawing them.</li>
+					<li><b>ScaleImage</b> - Sets whether the clipping rectangle for the background images should be the
+						button's own boundaries or the image's rectangular boundaries.</li>
+				</ul>
+			</li>
+				
+			<li id="vt_editbox"><h3>editbox</h3>
+				Creates a CGUIEditBox instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>OverrideColorEnabled</b> - Indicates if there is a color for this element's text that
+							overrides the default text color.</li>
+					<li><b>OverrideColor</b> - Color for the text specific to this GUI element.</li>
+					<li><b>MaxChars</b> - Sets a limit on the number of characters the element is allowed to contain.</li>
+					<li><b>WordWrap</b> - Indicates if words should wrap if they reach the edge of the element.
+						There is no element resizing.</li>
+					<li><b>MultiLine</b> - Indicates if multiple lines of text are allowed.</li>
+					<li><b>AutoScroll</b> - Indicates if the text position should be adjusted to keep the cursor in active
+						view (and thus the user see what they are typing even if they type more than what will fit in the element's
+						visible boundaries).</li>
+					<li><b>PasswordChar</b> - Sets a character that is displayed instead of regular text if this is a
+						password box.</li>
+					<li><b>PasswordBox</b> - Indicates if this is a password box. If so, a special password character will
+						be displayed instead of normal text. Note, however, that multi-line and word-wrapping settings will be
+						ignored. </li>
+					<li><b>HTextAlign</b> - Sets how the text is to be placed horizontally within the GUI element
+						(aligned left, aligned right, or in the middle).</li>
+					<li><b>VTextAlign</b> - Sets how the text is to be placed vertically within the GUI element
+						(starting from the top, placed at the bottom with respect to its finish point, or centered).</li>
+				</ul>
+			</li>
+			
+			<li id="vt_window"><h3>window</h3>
+				Creates a CGUIWindow instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>IsDraggable</b> - Indicates if the GUI element can be relocated.</li>
+					<li><b>DrawBackground</b> - Indicates if the GUI element should have its background drawn.</li>
+					<li><b>DrawTitlebar</b> - Indicates if a titlebar should be drawn.</li>
+					<li><b>IsCloseVisible</b> - Indicates if the exit button is visible.</li>
+					<li><b>IsMinVisible</b> - Indicates if the minimize button is visible.</li>
+					<li><b>IsRestoreVisible</b> - Indicates if the restore button is visible.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_contextmenu"><h3>menu</h3>
+				Creates a CGUIContextMenu instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Position</b> - Does nothing.</li>
+					<li><b>ParentItem</b> - If this menu is the child GUI element of another menu, then this
+						is that placement of this menu within that list. In other words, this is a sub-menu.
+						To make this GUI element a sub-menu, simply nest the menu tags within another menu.</li>
+					<li><b>CloseHandling</b> - Indicates if the menu should be ignored, made invisible, or
+						removed when the menu is closed/exited.</li>
+					<li><b>ItemCount</b> - Number of items in the menu.</li>
+					<ul>
+						<p>
+							The following are specifically for menu items (but given with the other parameters).
+							Note that each one is followed by a "+ #" which means appending an integer value
+							to the given name.
+						</p>
+						<li><b>IsSeparator + #</b> - Indicates this list item is simply a divider.
+							Since boolean values are defaulted to false, it is not necessary to set this to false
+							for menu items.</li>
+						<li><b>Text + #</b> - Text of the item whose place in the list is given by # + 1.</li>
+						<li><b>CommandID + #</b> - ID of the item whose place in the list is given by # + 1.</li>
+						<li><b>Enabled + #</b> - Indicates if the item whose place in the list is given by # + 1
+							is enabled / will respond to user interaction.</li>
+						<li><b>Checked + #</b> - Indicates if the item whose place in the list is given by # + 1
+							is initialized as check / having a flick sprite.</li>
+						<li><b>AutoChecking + #</b> - Indicates if the item whose place in the list is given by # + 1
+							is given a check mark or has it removed automatically upon user interaction with the item.</li>
+					</ul>
+					
+				</ul>
+			</li>
+			
+			<li id="vt_menubar"><h3>menubar</h3>
+				Creates a CGUIMenu instance.
+				<p>
+					These menus are identical to menu in the parameters they receive as well as in most of their
+					functionality. The difference is that these menus are bars that are placed along the top of
+					their parent GUI element.
+				</p>
+				<p>
+					Order of the menu items is from left to right.
+					It does not appear that overflow is not compressed to fit.
+				</p>
+			</li>
+			
+			<li id="vt_messagebox"><h3>messagebox</h3>
+				Creates a CGUIMessageBox instance. <br>
+				Note that message boxes receive the same parameters as windows plus a few more and minus
+				IsMinVisible and IsRestoreVisible. This is because CGUIMessageBox inherits from CGUIWindow.
+				<p>CSS Parameters received (beyond those that apply to windows):</p>
+				<ul>
+					<li><b>OkayButton</b> - Indicates this message box contains a button with the word "Okay"
+						on it. This is the first button on the left in the box.</li>
+					<li><b>CancelButton</b> - Indicates this message box contains a button with the word "Cancel"
+						on it. This is the second button on the left in the box.</li>
+					<li><b>YesButton</b> - Indicates this message box contains a button with the word "Yes"
+						on it. This is the third button on the left in the box.</li>
+					<li><b>NoButton</b> - Indicates this message box contains a button with the word "No"
+						on it. This is the fourth button on the left in the box.</li>
+					<li><b>Texture</b> - Name or pathname of the texture that will act as an icon for this
+						message box.</li>
+					<li><b>MessageText</b> - The text appearing within the message box and not on a button.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_modalscreen"><h3>modalscreen</h3>
+				Creates a CGUIModalScreen instance. <br>
+				It receives no parameters beyond what are common to all.
+			</li>
+			
+			<li id="vt_meshviewer"><h3>meshviewer</h3>
+				Creates a CGUIMeshViewer instance. <br>
+				It receives no parameters beyond what are common to all.
+			</li>
+			
+			<li id="vt_checkbox"><h3>checkbox</h3>
+				Creates a CGUICheckbox instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Checked</b> - Indicates if the checkbox is initialized as checked.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_combobox"><h3>combobox</h3>
+				Creates a CGUICombobox instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>ItemCount</b> - Number of items in the menu.</li>
+					<li><b>Item + # + Text</b> - Text of the item whose place in the list is given by # + 1.</li>
+					<li><b>Selected</b> - Index of the list item that is initially selected.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_fileopendialog"><h3>fileopendialog</h3>
+				Creates a CGUIFileOpenDialog instance.
+				<p>No parameters received.</p>
+				<p>
+					While not very useful within a program, this feature has been added for situations such as where
+					the programmer wants to have a file open dialog since a file will be necessary for a particular
+					toolbar to even be useful after loading. Or perhaps the programmer wishes to have the dialog
+					appear immediately upon loading the program.
+				</p>
+			</li>
+			
+			<li id="vt_listbox"><h3>listbox</h3>
+				Creates a CGUIListBox instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>DrawBack</b> - Same as DrawBackground</li>
+					<li><b>MoveOverSelect</b> - ?</li>
+					<ul>
+						<p>
+							The following are specifically for menu items (but given with the other parameters).
+							Note that each one is followed by a "+ #" which means appending an integer value
+							to the given name.
+						</p>
+						<li><b>UseColText + #</b> - boolean</li>
+						<li><b>ColText + #</b> - color</li>
+						<li><b>UseColTextHl + #</b> - boolean</li>
+						<li><b>ColTextHl + #</b> - color</li>
+						<li><b>UseColIcon + #</b> - will be a boolean when implemented</li>
+						<li><b>ColIcon + #</b> - will be a color when implemented</li>
+						<li><b>UseColIconHl + #</b> - will be a boolean when implemented</li>
+						<li><b>ColIconHl + #</b> - will be a color when implemented</li>
+					</ul>
+				</ul>
+			</li>
+			
+			<li id="vt_colorselectdialog"><h3>colorselectdialog</h3>
+				Creates a CGUIColorSelectDialog instance.
+				<p>No parameters received.</p>
+				<p>
+					While not very useful within a program, this feature has been added for situations such as where
+					the programmer wants to have a color open dialog knows a color will be necessary for a particular
+					toolbar to even be useful after loading. Or perhaps the programmer wishes to have the dialog
+					appear immediately upon loading the program.
+				</p>
+			</li>
+			
+			<li id="vt_inoutfader"><h3>inoutfader</h3>
+				Creates a CGUIInOutFader instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>FullColor</b> - Starting color for fade-ins and final color for fade-outs.</li>
+					<li><b>TransColor</b> - Starting color for fade-outs and final color for fade-ins.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_scrollbar"><h3>scrollbar</h3>
+				Creates a CGUIScrollBar instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Horizontal</b> - Sets if this element is horizontal.</li>
+					<li><b>Min</b> - Smallest value that the slider can be set to.</li>
+					<li><b>Max</b> - Largest value that the slider can be set to.</li>
+					<li><b>Value</b> - Starting value.</li>
+					<li><b>SmallStep</b> - How much the value changes upon clicking the up/left or down/right button.</li>
+					<li><b>LargeStep</b> - How much the value changes upon clicking on the tray.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_slider"><h3>slider</h3>
+				Creates a CSlider instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Horizontal</b> - Sets if this element is horizontal.</li>
+					<li><b>Min</b> - Smallest value that the slider can be set to.</li>
+					<li><b>Max</b> - Largest value that the slider can be set to.</li>
+					<li><b>Value</b> - Starting value.</li>
+					<li><b>SmallStep</b> - Spacing between the small tick marks.</li>
+					<li><b>LargeStep</b> - Spacing between the large tick marks.</li>
+					<li><b>SliderWidth</b></li>
+					<li><b>BGColor</b></li>
+					<li><b>TickColor</b></li>
+					<li><b>ShowSmallTicks</b></li>
+					<li><b>ShowLargeTicks</b></li>
+				</ul>
+			</li>
+			
+			<li id="vt_tabcontrol"><h3>tabcontrol</h3>
+				Creates a CGUITabControl instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Border</b> - Indicates if there should be a border.</li>
+					<li><b>FillBackground</b> - Indicates if the background should be filled.</li>
+					<li><b>TabHeight</b></li>
+					<li><b>TabMaxWidth</b></li>
+					<li><b>ActiveTab</b> - NOT IMPLEMENTED.</li>
+					<li><b>TabVerticalAlignment</b> - Indicates if the tabs should be aligned on the top or the bottom.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_tab"><h3>tab</h3>
+				Creates a CGUITab instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>TabNumber</b> - Placement in the tab list. THIS SHOULD NOT BE SET TO THE SAME VALUE FOR ALL TABS.</li>
+					<li><b>DrawBackground</b></li>
+					<li><b>BackColor</b> - Background color.</li>
+					<li><b>OverrideTextColorEnabled</b></li>
+					<li><b>TextColor</b> - Color of the override text.</li>
+				</ul>
+			</li>
+			
+			<li id="vt_spinbox"><h3>spinbox</h3>
+				Creates a CGUISpinBox instance.
+				<p>CSS Parameters received (beyond those that apply to all):</p>
+				<ul>
+					<li><b>Min</b></li>
+					<li><b>Max</b></li>
+					<li><b>Step</b></li>
+					<li><b>DecimalPlaces</b> - Sets the number of decimal places to be displayed.</li>
+				</ul>
+			</li>
+			
+		</ul>
+	</p>
+
+
+	<!-- ****************** Functions and Example Usage ******************** -->	
+	
+	<h2 id="CO_functionsandexampleusage">Functions and Example Usage</h2>
+	<h3 style="text-align:center;">Functions</h3>
+	<ul>
+	
+		<li>
+			<h4>
+				XPLOsion( IrrlichtDevice* device, bool inherit_css = false )
+				<b style="color:green;">(Constructor)</b>
+			</h4>
+			Parameters:
+			<ul>
+				<li> device - Pointer to the irrlicht engine. </li>
+				<li> inherit_css - Flag indicating whether CSS information should be inherited from parent XML nodes. </li>
+			</ul>
+			<p>
+				Intended to be initialized and stored in a pointer.
+				<a href="#FE_constructor" >example</a>
+			</p>
+		</li>
+		
+		<li>
+			<h4>
+				~XPLOsion()
+				<b style="color:green;">(Destructor)</b>
+			</h4>
+			Drops the XML data, CSS library, and GUI Function Fire instances, leaving them to be deleted by garbage
+			collection if not referenced elsewhere.
+		</li>
+		<li>
+			<h4>irr::s32 getID()</h4>
+			Returns the ID number of this instance.
+		</li>
+		
+		<li>
+			<h4>void setID()</h4>
+			Sets the numeric ID of this instance.
+		</li>
+		
+		<li>
+			<h4>void setAutoID( irr::s32 new_start )</h4>
+			Parameters:
+			<ul>
+				<li> new_start - Starting value for automatically-assigned IDs. </li>
+			</ul>
+			<p>
+				As the GUI elements are being created, they are automatically assigned ID numbers, beginning with
+				the value given here (or defaulted to 1).
+				Note: This function must be called prior to ParseFile() or TranslateXMLTree() if it is to apply to the elements.
+				The auto ID is not reset after each call to ParseFile() or TranslateXMLTree(), so the last available ID value
+				remains and can be used as the starting ID for the next tree to be translated into a GUI.
+			</p>
+		</li>
+		
+		<li>
+			<h4>void setParentCSSInheritance( bool inherit_css = false )</h4>
+			Parameters:
+			<ul>
+				<li> inherit_css - Indicates whether XML nodes should inherit missing but needed CSS information from their
+					parent XML nodes. </li>
+			</ul>
+			<p>
+				By default, this is set to false and the resulting behavior is most similar to HTML.
+				What this allows for is a simplistic way to apply a sweeping application of CSS data to multiple elements by
+				<a href="#FE_CSSinheritance" >simply enclosing them in a division that contains the missing CSS information</a>.
+				Note, however, the effects are additive. Furthermore,
+				<a href="#BUG_inheritance" >the effects are biased with respect to position inheritance</a>.
+			</p>
+		</li>
+		
+		<li>
+			<h4>bool getParentCSSInheritance()</h4>
+			Returns true if CSS information will be inherited from parent XML nodes.
+		</li>
+		
+		<li>
+			<h4>irrXMLStorage* getXMLData()</h4>
+			Returns a pointer to the XML data stored here.
+		</li>
+		
+		<li>
+			<h4>void dropXMLData()</h4>
+			Removes the reference of the XML data (from an irrXMLStorage instance), leaving it to other pointers or garbage collection.
+		</li>
+		
+		<li>
+			<h4>void setXMLDataPointer( irrXMLStorage* new_data )</h4>
+			Parameters:
+			<ul>
+				<li> new_data - Pointer to a irrXMLStorage instance that has not been parsed. </li>
+			</ul>
+			You should never have to call this function. The XPLOsion class create its own to load from file.
+		</li>
+		
+		<li>
+			<h4>CSSLibrary* getCSSData()</h4>
+			Returns a pointer to the CSS library used by this XPLOsion class instance in assigning style information
+			to the GUI elements it creates.
+		</li>
+		
+		<li>
+			<h4>void dropCSSData()</h4>
+			Removes the reference of the CSS library, leaving it to other pointers or garbage collection.
+		</li>
+		
+		<li>
+			<h4>void setCSSDataPointer( CSSLibrary* library )</h4>
+			Parameters:
+			<ul>
+				<li> library - Pointer to a CSS library class instance. </li>
+			</ul>
+		</li>
+		
+		<li>
+			<h4>GUIfunctionFire* getFunctionFireList()</h4>
+			Returns a pointer to the GUIFunctionFire class instance being used to assign functions to the
+			buttons and divisions that are created.
+		</li>
+		
+		<li>
+			<h4>void dropFunctionFireList()</h4>
+			Removes the reference of the GUIFunctionFire list, leaving it to other pointers or garbage collection.
+		</li>
+		
+		<li>
+			<h4>void setFunctionFireList( GUIFunctionFire* list )</h4>
+			Parameters:
+			<ul>
+				<li> library - Pointer to a GUIFunctionFire class instance. </li>
+			</ul>
+		</li>
+		
+		<li>
+			<h4>bool LoadFile( irr::io::path filename )</h4>
+			Parameters:
+			<ul>
+				<li> filename - Name of the file from which to load the XML data. </li>
+			</ul>
+			Loads the XML data into the XML data storage object. If the storage object does not exist, it is created.
+			<br>
+			Returns true if the file was loaded successfully.
+		</li>
+		
+		<li>
+			<h4>bool ParseFile( irr::gui::IGUIElement * parent=0 )</h4>
+			Parameters:
+			<ul>
+				<li> parent - Pointer to a GUI element to which all elements created will be attached as
+					children or sub-children. If no parent is given, the root GUI element is used. </li>
+			</ul>
+			Call after LoadFile().
+			<br>
+			Returns true if the file was parsed successfully.
+		</li>
+		
+		<li>
+			<h4>void TranslateXMLNode( irrXMLTreeNode * node, irr::gui::IGUIElement * parent, bool clipped=false )</h4>
+			Parameters:
+			<ul>
+				<li> node - Node from which to begin extracting GUI information. This node and its children contain the
+					necessary information for constructing a GUI. </li>
+				<li> parent - Pointer to a GUI element to which all elements created will be attached as
+					children or sub-children. If no parent is given, the root GUI element is used. </li>
+				<li> clipped - If the GUI elements will be clipped in order to remain within the boundaries of the parent
+					GUI element. </li>
+			</ul>
+			This is the main function in XPLOsion. It is exposed to allow you to pass in any irrXMLTreeNode you wish,
+			and this way make it easier to load multiple XML trees with only one instance of the XPLOsion class.
+		</li>
+		
+	</ul>
+	
+
+	
+	<!-- ****************** EXAMPLES -->
+	
+	<h3 style="text-align:center;">Examples</h3>
+	
+	<p id="FE_constructor">
+		<h4>Example usage of constructor</h4>
+		<div class="codebox"> <code>
+			IrrlichtDevice * irrdev = createDevice(); <br>
+			XPLOsion* xplo = new XPLOsion( irrdev, <bluetext>false</bluetext> ); <br>
+			CSSLibrary* css = new CSSLibrary( irrdev ); <br>
+			GUIFunctionFire* gff = new GUIFunctionFire( irrdev->getGUIEnvironment() ); <br>
+			
+			<br>
+			<comment>/* Assigning the library of CSS information to the XPLOsion instance.
+			Note that we can do this even without having yet loaded any CSS information. */</comment> <br>
+			xplo->setCSSDataPointer( css ); <br>
+			
+			<br>
+			<comment>/* Assigning the function-button association management for XPLOsion.
+			This is not required unless you wish to use "OnClick" or "OnPress" for divisions and buttons. */</comment> <br>
+			xplo->setFunctionFireList( gff ); <br>
+		</code> </div>
+	</p>
+	
+	<p id="FE_CSSinheritance">
+		<h4>Parent XML Node inheritance example</h4>
+		<p>
+			Without inheriting CSS information from parent nodes, CSS has to be assigned individually.
+		</p>
+		<div class="codebox"> In the C++ file: <br><br> <code>
+			IrrlichtDevice * irrdev = createDevice(); <br>
+			XPLOsion* xplo = new XPLOsion( irrdev, <bluetext>false</bluetext> );
+		</code> </div>
+		<br>
+		<div class="codebox"> In the XML file: <br><br> <code>
+			<!-- First tag -->
+			<tag_text><!><</!>div</tag_text>
+			style=<quote>"left:20px; top:40px; height:50px; width:100px; background-color:red;"</quote>
+			<tag_text><!>></!></tag_text>
+				<!-- close tag -->
+			<tag_text><!><</!>/div<!>></!></tag_text>
+			
+			<br>
+			<!-- Second tag -->
+			<tag_text><!><</!>div</tag_text>
+			style=<quote>"left:220px; top:40px; height:50px; width:100px; background-color:red;"</quote>
+			<tag_text><!>></!></tag_text>
+				<!-- close tag -->
+			<tag_text><!><</!>/div<!>></!></tag_text>
+		</code> </div>
+		<br>
+		Result:<br>
+		<img src="images/inheritance_no.png" alt="example image not found" >
+		
+		<br>
+		<p>
+			With inheritance of parent node CSS, CSS information can be wrapped and thus apply to all child elements.
+		</p>
+		<div class="codebox"> In the C++ file: <br><br> <code>
+			IrrlichtDevice * irrdev = createDevice(); <br>
+			XPLOsion* xplo = new XPLOsion( irrdev, <bluetext>true</bluetext> );
+		</code> </div>
+		<br>
+		<div class="codebox"> In the XML file: <br><br> <code>
+			<!-- Outer tag -->
+			<tag_text><!><</!>div</tag_text>
+			style=<quote>"top:40px;"</quote>
+			<tag_text><!>></!></tag_text>
+			<br>
+		
+			<div style="padding-left:20px;">
+				<!-- First tag -->
+				<tag_text><!><</!>div</tag_text>
+				style=<quote>"left:20px; height:50px; width:100px; background-color:red;"</quote>
+				<tag_text><!>></!></tag_text>
+					<!-- close tag -->
+				<tag_text><!><</!>/div<!>></!></tag_text>
+				
+				<br>
+				<!-- Second tag -->
+				<tag_text><!><</!>div</tag_text>
+				style=<quote>"left:220px; height:50px; width:100px; background-color:red;"</quote>
+				<tag_text><!>></!></tag_text>
+					<!-- close tag -->
+				<tag_text><!><</!>/div<!>></!></tag_text>
+			</div>
+			
+			<!-- end of outer tag -->
+			<tag_text><!><</!>/div<!>></!></tag_text>
+			
+		</code> </div>
+		<br>
+		Result:<br>
+		<img src="images/inheritance_yes.png" alt="example image not found" >
+		
+		<p>
+			Note that the positioning effects are additive (i.e. The parent object that loans its CSS attributes
+			does not go away, and thus the effects appear to be additive).
+			Furthermore, note that height and width remain with the divisions in the example due to the
+			<a href="#BUG_inheritance" >way CSS Library handles missing CSS data</a>.
+		</p>
+		
+	</p>
+	
+	
+	
+	<!-- ****************** Known Bugs ******************** -->
+	
+	<h2 id="CO_knownbugs">Known Bugs and Oddities</h2>
+	<p>
+		While not a bug with XPLOsion, for some reason menus are non-responsive in some aspects.
+	</p>
+	<p id="BUG_inheritance">
+		Oddity: When nodes are allowed to inherit CSS information from their parent nodes, they do not
+		merely take the positioning attributes necessary to create any box. Instead, the attributes are
+		searched for in the following order (if missing): "left", "right", "top", "bottom", "height", "width".
+		For example, if "left" is missing and either only a "right" or a "width" value is provided, the first
+		left encountered in a parent node will be used for positioning the GUI element. Only if it is not
+		found will the other missing attribute be searched for.
+		The downside of this is that you cannot use a browser to test the appearance of your interface
+		(with a few minor alterations) before attempting to load it with XPLOsion. 
+	</p>
+	<p>
+		Oddity: Currently, in order to draw a full-scale, unaltered image, class divBox must load and draw each 
+		pixel of an irr::video::IImage individually, which is a slow method. Preferably there ought to be a
+		built-in function that draws images without altering their dimensions.
+	</p>
+	<p>
+		Oddity: When the irrlicht engine draws boxes based on EGUIA_LOWERRIGHT, the boxes are placed
+		about 20 pixels off to the right and bottom of the screen. 
+	</p>
+	
+	
+	
+	<!-- ****************** To Do ******************** -->
+	
+	<h2 id="CO_othertodo">Other To-Dos</h2>
+
+	<ul>
+		<li>
+			Implement scrolling background image with movement of the scroll bars in divBox.
+			(Make this optional with a serializable attribute.)
+		</li>
+		<li>
+			Add attribute loading such that the following GUI elements can be integrated:
+			<ul>
+				<li> CGUITable </li>
+			</ul>
+			In need of different intergration:
+			<ul>
+				<li> CGUITreeView </li>
+			</ul>
+		</li>
+		<li>
+			The following will NOT be integrated:
+			<ul>
+				<li> CGUIToolBar - It would produce the same result as a division containing relatively-positioned
+					buttons. </li>
+				<li> CGUIImage - It would produce the same result as a division with a background image, no clipping,
+					and no scrolling. </li>
+			</ul>
+		</li>
+	</ul>
+	
+	<br><br><br>
+
+
+</body>
+
+</html>

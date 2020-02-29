@@ -1,0 +1,132 @@
+
+
+#main_region1
+{
+	position: absolute;
+	left: 30px;
+	top: 30px;
+	height: 360px;
+	/* width: 350px; */
+	right: 50px;
+	
+	background-color: white;
+	
+	overflow: hidden;
+}
+
+.stdbox
+{
+	height: 30px;
+	width: 100px;
+}
+
+#innerbox1-1
+{
+	position: absolute;
+	right: 0px;
+	top: 20px;
+	
+	background-color: blue;
+}
+
+.relative
+{
+	position: relative;
+}
+
+#innerbox2-1
+{
+	left: 20px;
+	top: 35px;
+	
+	background-color: red;
+}
+
+.editbox1c
+{
+	left: 0px;
+	top: 40px;
+	
+	Visible: false;
+	
+	Enabled: true;
+	
+	WordWrap: true;
+	MultiLine: true;
+	AutoScroll: true;
+}
+
+#editbox1
+{
+	top: 40px;
+	height: 200px;
+	width: 200px;
+	
+	Visible: true;
+	
+	/* Enabled: true; */
+	
+	OverrideColor: blue;
+	OverrideColorEnabled: true;
+
+	
+	PasswordChar:; /* No password */
+	
+	HTextAlign: upperLeft;
+	VTextAlign: upperLeft;
+}
+
+#leftmost
+{
+	position: absolute;
+	left: -30px;
+	top: 0px;
+	width: 100px;
+	height: 100px;
+	
+	background-color: #aabbcc;
+}
+
+#rightmost
+{
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	height: 100px;
+	width: 100px;
+	
+	background-color: #ffeedd;
+}
+
+#windiv
+{
+	position: static;
+	left: 0px;
+	top: 20px;
+	height: 180px;
+	width: 200px;
+	
+	background-color: green;
+	
+	overflow: auto;
+}
+
+#win1
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	height: 200px;
+	width: 200px;
+	
+	Enabled: true;
+	
+	Caption: Hello there;
+	
+	IsDraggable: true;
+	DrawBackground: true;
+	DrawTitlebar: true;
+	IsCloseVisible: true;
+	IsMinVisible: false;
+	IsRestoreVisible: false;
+}

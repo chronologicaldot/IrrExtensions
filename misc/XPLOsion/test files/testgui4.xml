@@ -1,0 +1,12 @@
+
+
+<div id="container">
+	<tabcontrol id="tc1">
+		<tab class="tb" id="tb1">
+			<text class="txt">This is some text</text>
+		</tab>
+		<tab class="tb" id="tb2">
+			<text class="txt">More text</text>
+		</tab>
+	</tabcontrol>
+</div>

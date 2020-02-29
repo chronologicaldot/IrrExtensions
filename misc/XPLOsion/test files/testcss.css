@@ -1,0 +1,202 @@
+
+/* This is a style file for programs using CSSLibrary, which, when combined with XPLOsion,
+create GUI interfaces. These files operate like typical CSS files:
+>> "#" (pound sign) before a name indicates an ID.
+>> "." (period) before a name indicates a class.
+The contents inside of the curly brackets "{}" contain the names of the parameters that
+the GUI elements are expecting via deserializeAttributes (native IGUIElement function for irrlicht).
+
+Formatting:
+While "px" is the only thing expecting after parameters that give location information, it is not required.
+Currently quotation marks are not supported.
+*/
+
+.upperleft_div
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100px;
+	height: 100px;
+	
+	background-color: gray;
+}
+
+#upperleft_div
+{
+	background-color: green;
+}
+
+#lowerright_div
+{
+	position: absolute;
+	right: 20px;
+	bottom: 50px;
+	width: 200px;
+	height: 300px;
+	
+	background-color: #00a5ff;
+	
+	/*
+	background-color: 255 125 30 50;
+	*/
+
+	background-image: ../test files/iu_test.jpg ;
+	
+	background-repeat: no-repeat;
+}
+
+#green_div
+{
+	position: absolute;
+	right:20px;
+	top:-20px;
+	height:100px;
+	width:100px;
+	
+	background-color:green;
+}
+
+.hider
+{
+	overflow: hidden;
+}
+
+#editbox1
+{
+	position: absolute;
+	left: 0px;
+	top: 80px;
+	height: 200px;
+	width: 400px;
+	
+	Enabled: true;
+	
+	OverrideColor: blue;
+	OverrideColorEnabled: true;
+	
+	WordWrap: true;
+	MultiLine: true;
+	AutoScroll: true;
+	
+	PasswordChar:; /* No password */
+	
+	HTextAlign: upperLeft;
+	VTextAlign: upperLeft;
+}
+
+#editbox2
+{
+	position: absolute;
+	left: 0px;
+	top: 60px;
+	height: 200px;
+	width: 400px;
+	
+	Enabled: true;
+	
+	OverrideColor: gray;
+	OverrideColorEnabled: true;
+	
+	WordWrap: true;
+	MultiLine: true;
+	AutoScroll: true;
+	
+	PasswordChar: ; /* No password */
+	
+	HTextAlign: upperLeft;
+	VTextAlign: upperLeft;
+}
+
+#bstd
+{
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	height: 64px;
+	width: 64px;
+	
+	Enabled: true;
+	
+	PushButton: true;
+	Pressed: false;
+	
+	Border: true;
+	UseAlphaChannel: true;
+	ScaleImage: true;
+
+	Image: ../test files/iu_test.png ;
+	ImageRect: 0 0 64 64;
+	
+	PressedImage: ../test files/button.bmp ;
+	PressedImageRect: 0 0 64 64;
+	
+	Caption: at least text works;
+}
+
+.stdbluetext
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	height: 50px;
+	width: 200px;
+	
+	Enabled: true;
+	
+	Background: true;
+	OverrideColor: white;
+	OverrideColorEnabled: true;
+	BGColor: blue;
+	OverrideBGColorEnabled: true;
+	
+	WordWrap: true;
+}
+
+#win1
+{
+	position: absolute;
+	left: 0px;
+	top: 30px;
+	height: 100px;
+	width: 250px;
+	
+	Enabled: true;
+	
+	Caption: Hello there;
+	
+	IsDraggable: true;
+	DrawBackground: true;
+	DrawTitlebar: true;
+	IsCloseVisible: true;
+	IsMinVisible: true;
+	IsRestoreVisible: true;
+}
+
+#slide
+{
+	position: absolute;
+	/* Rect: 0 0 20 100; */
+	left: 0;
+	top: 0;
+	height: 250;
+	width: 250;
+	
+	Enabled: true;
+	Visible: true;
+	Id: 1000;
+	
+	Horizontal: true;
+	Min: -50;
+	Max: 100;
+	Value: 50;
+	SmallStep: 10;
+	LargeStep: 50;
+
+	SliderWidth: 100;
+	
+	BGColor: green;
+	TickColor: blue;
+	ShowSmallTicks: true;
+	ShowLargeTicks: true;
+}

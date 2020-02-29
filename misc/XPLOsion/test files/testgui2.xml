@@ -1,0 +1,47 @@
+
+<div id="main_region1">
+
+	<div id="leftmost">
+		<div id="leftmost" style="background-color:red;"></div>
+	</div>
+	
+	<div id="rightmost">
+	</div>
+	
+	<window id="win1">
+		<div id="windiv">
+			<div id="leftmost">
+				<div id="leftmost" style="background-color:red;"></div>
+			</div>
+			<div id="rightmost"></div>
+		</div>
+	</window>
+
+</div>
+
+<!--
+<div id="main_region1">
+	
+	<div class="relative" class2="stdbox" id="innerbox2-1"></div>
+	
+	<div class="stdbox" id="innerbox1-1"></div>
+	
+	<div class="relative" class2="stdbox" id="innerbox2-1"></div>
+
+	<editbox class="relative" class2="editbox1c" id="editbox1"></editbox>
+	
+	<div class="stdbox" style="position:absolute; right:0px; bottom:0px; background-color:green;"> </div>
+
+</div>
+-->
+
+<!--
+<div style="top:40px;">
+
+<div style="left:20px; height:50px; width:100px; background-color:red;"></div>
+
+<div style="left:220px; height:50px; width:100px; background-color:red;"></div>
+
+</div>
+
+-->

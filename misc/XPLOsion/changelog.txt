@@ -1,0 +1,72 @@
+XPLOsion change log
+====================
+
+v 1.42
+
+- Added GUI element support for:
+>> basic
+- Added premake5.lua file.
+
+ATTENTION: XPLOsion no longer works with the latest version of Irrlicht.
+
+----------------
+v 1.411
+
+- Fixed bug that caused unknown xml elements to crash when trying to construct them with a factory.
+- Added support for tabs to be controlled by the tabcontrol they are nested in.
+
+----------------
+v 1.41
+
+- Added ability to deserialize data for elements created from factories.
+
+
+----------------
+v 1.4
+
+- Added a version number "XPLO_version" to xplo.h
+- Added no-parent preventation when using XPLOsion::TranslateXMLNode()
+- Removed support for GUIFunctionFire
+- Added support for GUIElemAcceptor
+- Added support for loading GUI elements from GUI element factories
+
+
+----------------
+v 1.3
+
+- Updated divBox class - Scrollbars are no longer sub elements due to irrlicht 1.8 change
+- Fixed issue with bounding rectangles for images (they had been initialized to zero)
+- Added GUI element support for:
+>> slider
+>> scrollbar
+>> tabs and tab control
+
+
+----------------
+v 1.2
+
+- Add support for irrlicht GUI elements:
+>> menu
+>> menubar
+>> message box
+>> modal screen
+>> mesh viewer
+>> checkbox
+>> combo box
+>> file open dialog
+>> list box
+>> color select dialog
+>> in-out fader
+- Reoranged attribute identification in CSSLibraryImpl.cpp
+- Changed overflow attribute keyword from "show" to "visible", but kept backwards compatibility
+
+
+----------------
+v 1.1
+
+- Core code completed
+- GUI elements supported:
+>> div
+>> button
+>> editbox
+>> window

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+</head>
+
+<body>
+
+	<ul> <!-- list of valid attribute type names BEGIN -->
+	
+		<!-- ____________________ attribute: position ___________________ -->
+		<li> <h3>position</h3>
+			<p>
+				Attribute value type: Enumeration (HTMLPosTypes in webtypes.h) <br>
+				Default value: "static"
+			</p>
+			<p>
+				Not the same as <a href="#attr_position" >Position</a>, which does nothing.
+			</p>
+			<p>
+				This indicates the type of positioning an element will experience, independent of the type of
+				element it is. (Currently, it applies only to GUI elements.)
+				The way it treats elements is analogous to HTML:
+				
+				<ul>
+				
+					<li> <b>absolute</b>
+					- positions an object outside of the normal flow of elements but within the boundaries of the
+					parent GUI element (attributes affecting this are "left", "right", "top", "bottom", "height", and
+					"width");
+					</li>
+					
+					<li> <b>fixed</b>
+					- positions an object similar to "absolute", but the parent object is the root GUI element;
+					</li>
+					
+					<li> <b>relative</b>
+					- positions objects within the normal flow of elements but offsets the element to the right by
+					the amount given by the attributes "left" and "top". Furthermore, size judgment is made based
+					on the absolute rectangle of the containing element from the top, not from current placement
+					within the element (attributes affecting this are "left", "right", "top", "bottom", "height", and
+					"width");
+					</li>
+					
+					<li> <b>static</b>
+					- positions objects within the normal flow of elements but offsets the element by the amount
+					given by the attribute "top". Furthermore, size judgment is made based on the absolute
+					rectangle of the containing element from the top, not from current placement within the
+					element (attributes affecting this are "left", "right", "top", "bottom", "height", and "width");
+					</li>
+					
+				</ul>
+
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: left ___________________ -->
+		<li> <h3>left</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing how far left from the parent element's
+				left edge (or preceding element's right edge) this element's left edge is to be placed.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: right ___________________ -->
+		<li> <h3>right</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing how far right from the parent element's
+				right edge this element's right edge is to be placed disregarding how it will be repositioned based
+				on the flow of elements.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: top ___________________ -->
+		<li> <h3>top</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing how far below the parent element's
+				top edge (or preceding element's bottom edge) this element's top edge is to be placed.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: bottom ___________________ -->
+		<li> <h3>bottom</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing how far above the parent element's
+				bottom edge this element's bottom edge is to be placed disregarding how it will be repositioned
+				based on the flow of elements.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: height ___________________ -->
+		<li> <h3>height</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing its height. If the top is given and not
+				the bottom, the height will determine the bottom edge of the bounding box, and vice versa (bottom
+				given instead of top). This attribute will be ignored if both the top and bottom attributes are
+				found.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: width ___________________ -->
+		<li> <h3>width</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Helps define the bounding box of an element by establishing its width. If the left is given and not
+				the right, the width will determine the right edge of the bounding box, and vice versa (right
+				given instead of left). This attribute will be ignored if both the left and right attributes are
+				found.
+			</p>
+			<p>
+				Current implementation allows you to add "px" to the end of the value because it will be ignored.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: background-color ___________________ -->
+		<li> <h3>background-color</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				For setting the background color of element that uses this attribute.
+				NOTE: This is not a substitute for "BGColor".
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: background-image ___________________ -->
+		<li> <h3>background-image</h3>
+			<p>
+				Attribute value type: Path (irr::io::path) <br>
+				Default value: ""
+			</p>
+			<p>
+				For setting the background image of an element that uses this attribute.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: background-repeat ___________________ -->
+		<li> <h3>background-repeat</h3>
+			<p>
+				Attribute value type: Enum (HTMLBackgroundImageRepeatTypes in webtypes.h) <br>
+				Default value: "no-repeat"
+			</p>
+			<p>
+				For setting the repeat of a background image of an element that uses this attribute.
+				Acceptable values are "repeat" (both x and y axis), "repeat-x", "repeat-y", and "no-repeat".
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: overflow ___________________ -->
+		<li> <h3>overflow</h3>
+			<p>
+				Attribute value type: Enum (WebOverflowTypes in webtypes.h) <br>
+				Default value: "show"
+			</p>
+			<p>
+				For handling how child elements are displayed (i.e. by setting their NoClip variable).
+				NOTE: While loading with XPLosion, this is handled, but it is not automatically done by the
+				sdiv class.
+				Acceptable values are "visible", "hidden", and "auto" (produce scrollbars if necessary).
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Id ___________________ -->
+		<li> <h3>Id</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				NOTE: For buttons and divs that use GUIFunctionFire, do NOT change this from zero if you wish
+				to have auto-assignment of functions using "onClick" and/or "onPress".
+				A value of zero will be overridden by an autmatically assigned ID used to associate it with a
+				function.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Caption ___________________ -->
+		<li> <h3>Caption</h3>
+			<p>
+				Attribute value type: String (irr::core::stringc) <br>
+				Default value: ""
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Visible ___________________ -->
+		<li> <h3>Visible</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: true
+			</p>
+			<p>
+				Unlike most boolean values, this attribute is set to true by default so we don't have to
+				worry about this when loading elements (especially when we usually want to show
+				them).
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Enable ___________________ -->
+		<li> <h3>Enable</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: true
+			</p>
+			<p>
+				Unlike most boolean values, this attribute is set to true by default so we don't have to
+				worry about this when loading elements (especially when we usually want to show
+				them).
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Enabled (+ #) ___________________ -->
+		<li> <h3>Enabled (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Used for list items only. Indicates if a particular list item is enabled / will react to user events.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: NoClip ___________________ -->
+		<li> <h3>NoClip</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: true
+			</p>
+			<p>
+				Unlike most boolean values, this attribute overridden by the attribute "overflow" in sdiv
+				instances (HTML-like divisions) in cases where overflow is set to hidden or auto.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Rect ___________________ -->
+		<li> <h3>Rect</h3>
+			<p>
+				Attribute value type: Rectangle (irr::core::recti) <br>
+				Default value: 0 0 0 0
+			</p>
+			<p>
+				A means of setting the attributes "left", "top", "right", and "bottom" (in that order) all at once.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Border ___________________ -->
+		<li> <h3>Border</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether there should be an outline (or, in some cases, a backdrop made from the GUI skin).
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Checked ___________________ -->
+		<li> <h3>Checked</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if a GUI element is to display a check mark (flick sprite).
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Checked (+ #) ___________________ -->
+		<li> <h3>Checked (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Used for list items only. Indicates if a particular list item is initialized with a check-mark
+				(flick sprite) next to its name.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ImageRect ___________________ -->
+		<li> <h3>ImageRect</h3>
+			<p>
+				Attribute value type: Rectangle (irr::core::recti) <br>
+				Default value: 0 0 0 0
+			</p>
+			<p>
+				Bounding box for images.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Image ___________________ -->
+		<li> <h3>Image</h3>
+			<p>
+				Attribute value type: Path (irr::io::path) -> converted to ITexture <br>
+				Default value: ""
+			</p>
+			<p>
+				For setting the foreground image of an element that uses this attribute.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: PressedImageRect ___________________ -->
+		<li> <h3>PressedImageRect</h3>
+			<p>
+				Attribute value type: Rectangle (irr::core::recti) <br>
+				Default value: 0 0 0 0
+			</p>
+			<p>
+				Bounding box for image of pressed state of elements that have such a state.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: PressedImage ___________________ -->
+		<li> <h3>PressedImage</h3>
+			<p>
+				Attribute value type: Path (irr::io::path) -> converted to ITexture <br>
+				Default value: ""
+			</p>
+			<p>
+				For setting the foreground image for the pressed state of an element that uses this attribute.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: PushButton ___________________ -->
+		<li> <h3>PushButton</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				If the button or element should maintain a pressed state when clicked on.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Pressed ___________________ -->
+		<li> <h3>Pressed</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				If the button or element should start in the state of being pressed when the GUI is loaded.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: UseAlphaChannel ___________________ -->
+		<li> <h3>UseAlphaChannel</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether to utilize the alpha channel of the image (from the attribute "Image") when drawing
+				it to the screen.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ScaleImage ___________________ -->
+		<li> <h3>ScaleImage</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether to make the image (from the attribute "Image") fit the element it is being drawn upon.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: OverrideColor ___________________ -->
+		<li> <h3>OverrideColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Sets whether to utilize the alpha channel of the image (from the attribute "Image") when drawing
+				it to the screen.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: OverrideColorEnabled ___________________ -->
+		<li> <h3>OverrideColorEnabled</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether to utilize the overriding background color.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: OverrideBGColorEnabled ___________________ -->
+		<li> <h3>OverrideBGColorEnabled</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether this element utilizes the overriding background color instead of the default.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Background ___________________ -->
+		<li> <h3>Background</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether this element has a background.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: DrawBackground ___________________ -->
+		<li> <h3>DrawBackground</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element should have a background.
+				Same as Background.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: DrawBack ___________________ -->
+		<li> <h3>DrawBack</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Same as DrawBackground.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: BGColor ___________________ -->
+		<li> <h3>BGColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Sets the background color of the element that utilizes this.
+				NOTE: This is not a substitute for "background-color".
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: BackColor ___________________ -->
+		<li> <h3>BackColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Background color.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: MaxChars ___________________ -->
+		<li> <h3>MaxChars</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Sets the maximum number of characters that can be typed into the element.
+				This is used primarily by editing text boxes.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: WordWrap ___________________ -->
+		<li> <h3>WordWrap</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether this element allows word wrapping.
+				This is used primarily by editing text boxes. It is only effective if MultiLine is set to true.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: MultiLine ___________________ -->
+		<li> <h3>MultiLine</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Sets whether this element allows multiple lines for typing text.
+				This is used primarily by editing text boxes.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: AutoScroll ___________________ -->
+		<li> <h3>AutoScroll</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				If the element allows multiple lines of text, this acts as a flag that tells the element to keep
+				the cursor position within the text box visible at all times by automatically handling scrolling.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: PasswordChar ___________________ -->
+		<li> <h3>PasswordChar</h3>
+			<p>
+				Attribute value type: String (irr::core::string) <br>
+				Default value: ""
+			</p>
+			<p>
+				If the element contains a password, the first letter of this string is to be used as a substitute
+				character for all of the characters in the passwords.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: PasswordBox ___________________ -->
+		<li> <h3>PasswordBox</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				If the element contains text, this acts as a flag to indicate if the text belongs to passwords,
+				in which case the password character (given in the attribute PasswordChar) is to be used.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: HTextAlign ___________________ -->
+		<li> <h3>HTextAlign</h3>
+			<p>
+				Attribute value type: Enum (irr::gui::GUIAlignmentNames in EGUIAlignment.h) <br>
+				Default value: "upperLeft"
+			</p>
+			<p>
+				Indicates how the text within an element is to be aligned horizontally.
+				For example: "upperLeft" should cause the text to be placed on the left edge of the text box.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: VTextAlign ___________________ -->
+		<li> <h3>VTextAlign</h3>
+			<p>
+				Attribute value type: Enum (irr::gui::GUIAlignmentNames in EGUIAlignment.h) <br>
+				Default value: "upperLeft"
+			</p>
+			<p>
+				Indicates how the text within an element is to be aligned vertically.
+				For example: "upperLeft" should cause the text to be placed on the top edge of the text box.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: IsDraggable ___________________ -->
+		<li> <h3>IsDraggable</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element can be dragged using the mouse button.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: DrawTitlebar ___________________ -->
+		<li> <h3>DrawTitlebar</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element should have its titlebar drawn.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: IsCloseVisible ___________________ -->
+		<li> <h3>IsCloseVisible</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element should have its exit button drawn.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: IsMinVisible ___________________ -->
+		<li> <h3>IsMinVisible</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element should have its minimize button drawn.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: IsRestoreVisible ___________________ -->
+		<li> <h3>IsRestoreVisible</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the GUI element should have its restore button drawn.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Position ___________________ -->
+		<li id="attr_position"> <h3>Position</h3>
+			<p>
+				Attribute value type: Position (irr::core::position2di) <br>
+				Default value: position2di(0)
+			</p>
+			<p>
+				Does nothing. Implemented because the creators of irrlicht included it in their deserializeAttributes()
+				and serializeAttributes() functions in IGUIElement (specifically for context menus), although it may
+				have some use for scene nodes.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ParentItem ___________________ -->
+		<li> <h3>ParentItem</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				If this is a sub-menu, this indicates which slot in the list this sub-menu will be placed in.
+				To make a GUI menu a sub-menu, simply nest the menu tags within another menu.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: CloseHandling ___________________ -->
+		<li> <h3>CloseHandling</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0 (ECONTEXT_MENU_CLOSE::ECMC_IGNORE) (ignore)
+			</p>
+			<p>
+				This indicates how a menu will react when told to close. The settings are:
+				<ul>
+					<li>0 - Ignore / Do nothing.</li>
+					<li>1 - Remove / Menu is deleted.</li>
+					<li>2 - Hide / Menu disappears.</li>
+				</ul>
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ItemCount ___________________ -->
+		<li> <h3>ItemCount</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Indicates the number of items of some sort, sometimes the number of items in a GUI menu.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: IsSeparator (+ #) ___________________ -->
+		<li> <h3>IsSeparator (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Used for list items only. Indicates if this list item is actually a divider (e.g. a dash) instead of
+				an actual selectable item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Text (+ #) (or) text ___________________ -->
+		<li> <h3>Text (+ #) (or) text</h3>
+			<p>
+				Attribute value type: String (irr::core::stringc) <br>
+				Default value: ""
+			</p>
+			<p>
+				Used for list items. This is the text displayed in the list for a paritcular item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: CommandID (+ #) ___________________ -->
+		<li> <h3>CommandID (+ #)</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Used for list items. This is the unique ID for a paritcular item in a list.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: AutoChecking (+ #) ___________________ -->
+		<li> <h3>AutoChecking (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Used for list items only. Indicates if a particular list item should be checked (given a
+				flick sprite) or unchecked automatically with each user-click on the list item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Item (+ # +) Text ___________________ -->
+		<li> <h3>Item (+ # +) Text</h3>
+			<p>
+				Attribute value type: String (irr::core::stringc) <br>
+				Default value: ""
+			</p>
+			<p>
+				Used for list items. This is the text displayed in the list for a paritcular item.
+			</p>
+			<p>
+				NOTE: Between "Item" and "Text" must be a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Selected ___________________ -->
+		<li> <h3>Selected</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				When used for list items, it gives the index of the item in the list that is initially selected.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: MoveOverSelect ___________________ -->
+		<li> <h3>MoveOverSelect</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates a list item can be selected simply by hovering over it.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: UseColText (+ #) ___________________ -->
+		<li> <h3>UseColText (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether to use the override color (given by the attribute "ColText") for the font
+				of a list item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ColText (+ #) ___________________ -->
+		<li> <h3>ColText (+ #)</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				The override color for the font of a list item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: UseColTextHl (+ #) ___________________ -->
+		<li> <h3>UseColTextHl (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether to use the override color (given by the attribute "ColText") for the
+				font highlighter of a list item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ColTextHl (+ #) ___________________ -->
+		<li> <h3>ColTextHl (+ #)</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				The override color for the font highlighter of a list item.
+			</p>
+			<p>
+				NOTE: It must be followed by a number indicating which list item this is.
+				List numbers begin at zero.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: UseColIcon (+ #) ___________________ -->
+		<li> <h3>UseColIcon (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Future feature in irrlight.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ColIcon (+ #) ___________________ -->
+		<li> <h3>ColIcon (+ #)</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Future feature in irrlight.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: UseColIconHl (+ #) ___________________ -->
+		<li> <h3>UseColIconHl (+ #)</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Future feature in irrlight.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ColIconHl (+ #) ___________________ -->
+		<li> <h3>ColIconHl (+ #)</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Future feature in irrlight.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: FullColor ___________________ -->
+		<li> <h3>FullColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Color of an in-out fader. It is the initial color if the fader is the type that fades in and
+				the final color if the fader is the type that fades out.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TransColor ___________________ -->
+		<li> <h3>TransColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Color of an in-out fader. It is the final color if the fader is the type that fades in and
+				the initial color if the fader is the type that fades out.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Horizontal ___________________ -->
+		<li> <h3>Horizontal</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates if the implementation of a GUI element should display horizontally or vertically.
+				e.g. For scrollbars, this indicates if the scrolling should be from side to side or up and down.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Min ___________________ -->
+		<li> <h3>Min</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Indicates a minimum value.
+				e.g. For scrollbars, this is the lowest value they will return.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Max ___________________ -->
+		<li> <h3>Max</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Indicates a maximum value.
+				e.g. For scrollbars, this is the highest value they will return.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Value ___________________ -->
+		<li> <h3>Value</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				Key initial value for something.
+				e.g. For scrollbars, this is the starting position of the slider bar.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: SmallStep ___________________ -->
+		<li> <h3>SmallStep</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For scrollbars, this is the small change in their current position that occurs when scrolling with
+				the mouse wheel.
+				It may also be used for drawing tick marks.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: LargeStep ___________________ -->
+		<li> <h3>LargeStep</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For scrollbars, this is the largest change in their current position that occurs when clicking in
+				their "tray" (anywhere in the scrollbar other than the slider bar itself or the change buttons).
+				It may instead be used for drawing tick marks.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ShowSmallTicks ___________________ -->
+		<li> <h3>ShowSmallTicks</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether or not to display tick marks that indicate the smallest change that can
+				be made in the key value of a GUI element.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ShowLargeTicks ___________________ -->
+		<li> <h3>ShowLargeTicks</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether or not to display tick marks that indicate a large change that can be made
+				in the key value of a GUI element.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: SliderWidth ___________________ -->
+		<li> <h3>SliderWidth</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For scrolling GUI elements, this indicates the size of the slider bar.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TickColor ___________________ -->
+		<li> <h3>TickColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				Indicates the color of the tick marks whose visibility is usually controlled by ShowSmallTicks and
+				ShowLargeTicks.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Name ___________________ -->
+		<li> <h3>Name</h3>
+			<p>
+				Attribute value type: String (irr::core::stringc) <br>
+				Default value: ""
+			</p>
+			<p>
+				The name of a GUI element. Added in irrlicht 1.8.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabNumber ___________________ -->
+		<li> <h3>TabNumber</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For tabs - gives the slot of the tab in the list of tabs.
+			</p>
+		</li>
+		
+		<!-- ____________________ attribute: TabGroup ___________________ -->
+		<li> <h3>TabGroup</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For pressing the tab key to change the active GUI.
+				This indicates which tab group the element belongs to.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabHeight ___________________ -->
+		<li> <h3>TabHeight</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For tab control - gives the tab height.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabMaxWidth ___________________ -->
+		<li> <h3>TabMaxWidth</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For tab control - gives the largest a tab is allowed to be.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: ActiveTab ___________________ -->
+		<li> <h3>ActiveTab</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For tab control - gives the active tab.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabOrder ___________________ -->
+		<li> <h3>TabStop</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For pressing the tab key to change the active GUI.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabStop ___________________ -->
+		<li> <h3>TabStop</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				For pressing the tab key to change the active GUI.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TabVerticalAlignment ___________________ -->
+		<li> <h3>TabVerticalAlignment</h3>
+			<p>
+				Attribute value type: Enum (irr::gui::GUIAlignmentNames in EGUIAlignment.h) <br>
+				Default value: "upperLeft"
+			</p>
+			<p>
+				For tab control: Indicates how the tabs within an element are to to be aligned vertically.
+				For example: "upperLeft" should cause the tabs to be placed on the top edge of the tab control.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: OverrideTextColorEnabled ___________________ -->
+		<li> <h3>OverrideTextColorEnabled</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether or not to use the override text color.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: TextColor ___________________ -->
+		<li> <h3>TextColor</h3>
+			<p>
+				Attribute value type: Color (irr::video::SColor) <br>
+				Default value: (u16) 0 \ SColor(0,0,0,0)
+			</p>
+			<p>
+				The override text color.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: FillBackground ___________________ -->
+		<li> <h3>FillBackground</h3>
+			<p>
+				Attribute value type: Bool (bool) <br>
+				Default value: false
+			</p>
+			<p>
+				Indicates whether or not to use the override background color.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: Step ___________________ -->
+		<li> <h3>Step</h3>
+			<p>
+				Attribute value type: Float (irr::f32) <br>
+				Default value: 0.0
+			</p>
+			<p>
+				The amount to change a floating point value.
+				Used by SpinBox for changing the value in the box.
+			</p>
+		</li>
+		
+		
+		<!-- ____________________ attribute: DecimalPlaces ___________________ -->
+		<li> <h3>DecimalPlaces</h3>
+			<p>
+				Attribute value type: Integer (irr::s32) <br>
+				Default value: 0
+			</p>
+			<p>
+				The number of decimal places to display.
+			</p>
+		</li>
+		
+		
+	</ul> <!-- list of valid attribute type names END -->
+	
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!--
+<div class="upperleft_div" id="upperleft_div">
+First box
+</div>
+-->
+
+
+<div id="lowerright_div">
+First box
+</div>
+
+<button id="bstd" ></button>
+
+<window id="win1"></window>
+
+
+<div style="left:0px; bottom:0px; height:350px; width:400px; background-color:white;">
+
+	<!--
+	<div class="hider" id="green_div">
+		<text class="stdbluetext" > This is a box </text>
+		<editbox id="editbox2" ></editbox>
+	</div>
+	-->
+	
+	<editbox id="editbox1" ></editbox>
+	
+	<!-- <div class="newbox">
+	</div> -->
+	
+	<!--<slider id="slide" />-->
+
+</div>

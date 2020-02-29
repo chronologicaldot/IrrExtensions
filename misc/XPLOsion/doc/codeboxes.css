@@ -1,0 +1,45 @@
+/* Code box style sheet
+(c) Nic Anderson
+Free for public or private use */
+
+.codebox
+{
+	position: relative;
+	padding: 20px;
+	
+	max-width: 800px;
+	
+	background-color: #eeffff;
+}
+
+redtext
+{
+	color: red;
+}
+
+bluetext
+{
+	color: blue;
+}
+
+comment
+{
+	font-style: italic;
+	color: green;
+}
+
+tag_text
+{
+	color: #990099;
+}
+
+number
+{
+	font-weight: 12;
+	color: purple;
+}
+
+quote
+{
+	color: #ff7d00;
+}

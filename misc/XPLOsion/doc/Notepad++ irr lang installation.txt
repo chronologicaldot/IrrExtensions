@@ -1,0 +1,15 @@
+
+
+Put "irrlichtSerials.xml in the following folder:
+C:\Program Files\Notepad++\plugins\APIs
+
+Put "userDefineLang.xml" in the following folder:
+C:\Users\Nicolaus Anderson\AppData\Roaming\Notepad++
+
+
+NOTE: If you already have your own languages defined,
+you simply need to copy the contents of "userDefineLang.xml",
+starting with
+<UserLang name="irrlichtSerials" ext="" udlVersion="2.0">
+and ending with
+</UserLang>

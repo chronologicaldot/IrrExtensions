@@ -1,0 +1,19 @@
+
+<editbox id="eb" />
+
+<div style="position: absolute; left:0px; bottom:0px; height:350px; width:400px; background-color:white;">
+
+	<!--
+	<div class="hider" id="green_div">
+		<text class="stdbluetext" > This is a box </text>
+		<editbox id="editbox2" ></editbox>
+	</div>-->
+	
+	<!--<editbox id="eb" />-->
+	
+	<!-- <div class="newbox">
+	</div> -->
+	
+	<!--<slider id="slide" />-->
+
+</div>

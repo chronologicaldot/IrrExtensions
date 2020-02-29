@@ -1,0 +1,246 @@
+<!-- Created by Nicolaus Anderson, 2012 -->
+
+<html>
+
+<head>
+
+	<meta content="Nicolaus Anderson" name="author"></meta>
+	<meta content="October 4, 2012" name="created"></meta>
+	
+	<link rel="stylesheet" type="text/css" href="codeboxes.css"></link>
+
+</head>
+
+<body>
+
+	<div style="position:fixed; right:0px; bottom:0px; width:120px; height:50px; background-color:#eeeeee;">
+		<a href="#headerbox" style="padding:20px;">back to top</a>
+	</div>
+
+	<div id="headerbox">
+		<h1>GUIFunctionFire Documentation</h1>
+	</div>
+	
+	<h2>Table of Contents</h2>
+	<ul>
+		<li><a href="#CO_whatisthis" >What is this?</a></li>
+		<li><a href="#CO_format" >IDedFunc Implementing</a></li>
+		<li><a href="#CO_functionsandexampleusage" >Functions and Example Usage</a></li>
+		<li><a href="#CO_knownbugs" >Known Bugs</a></li>
+		<li><a href="#CO_othertodo" >Other To-Dos</a></li>
+	</ul>
+	
+	<!-- ****************** What is this ******************** -->
+	
+	<h2 id="CO_whatisthis">What is this?</h2>
+	<p>
+		Some Irrlicht GUI elements like buttons do not respond to user interaction unless an IEventReceiver
+		is called which responds to there selection with an event. GUIFunctionFire is such an event receiver.
+		It is implemented in such a way so as to make the following possible:
+		<ul>
+			<li>Assign functions to respond to interaction with (such as pressing) GUI buttons and other,
+				otherwise non-responsive GUI elements.</li>
+			<li>Allow multiple elements to respond using the same function.</li>
+			<li>Store functions by a name instead of a numeric ID and so make it easier for programmers
+				to directly associate functions with GUI elements.</li>
+			<li>Utilize functions from any part of a program whether part of a class or not.</li>
+		</ul>
+		Note that it's possible to even use this for making scene nodes responsive GUI elements.
+	</p>
+	<p>
+		The original intention of GUIFunctionFire is to allow the immediate assigning of functions to GUI elements
+		loaded from an XML file via XPLOsion.
+	</p>
+	<p>
+		This class is very straight forward.
+		<ol>
+			<li>Design classes that inherit the IDedFunc class and implement IDedFunc::call()</li>
+			<li>Construct an instance of the GUIFunctionFire class
+				via <a href="#FE_constructor" >constructor</a></li>
+			<li>Assign pointers to IDedFunc-inheriting classes to GUIFunctionFire
+				via <a href="#FE_registerFunctionClass" >GUIFunctionFire::registerFunctionClass()</a></li>
+			<li>Assign GUI element IDs to the IDedFunc-inheriting classes (this step can come earlier)
+				via <a href="#FE_giveToFunction" >GUIFunctionFire::giveToFunction()</a></li>
+			<li>Call GUIFunctionFire::OnEvent() in your main IEventReceiver implementation</li>
+		</ol>
+	</p>
+	
+	
+	<!-- ****************** IDedFunc Implementing ******************** -->
+	
+	<h2 id="CO_format">IDedFunc Implementing</h2>
+	<p>
+		GUIFunctionFire stores all of its functions in IDedFunc instances. Thus, in order to associate a
+		function with GUI elements, it is required that a class inherit from IDedFunc and implement the
+		function IDedFunc::call(). It is this function that will be called by GUIFunctionFire via OnEvent().
+		A simple implementation (SimpleIdedFunc) has been provided that stores non-class functions. 
+	</p>
+	<p>
+		If a class needs to inherit IDed function more than once, a basic solution is to build private classes
+		and pass them to GUIFunctionFire.
+		<a href="#FE_multipleclassfunctions" >See example for how to do this.</a>
+	</p>
+	
+	
+	<!-- ****************** Functions and Example Usage ******************** -->
+	
+	<h2 id="CO_functionsandexampleusage">Functions and Example Usage</h2>
+	<h3 style="text-align:center;">Functions</h3>
+	<ul>
+		<li id="FE_constructor">
+			<h4>
+				GUIFunctionFire( irr::gui::IGUIEnvironment * environment )
+				<b style="color:green;">(Constructor)</b>
+			</h4>
+			Parameters:
+			<ul>
+				<li> environment - Pointer to the irrlicht engine's GUI environment. </li>
+			</ul>
+			<p>
+				Intended to be initialized and stored in a pointer.
+			</p>
+		</li>
+		
+		<li>
+			<h4>
+			~GUIFunctionFire()
+				<b style="color:green;">(Destructor)</b>
+				Clears the list of IDedFunc pointers stored in this library.
+			</h4>
+		</li>
+		
+		<li>
+			<h4>irr::s32 findFunctionByName( irr::core::stringc funcName )</h4>
+			Parameters:
+			<ul>
+				<li> funcName - ID/Name associated with the IDedFunc class instance being searched for. </li>
+			</ul>
+			Returns the list location of the IDedFunc instance whose ID/name matches the given parameter.
+		</li>
+		
+		<li id="FE_registerFunctionClass">
+			<h4>void registerFunctionClass( IDedFunc* funcclass )</h4>
+			Parameters:
+			<ul>
+				<li> funcclass - IDedFunc class instance being registered. </li>
+			</ul>
+			Registers/saves a pointer to the IDedFunc to the list of available functions that will be searched
+			when GUIFunctionFire::OnEvent() in called.
+		</li>
+		
+		<li id="FE_giveToFunction">
+			<h4>void giveToFunction( irr::core::stringc funcName, irr::s32 gui_elem_id )</h4>
+			Parameters:
+			<ul>
+				<li> funcName - ID/Name of the IDedFunc instance to associate the given GUI ID with. </li>
+				<li> gui_elem_id - ID of the GUI element that is to respond to user interaction via GUIFunctionFire. </li>
+			</ul>
+			Associates the given Irrlicht ID with IDedFunc::call() of the IDedFunc instance whose ID/name is given.
+			It does this by appending the GUI element ID to a list of integers. When GUIFunctionFire::OnEvent() is
+			called, this list will be searched for an ID that matches the one of the GUI element that is responding to
+			user interaction.
+		</li>
+		
+		<li>
+			<h4>bool callFunctionWithRespondant( irr::s32 id )</h4>
+			Parameters:
+			<ul>
+				<li> id - GUI element ID that triggers the function. </li>
+			</ul>
+			Searches for a function that has in its list (of GUI elements to respond to) the given ID.
+			Returns false if either the ID could not be found or the function that was called returned false
+			(in which case it may be deferring action to another function).
+		</li>
+		
+		<li>
+			<h4>virtual bool OnEvent( const irr::SEvent& event )</h4>
+			Parameters:
+			<ul>
+				<li> event - GUI event from IEventReceiver containing information about interaction with the GUI. </li>
+			</ul>
+			Should be called it the implementation of IEventReceiver connected with the IrrlichtDevice instance in use.
+			This function searches the list of IDedFunc instances for the ID of the GUI element that is responding.
+			If it finds it, it calls the associated function.
+		</li>
+	</ul>
+	
+	
+	<!-- ****************** EXAMPLES -->
+	
+	<h3 style="text-align:center;">Examples</h3>
+	
+	<p id="FE_simplestIDed">
+		A simple implementation of IDedFunc was provided in case you only have a lonely function to call.
+		This implementation is called SimpleIDedFunc. It merely inherits IDedFunc and provides a body for
+		IDedFunc::call() that calls a function being pointed to. This other function pointer must be set.
+		The following is an example of how to do that:
+		
+		<div class="codebox"> C++ file: <br> <br> <code>
+		<comment>/* Function prototype, which must be in this form */</comment> <br>
+		<bluetext>bool</bluetext> your_function(); <br>
+		<br>
+		<comment>/* Instance of our IDedFunc to which we will store the previous function. */</comment> <br>
+		SimpleIDedFunc sid; <br>
+		<br>
+		<comment>/* Now we assign the function to our IDedFunc instance. */</comment> <br>
+		sid.set( your_function ); <br>
+		<br>
+		<comment>/* Now we assign the IDedFunc instance to our GUIFunctionFire instance (which we will
+		call gff) via pointer. */</comment> <br>
+		gff->registerFunctionClass( &sid ); <br>
+		<br>
+		<comment>/* If we had ever wanted to call the function straight from our SimpleIDedFunc instance,
+		we call call(), which returns the value of a subfunction named use(), which in turn either returns the
+		return value of the assigned function or false if no function has been assigned. */</comment> <br>
+		sid.call(); <br>
+		</code> </div>
+	</p>
+	
+	<p id="FE_multipleclassfunctions">
+		For classes that need to inherit IDedFunc more than once, a basic solution is to make private
+		classes that inherit IDedFunc and pass pointers of them to GUIFunctionFire like follows.
+		
+		<div class="codebox"> C++ file: <br> <br> <code>
+		<bluetext>class</bluetext> yourClass <br>
+		{
+		<p style="padding-left:20px;">
+			<bluetext>class</bluetext> : IDedFunc { <comment>/* Anonymous class */</comment>
+			<br>
+				<bluetext>bool</bluetext> call() { return yourClassFuncA(); }
+			<br>
+			} instanceA;
+		</p>
+		<bluetext>public</bluetext>:
+		<p style="padding-left:20px;">
+			yourClass( GUIFunctionFire* gff ) { <comment>/* Constructor */</comment>
+			<br>
+				gff->registerFunctionClass( instanceA );
+			<br>
+			} <br>
+			<br>
+			<bluetext>bool</bluetext> yourClassFuncA() { return true; }
+		</p>
+		};
+		</code> </div>
+	</p>
+	
+	
+	<!-- ****************** Known Bugs ******************** -->
+	
+	<h2 id="CO_knownbugs">Known Bugs and Oddities</h2>
+	<p>
+		It compiles without error, but it is currently untested.
+	</p>
+	
+	
+	<!-- ****************** To Do ******************** -->
+	
+	<h2 id="CO_othertodo">Other To-Dos</h2>
+	
+	<ul>
+		<li>
+			Test it.
+		</li>
+	</ul>
+	
+</body>

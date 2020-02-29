@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<NotepadPlus>
+	<AutoComplete>
+		<Environment ignoreCase="no" startFunc="(" stopFunc=")" paramSeparator="," terminal=";" />
+		<KeyWord name="position" />
+		<KeyWord name="left" />
+		<KeyWord name="right" />
+		<KeyWord name="top" />
+		<KeyWord name="bottom" />
+		<KeyWord name="height" />
+		<KeyWord name="width" />
+		<KeyWord name="background-color" />
+		<KeyWord name="background-image" />
+		<KeyWord name="background-repeat" />
+		<KeyWord name="overflow" />
+		<KeyWord name="ActiveTab" />
+		<KeyWord name="AutoChecking" />
+		<KeyWord name="AutoScroll" />
+		<KeyWord name="BackColor" />
+		<KeyWord name="Background" />
+		<KeyWord name="BGColor" />
+		<KeyWord name="Border" />
+		<KeyWord name="Caption" />
+		<KeyWord name="Checked" />
+		<KeyWord name="CloseHandling" />
+		<KeyWord name="ColIcon" />
+		<KeyWord name="ColIconHl" />
+		<KeyWord name="ColText" />
+		<KeyWord name="ColTextHl" />
+		<KeyWord name="CommandId" />
+		<KeyWord name="DecimalPlaces" />
+		<KeyWord name="DrawBack" />
+		<KeyWord name="DrawBackground" />
+		<KeyWord name="DrawTitlebar" />
+		<KeyWord name="Enable" />
+		<KeyWord name="FillBackground" />
+		<KeyWord name="FullColor" />
+		<KeyWord name="Horizontal" />
+		<KeyWord name="HTextAlign" />
+		<KeyWord name="Id" />
+		<KeyWord name="Image" />
+		<KeyWord name="ImageRect" />
+		<KeyWord name="IsCloseVisible" />
+		<KeyWord name="IsDraggable" />
+		<KeyWord name="IsMinVisible" />
+		<KeyWord name="IsRestoreVisible" />
+		<KeyWord name="IsSeparator" />
+		<KeyWord name="Item" />
+		<KeyWord name="ItemCount" />
+		<KeyWord name="LargeStep" />
+		<KeyWord name="Max" />
+		<KeyWord name="MaxChars" />
+		<KeyWord name="Min" />
+		<KeyWord name="MoveOverSelect" />
+		<KeyWord name="MultiLine" />
+		<KeyWord name="Name" />
+		<KeyWord name="NoClip" />
+		<KeyWord name="OverrideBGColorEnabled" />
+		<KeyWord name="OverrideColor" />
+		<KeyWord name="OverrideColorEnabled" />
+		<KeyWord name="OverrideTextColorEnabled" />
+		<KeyWord name="ParentItem" />
+		<KeyWord name="PasswordBox" />
+		<KeyWord name="PasswordChar" />
+		<KeyWord name="Position" />
+		<KeyWord name="Pressed" />
+		<KeyWord name="PressedImage" />
+		<KeyWord name="PressedImageRect" />
+		<KeyWord name="PushButton" />
+		<KeyWord name="Rect" />
+		<KeyWord name="ScaledImage" />
+		<KeyWord name="Selected" />
+		<KeyWord name="ShowLargeTicks" />
+		<KeyWord name="ShowSmallTicks" />
+		<KeyWord name="SliderWidth" />
+		<KeyWord name="SmallStep" />
+		<KeyWord name="Step" />
+		<KeyWord name="TabHeight" />
+		<KeyWord name="TabMaxHeight" />
+		<KeyWord name="TabNumber" />
+		<KeyWord name="TabVerticalAlignment" />
+		<KeyWord name="Text" />
+		<KeyWord name="TextColor" />
+		<KeyWord name="TickColor" />
+		<KeyWord name="TransColor" />
+		<KeyWord name="UseAlphaChannel" />
+		<KeyWord name="UseColIcon" />
+		<KeyWord name="UseColIconHl" />
+		<KeyWord name="UseColText" />
+		<KeyWord name="UseColTextHl" />
+		<KeyWord name="Value" />
+		<KeyWord name="Visible" />
+		<KeyWord name="VTextAlign" />
+		
+		<!-- Enumerations -->
+		<KeyWord name="absolute" />
+		<KeyWord name="fixed" />
+		<KeyWord name="relative" />
+		<KeyWord name="static" />
+		
+		<KeyWord name="repeat" />
+		<KeyWord name="repeat-x" />
+		<KeyWord name="repeat-y" />
+		<KeyWord name="no-repeat" />
+		
+		<KeyWord name="auto" />
+		<KeyWord name="hidden" />
+		<KeyWord name="visible" />
+		
+		<KeyWord name="upperLeft" />
+		<KeyWord name="lowerRight" />
+		<KeyWord name="center" />
+		<KeyWord name="scale" />
+		
+		<!-- Colors -->
+		<KeyWord name="black" />
+		<KeyWord name="blue" />
+		<KeyWord name="clear" />
+		<KeyWord name="gray" />
+		<KeyWord name="green" />
+		<KeyWord name="light blue" />
+		<KeyWord name="light green" />
+		<KeyWord name="light pink" />
+		<KeyWord name="lime" />
+		<KeyWord name="maroon" />
+		<KeyWord name="medium blue" />
+		<KeyWord name="orange" />
+		<KeyWord name="pink" />
+		<KeyWord name="purple" />
+		<KeyWord name="red" />
+		<KeyWord name="sky blue" />
+		<KeyWord name="transparent" />
+		<KeyWord name="white" />
+		<KeyWord name="yellow" />
+	</AutoComplete>
+</NotepadPlus>

@@ -1,0 +1,50 @@
+
+#eb
+{
+	Enabled : true ;
+	Id : 0 ;
+	position : absolute ;
+	left : 30 ;
+	top : 0 ;
+	width : 400 ;
+	height : 400 ;
+	OverrideColorEnabled : true;
+	OverrideColor : red ;
+	MaxChars : -1 ;
+	WordWrap : true ;
+	MultiLine : true ;
+	AutoScroll : true ;
+	PasswordChar : ;
+	PasswordBox : false ;
+	HTextAlign : left ;
+	VTextAlign : top ;
+	Border : true ;
+}
+
+#slide
+{
+	position: absolute;
+	/* Rect: 0 0 20 100; */
+	left: 0;
+	top: 0;
+	height: 250;
+	width: 250;
+	
+	Enabled: true;
+	Visible: true;
+	Id: 1000;
+	
+	Horizontal: true;
+	Min: -50;
+	Max: 100;
+	Value: 50;
+	SmallStep: 10;
+	LargeStep: 50;
+
+	SliderWidth: 100;
+	
+	BGColor: green;
+	TickColor: blue;
+	ShowSmallTicks: true;
+	ShowLargeTicks: true;
+}

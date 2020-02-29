@@ -1,0 +1,88 @@
+
+
+#container
+{	
+	position : absolute ;
+	left : 20;
+	top : 20;
+	width : 400;
+	height : 300;
+	
+	Name : container;
+	Id : 0;
+}
+
+.txt
+{
+	position : absolute ;
+	Rect : 0 0 0 0;
+	
+	Name : text ;
+	Id : 0;
+	Caption : Hello ;
+	Visible : true ;
+	
+	Border : true ;
+	OverrideColorEnabled : true ;
+	OverrideColor : blue ;
+	OverrideBackgroundColorEnabled : true ;
+	OverrideBackgroundColor : green ;
+	WordWrap : true ;
+	Background : true ;
+	HTextAlign : upperLeft ;
+	VTextAlign : upperLeft ;
+}
+
+#tc1
+{
+	position : absolute ;
+	Rect : 10 10 10 10;
+
+	Visible : true ;
+	Enabled : true ;
+	TabStop : 0;
+	TabGroup : 0;
+	TabOrder : 0;
+	
+	Border : true ;
+	FillBackground : true ;
+	
+	TabHeight : 200;
+	TabMaxWidth : 200;
+	
+	ActiveTab : 0;
+	
+	TabVerticalAlignment : upperLeft ;
+}
+
+.tb
+{
+	position : absolute;
+	Rect : 10 10 10 10;
+
+	Visible : true;
+	Enabled : true;
+	TabStop : 0;
+	TabGroup : 0;
+	TabOrder : 0;
+}
+
+#tb1
+{
+	Caption : tab1;
+	
+	TabNumber : 1;
+	DrawBackground : true ;
+	BackColor : red ;
+	OverrideTextColorEnabled : false ;
+}
+
+#tb2
+{
+	Caption : tab2;
+	
+	TabNumber : 0;
+	DrawBackground : true ;
+	BackColor : yellow ;
+	OverrideTextColorEnabled : false ;
+}

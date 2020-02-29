@@ -1,0 +1,18 @@
+
+<div id="mainbox">
+
+	<menubar id="mainmenu">
+		<menu class="submenu">
+		</menu>
+	</menu>
+	
+	<menu id="sidemenu">
+		<menu class="submenu">
+		</menu>
+	</menu>
+	
+	<messagebox id="mesbox" />
+
+</div>
+
+<colorselectdialog />

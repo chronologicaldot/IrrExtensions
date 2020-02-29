@@ -1,0 +1,149 @@
+
+
+#mainbox
+{
+	position: absolute;
+	left: 50px;
+	right: 50px;
+	top: 20px;
+	bottom: 20px;
+	
+	background-color: gray;
+}
+
+
+#mainmenu
+{
+	position: absolute;
+	left: 50px;
+	right: 50px;
+	top: 50px;
+	height: 50px;
+	
+	Enabled: true;
+	
+	Id: 10;
+	
+	/* ParentItem: 0; */
+	CloseHandling: 0;
+	
+	ItemCount: 2;
+	
+	/* List of items in this menu */
+	
+		/* 0 */
+	Text0: Ostrich;
+	CommandID0: 110;
+	Enabled0: true;
+	Checked0: true;
+	AutoChecking0: true;
+	
+		/* 1 */
+	Text1: Shark;
+	CommandID1: 111;
+	Enabled1: true;
+	Checked1: false;
+	AutoChecking1: true;
+}
+
+.submenu
+{
+	position: relative;
+	left: 60px;
+	right: 50px;
+	top: 0px;
+	height: 50px;
+	
+	Enabled: true;
+	
+	Id: 15;
+	
+	ParentItem: 1;
+	CloseHandling: 0;
+	
+	ItemCount: 2;
+	
+	/* List of items in this menu */
+	
+		/* 0 */
+	Text0: Yucka;
+	CommandID0: 150;
+	Enabled0: true;
+	Checked0: true;
+	AutoChecking0: true;
+	
+		/* 1 */
+	Text1: Blake;
+	CommandID1: 151;
+	Enabled1: true;
+	Checked1: false;
+	AutoChecking1: true;
+}
+
+
+#sidemenu
+{
+	position: absolute;
+	right: 50px;
+	top: 50px;
+	height: 50px;
+	width: 100px;
+	
+	Enabled: true;
+	
+	Id: 20;
+	
+	/* ParentItem: 0; */
+	CloseHandling: 0;
+	
+	ItemCount: 2;
+	
+	/* List of items in this menu */
+	
+		/* 0 */
+	Text0: Ostrich;
+	CommandID0: 120;
+	Enabled0: true;
+	Checked0: true;
+	AutoChecking0: true;
+	
+		/* 1 */
+	Text1: Shark;
+	CommandID1: 121;
+	Enabled1: true;
+	Checked1: false;
+	AutoChecking1: true;
+}
+
+
+#mesbox
+{
+	position: absolute;
+	left: 200px;
+	top: 100px;
+	width: 100px;
+	height: 100px;
+	
+	Enabled: true;
+	
+	Id: 3;
+	
+	Caption: This is the caption;
+	MessageText: Message text;
+	
+	/* Texture: ../test files/iu_test.jpg */
+	
+	OkayButton: false;
+	CancelButton: true;
+	YesButton: true;
+	NoButton: false;
+	
+	/* Attributes inherited from windows... */
+	IsDraggable: true;
+	DrawBackground: true;
+	DrawTitlebar: true;
+	IsCloseVisible: true;
+		/* The following two are irrelevant since they are never drawn or accounted for anyways. */
+	IsMinVisible: false;
+	IsRestoreVisible: false;
+}

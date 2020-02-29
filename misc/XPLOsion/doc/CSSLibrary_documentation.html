@@ -1,0 +1,939 @@
+<!-- Created by Nicolaus Anderson, 2012 -->
+
+<html>
+
+<head>
+
+	<meta content="Nicolaus Anderson" name="author"></meta>
+	<meta content="September 26, 2012" name="created"></meta>
+	
+	<link rel="stylesheet" type="text/css" href="codeboxes.css"></link>
+
+</head>
+
+<body>
+
+	<div style="position:fixed; right:0px; bottom:0px; width:120px; height:50px; background-color:#eeeeee;">
+		<a href="#headerbox" style="padding:20px;">back to top</a>
+	</div>
+
+	<div id="headerbox">
+		<h1>CSSLibrary Documentation</h1>
+	</div>
+	
+	<h2>Table of Contents</h2>
+	<ul>
+		<li><a href="#CO_whatisthis" >What is this?</a></li>
+		<li><a href="#CO_format" >CSS Tag Format</a></li>
+		<li><a href="#CO_tagusage" >CSS Tag Usage</a></li>
+		<li><a href="#CO_validvaluetypes" >Valid Tag Attribute Value Types</a></li>
+		<li><a href="#CO_validtypenames" >Valid Tag Attribute Names</a></li>
+		<li><a href="#CO_functionsandexampleusage" >Functions and Example Usage</a></li>
+		<li><a href="#CO_knownbugs" >Known Bugs</a></li>
+		<li><a href="#CO_othertodo" >Other To-Dos</a></li>
+	</ul>
+	
+	<!-- ****************** What is this ******************** -->
+	
+	<h2 id="CO_whatisthis">What is this?</h2>
+	<p>
+		CSSLibrary is class that loads CSS-like data from files or properly-formatted strings. It stores this data
+		in instances of the class CSSTagData. This class utilizes irrlicht engine's CAttributes class to store the
+		data and make it available for usage with irrlicht's built-in objects. This way, using irrlicht objects'
+		function deserializeAttributes(), we are able to generate irrlicht objects from data stored in a CSS-like
+		manner rather than from an XML format and without having to make alterations to the engine or engine
+		objects themselves. Furthermore, all objects (including custom-designed objects) that possess the
+		function deserializeAttributes() (with the same parameters) can be generated.
+	</p>
+	<p>
+		CSSLibrary is designed to be used in combination with a loader, such as XPLOsion, which identifies the
+		desired objects from a different file and requests from the CSSLibrary the desired CSSTagData object.
+	</p>
+	<p>
+		<h4>Order of Function Calls</h4>
+		<ul>
+			<li><code>CSSLibrary::CSSLibrary( IrrlichtDevice* )</code></li>
+			<li><code>CSSLibrary::ParseCSSFile( irr::io::path )</code></li>
+			<li><code>XPLOsion::setCSSDataPointer( CSSLibrary* )</code>
+				<br>
+				<i style="color:green;">Note: It is irrelevant whether this precedes ParseCSSFile().</i>
+				</li>
+		</ul>
+	</p>
+	
+	
+	<!-- ****************** CSS Tag format ******************** -->
+	
+	<h2 id="CO_format">CSS Tag format</h2>
+	<p>
+		The CSSLibrary can load CSS-style tags from files. These files are formatted in the exact same way as
+		normal CSS files. The main difference is that the attributes within each tag now correspond to
+		deserializable attributes for irrlicht objects.
+	</p>
+	<p>
+		<div class="codebox"> <code>
+			<b style="color:green;">[Marker]</b><tag_text>Tag_name</tag_text> <br>
+			{
+			<p style="padding-left:20px;">
+				Attribute_name : Attribute_value ;
+			</p>
+			}
+		</code> </div>
+		<ul>
+			<li><b>Marker</b> - <i style="color:green;">(Optional)</i> - A period (.) makes this tag a class.
+				A pound sign (#) makes this tag an ID.
+				<redtext>NOTE: This is not the same as an irrlicht object ID, which can be set as an attribute
+				in the tag body.</redtext>
+				There must not be a space between the marker and the tag name.</li>
+			<li><b>Tag_Name</b> - Name of the tag. There must be no spaces in the name.
+				Current implementation of CSSLibrary holds case sensitivity for tag names.</li>
+			<li><b>Attribute_name</b> - Name of the attribute. This attribute is sought by irrlicht objects
+				via getAttributeAs...() in deserializeAttributes(), hence it is case-sensitive.</li>
+			<li><b>Attribute_value</b> - Value of the attribute, separated from the attribute name by a
+				colon and terminated by a semicolon. Current implementation of CSSLibrary permits spaces in
+				the attribute value (though spaces preceding and following it will be removed).</li>
+		</ul>
+	</p>
+
+	
+	<!-- ****************** CSS Tag usage ******************** -->
+	
+	<h2 id="CO_tagusage">CSS Tag Usage</h2>
+	<p>
+		To apply a CSS tag to an element (that is, to have the irrlicht object obtain attributes from the
+		CSSTagData object), do not directly call deserializeAttributes() on the element and pass it the tag.
+		Instead, the CSSLibrary object handles this so that the CSSTagData object can be prepared for
+		applying its data to the irrlicht object. We use the following CSSLibrary functions to apply the
+		attributes stored in a CSSTagData object to GUI elements:
+		<ul>
+			<li> <code> applyStyleToGUIElement( irr::gui::IGUIElement*, CSSTagData* ) </code>
+				- Use this if you already have a pointer to the CSSTagData object you wish to apply to the GUI
+				element. You can obtain such CSSTagData using the tag-finding functions. </li>
+			<li> <code> applyStyleToGUIElement( irr::gui::IGUIElement*, irr::core::stringc, irr::core::stringc) </code>
+				- Use this if you have the name of the CSSTagData object you wish to use. </li>
+			<li> <code> applyInlineStyling( irr::gui::IGUIElement*, irr::core::stringc ) </code>
+				- Use this if you only have the style text (what would be the CSS tag body if actually written in
+				a file). This is very handy if you are trying to contain CSS-like data in a file that isn't devoted to
+				CSS-like data. </li>
+		</ul>
+	</p>
+	<p>
+		A CSSTagData object can be assigned a parent CSSTagData object. When the desired attribute cannot
+		be found in the CSSTagData, it is requested from the parent CSSTagData before the default value is
+		returned. Note that there is a chaining effect when assigning a parent to one that is itself a parent.
+		<redtext> Pitfall: Be wary of assigning parents to CSSTagData objects - they do not check for circular
+		chains of assignment. </redtext>
+	</p>
+	
+	
+	<!-- ****************** Valid Tag Attribute Value Types ******************** -->
+	
+	<h2 id="CO_validvaluetypes">Valid Tag Attribute Value Types</h2>
+	<p>
+		While most attributes are straightforward (e.g. integers and strings), some attributes must be given
+		in specific ways that are unique to CSSLibrary. Those specific to CSSLibrary are highlighted.
+		It is important to note that while quotation marks are acceptable in a few cases, generally they
+		are not accepted (and in cases that do accept them, they are removed from the string).
+	</p>
+	<p>
+		Furthermore, note that while CSSTagData is perfectly fine with handling all normal types of data
+		for the irrlicht engine, CSSLibrary must be appended to in order for it to load properly all of the
+		different attribute names.
+		See <a href="#CO_validtypenames" >Valid Attribute Type Names</a> for the list.
+	</p>
+	<ul>
+		<li> <bluetext>Bool</bluetext> - Loaded as bool</li>
+		<li> <bluetext>Integer</bluetext> - Loaded as irr::s32</li>
+		<li> <bluetext>String</bluetext> - Loaded as irr::core::stringc</li>
+		<li> <bluetext>Enumeration</bluetext> - Given as a string (see declaration of the enumeration's
+		corresponding string array (if it exists) for the list of acceptable values)</li>
+		<li> <bluetext>Color</bluetext> - Loaded as irr::video::SColor -
+			Can be given as a set of four numbers (spaced),
+			an HTML color value (one preceded by a pound sign (#),
+			or a color word (no quotation marks).
+			<p>
+				Currently accepted color words are:
+				<ul>
+					<li>clear</li>
+					<li>transparent - same as "clear"</li>
+					<li>white</li>
+					<li>black</li>
+					<li>gray</li>
+					<li>red</li>
+					<li>blue</li>
+					<li>green</li>
+					<li>pink</li>
+					<li>yellow</li>
+					<li>orange</li>
+					<li>purple</li>
+					<li>maroon</li>
+					<li>light pink</li>
+					<li>sky blue</li>
+					<li>light blue</li>
+					<li>light green</li>
+					<li>lime - same as "light green"</li>
+					<li>medium blue</li>
+				</ul>
+				<br>
+				Default return is completely transparent white.
+			</p>
+		</li>
+		<li> <bluetext>Rectangle</bluetext> - Loaded as irr::core::recti -
+			For the attribute "Rect", it must be given as a set of four integers (spaced), which correspond
+			to left, top, right, and bottom edges of the rectangle respectively.
+			For other rectangles, it must be given as a set of four integers (spaced), which correspond
+			to left, top, left + width, and top + height values of the rectangle.
+		</li>
+		<li> <bluetext>Path</bluetext> - Loaded as irr::io::path -
+			Structured like any UNIX-style path. Enclosing quotation marks can be added because they are ignored.
+		</li>
+	</ul>
+	
+	
+	<!-- ****************** Valid Tag Attribute Names ******************** -->
+	
+	<h2 id="CO_validtypenames">Valid Tag Attribute Names</h2>
+	<p>
+		The following is a list of (case-sensitive) attribute names that can be used within the body of a
+		CSS tag.
+		Each of these are attributes that will be applied to irrlicht objects via the function
+		deserializeAttributes(). Note that this list is incomplete and contains attributes that are primarily
+		applicable to GUI elements.
+	</p>
+	<p>
+		When accepted value types are given, quotation marks should not be included in any case
+		- those are added for clarification.
+		They are acceptable in only one case: giving a path name, and in such a case, they are unnecessary.
+	</p>
+	
+	<!-- list of valid attribute type names, listed by return value -->
+
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept integer values and remove "px" </h3>
+	In other words, "px" can be appended to the end of the number and it won't make a difference.
+	<ul>
+		<li> <b> left </b> -
+			Helps define the bounding box of an element by establishing how far left from the parent element's
+			left edge (or preceding element's right edge) this element's left edge is to be placed.
+		</li>
+		<li> <b> right </b> -
+			Helps define the bounding box of an element by establishing how far right from the parent element's
+			right edge this element's right edge is to be placed disregarding how it will be repositioned based
+			on the flow of elements.
+		</li>
+		<li> <b> top </b> -
+			Helps define the bounding box of an element by establishing how far below the parent element's
+			top edge (or preceding element's bottom edge) this element's top edge is to be placed.
+		</li>
+		<li> <b> bottom </b> -
+			Helps define the bounding box of an element by establishing how far above the parent element's
+			bottom edge this element's bottom edge is to be placed disregarding how it will be repositioned
+			based on the flow of elements.
+		</li>
+		<li> <b> height </b> -
+			Helps define the bounding box of an element by establishing its height. If the top is given and not
+			the bottom, the height will determine the bottom edge of the bounding box, and vice versa (bottom
+			given instead of top). This attribute will be ignored if both the top and bottom attributes are
+			found.
+		</li>
+		<li> <b> width </b> -
+			Helps define the bounding box of an element by establishing its width. If the left is given and not
+			the right, the width will determine the right edge of the bounding box, and vice versa (right
+			given instead of left). This attribute will be ignored if both the left and right attributes are
+			found.
+		</li>
+		<li> <b> SliderWidth </b> -
+			For scrolling GUI elements, this indicates the size of the slider bar.
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept integer values </h3>
+	<ul>
+		<li> <b> Id </b> -
+			ID of the GUI element.
+			<p>
+				NOTE for XPLOsion v1-3: For buttons and divs that use GUIFunctionFire, do NOT change this from zero
+				if you wish to have auto-assignment of functions using "onClick" and/or "onPress".
+				A value of zero will be overridden by an autmatically assigned ID used to associate it with a
+				function.
+			</p>
+		</li>
+		<li> <b> ActiveTab </b> -
+			For tab control - gives the active tab.
+		</li>
+		<li> <b> CommandID (+ #) </b> -
+		</li>
+		<li> <b> CloseHandling </b> -
+			<p>
+				Attribute value type: ECONTEXT_MENU_CLOSE (Integer (irr::s32)) <br>
+				Default value: 0 (ECONTEXT_MENU_CLOSE::ECMC_IGNORE) (ignore)
+			</p>
+			<p>
+				This indicates how a menu will react when told to close. The settings are:
+				<ul>
+					<li>0 - Ignore / Do nothing.</li>
+					<li>1 - Remove / Menu is deleted.</li>
+					<li>2 - Hide / Menu disappears.</li>
+				</ul>
+			</p>
+		</li>
+		<li> <b> DecimalPlaces </b> -
+			The number of decimal places to display.
+		</li>
+		<li> <b> ItemCount </b> -
+			Indicates the number of items of some sort, sometimes the number of items in a GUI menu.
+		</li>
+		<li> <b> LargeStep </b> -
+		</li>
+		<li> <b> Max </b> -
+		</li>
+		<li> <b> MaxChars </b> -
+		</li>
+		<li> <b> Min </b> -
+		</li>
+		<li> <b> ParentItem </b> -
+		</li>
+		<li> <b> SmallStep </b> -
+		</li>
+		<li> <b> Selected </b> -
+		</li>
+		<li> <b> TabHeight </b> -
+		</li>
+		<li> <b> TabMaxWidth </b> -
+		</li>
+		<li> <b> TabNumber </b> -
+		</li>
+		<li> <b> TabOrder </b> -
+		</li>
+		<li> <b> Value </b> -
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept floating point number values </h3>
+	<ul>
+		<li> <b> Step </b> -
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept boolean values </h3>
+	<ul>
+		<li> <b> AutoChecking (+ #) </b> -
+		</li>
+		<li> <b> AutoScroll </b> -
+		</li>
+		<li> <b> Background </b> -
+		</li>
+		<li> <b> Border </b> -
+		</li>
+		<li> <b> CancelButton </b> -
+		</li>
+		<li> <b> Checked </b> -
+		</li>
+		<li> <b> DrawBackground </b> -
+			Same effect as "Background" but for different GUI elements.
+		</li>
+		<li> <b> DrawBack </b> -
+			Same effect as "Background" but for different GUI elements.
+		</li>
+		<li> <b> DrawTitlebar </b> -
+		</li>
+		<li> <b> Enabled </b> -
+			Indicates if a GUI element is active.
+			<p>
+				Unlike most boolean values, this attribute is set to true by default so we don't have to
+				worry about this when loading elements (especially when we usually want to show
+				them).
+			</p>
+		</li>
+		<li> <b> FillBackground </b> -
+			Same effect as "Background" but for different GUI elements.
+		</li>
+		<li> <b> Horizontal </b> -
+		</li>
+		<li> <b> IsCloseVisible </b> -
+			Visibility of the close-button as for windows.
+		</li>
+		<li> <b> IsDraggable </b> -
+		</li>
+		<li> <b> IsMinVisible </b> -
+			Visibility of the minimize-button as for windows.
+		</li>
+		<li> <b> IsRestoreVisible </b> -
+		</li>
+		<li> <b> IsSeparator (+ #) </b> -
+		</li>
+		<li> <b> MoveOverSelect </b> -
+		</li>
+		<li> <b> MultiLine </b> -
+		</li>
+		<li> <b> NoButton </b> -
+			Existence of a button that says "No".
+		</li>
+		<li> <b> NoClip </b> -
+		</li>
+		<li> <b> OkayButton </b> -
+			Existence of a button that says "Okay".
+		</li>
+		<li> <b> OverrideBGColorEnabled </b> -
+		</li>
+		<li> <b> OverrideColorEnabled </b> -
+		</li>
+		<li> <b> OverrideTextColorEnabled </b> -
+		</li>
+		<li> <b> PasswordBox </b> -
+		</li>
+		<li> <b> Pressed </b> -
+		</li>
+		<li> <b> PushButton </b> -
+		</li>
+		<li> <b> ScaleImage </b> -
+		</li>
+		<li> <b> ShowSmallTicks </b> -
+		</li>
+		<li> <b> ShowLargeTicks </b> -
+		</li>
+		<li> <b> TabStop </b> -
+		</li>
+		<li> <b> TabGroup </b> -
+		</li>
+		<li> <b> UseAlphaChannel </b> -
+		</li>
+		<li> <b> UseColText (+ #) </b> and <b> UseColTextHl (+ #) </b> -
+		</li>
+		<li> <b> UseColIcon (+ #) </b> and <b> UseColIconHl (+ #) </b> -
+		</li>
+		<li> <b> Visible </b> -
+		</li>
+		<li> <b> WordWrap </b> -
+		</li>
+		<li> <b> YesButton </b> -
+			Existence of a button that says "Yes".
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept string values </h3>
+	<ul>
+		<li> <b> Caption </b> -
+		</li>
+		<li> <b> MessageText </b> -
+		</li>
+		<li> <b> Name </b> -
+		</li>
+		<li> <b> PasswordChar </b> -
+		</li>
+		<li> <b> Text </b> and <b> text </b> -
+		</li>
+		<li> <b> Item (+ #) Text </b> -
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept color values </h3>
+	<ul>
+		<li> <b> background-color </b> -
+		</li>
+		<li> <b> BackColor </b> -
+		</li>
+		<li> <b> BGColor </b> -
+		</li>
+		<li> <b> ColIcon (+ #) </b> -
+		</li>
+		<li> <b> ColText (+ #) </b> -
+		</li>
+		<li> <b> FullColor </b> -
+		</li>
+		<li> <b> OverrideColor </b> -
+		</li>
+		<li> <b> TransColor </b> -
+		</li>
+		<li> <b> TextColor </b> -
+		</li>
+		<li> <b> TickColor </b> -
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept texture path names </h3>
+	<ul>
+		<li> <b> background-image </b> -
+		</li>
+		<li> <b> Image </b> -
+		</li>
+		<li> <b> PressedImage </b> -
+		</li>
+		<li> <b> Texture </b> -
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept rectangle values </h3>
+	<ul>
+		<li> <b> ImageRect </b> -
+		</li>
+		<li> <b> PressedImageRect </b> -
+		</li>
+		<li> <b> Rect </b> -
+			Determines the boundaries of the GUI element. Note: It merely sets "left", "right", "top", and "bottom"
+			instead of the actual, absolute position (which would be given as style="position:absolute; left:#; top:#;
+			height:#; width:#;" where "#" is some integer value).
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept positions </h3>
+	<ul>
+		<li> <b> Position </b> -
+			The developers included this in GUI context menus, but it serves no purpose at the current time.
+		</li>
+	</ul>
+	
+	<!-- ********* attribute section ********* -->
+	<h3> Attributes that accept enumeration values </h3>
+	<ul>
+		<li> <b>position</b> -
+			<p>
+				Attribute value type: Enumeration (HTMLPosTypes in webtypes.h) <br>
+				Accepted values: absolute ; fixed ; relative ; static <br>
+				Default value: "static"
+			</p>
+			<p>
+				Not the same as <a href="#attr_position" >Position</a>, which does nothing.
+			</p>
+			<p>
+				This indicates the type of positioning an element will experience, independent of the type of
+				element it is. (Currently, it applies only to GUI elements.)
+				The way it treats elements is analogous to HTML:
+				
+				<ul>
+				
+					<li> <b>absolute</b>
+					- positions an object outside of the normal flow of elements but within the boundaries of the
+					parent GUI element (attributes affecting this are "left", "right", "top", "bottom", "height", and
+					"width");
+					</li>
+					
+					<li> <b>fixed</b>
+					- positions an object similar to "absolute", but the parent object is the root GUI element;
+					</li>
+					
+					<li> <b>relative</b>
+					- positions objects within the normal flow of elements but offsets the element to the right by
+					the amount given by the attributes "left" and "top". Furthermore, size judgment is made based
+					on the absolute rectangle of the containing element from the top, not from current placement
+					within the element (attributes affecting this are "left", "right", "top", "bottom", "height", and
+					"width");
+					</li>
+					
+					<li> <b>static</b>
+					- positions objects within the normal flow of elements but offsets the element by the amount
+					given by the attribute "top". Furthermore, size judgment is made based on the absolute
+					rectangle of the containing element from the top, not from current placement within the
+					element (attributes affecting this are "left", "right", "top", "bottom", "height", and "width");
+					</li>
+					
+				</ul>
+
+			</p>
+		</li> <!-- end attribute "position" -->
+		
+		<li> <b> background-repeat </b> -
+			<p>
+				Attribute value type: Enum (HTMLBackgroundImageRepeatTypes in webtypes.h) <br>
+				Accepted values: no-repeat ; repeat ; repeat-x ; repeat-y <br>
+				Default value: "no-repeat"
+			</p>
+			<p>
+				For setting the repeat of a background image of an element that uses this attribute.
+			</p>
+		</li> <!-- end attribute "background-repeat" -->
+		
+		<li> <b> overflow </b> -
+			<p>
+				Attribute value type: Enum (WebOverflowTypes in webtypes.h) <br>
+				Acceptable values: visible ; show ; hidden ; auto (produce scrollbars if necessary) <br>
+				Default value: "visible"
+			</p>
+			<p>
+				For handling how child elements are displayed (i.e. by setting their NoClip variable).
+				NOTE: While loading with XPLosion, this is handled, but it is not automatically done by the
+				sdiv class.
+			</p>
+		</li> <!-- end attribute "overflow" -->
+		
+		<li> <b> HTextAlign </b> -
+			<p>
+				Attribute value type: Enum (irr::gui::GUIAlignmentNames in EGUIAlignment.h) <br>
+				Default value: "upperLeft"
+			</p>
+			<p>
+				Indicates how the text within an element is to be aligned horizontally.
+				For example: "upperLeft" should cause the text to be placed on the left edge of the text box.
+			</p>
+		</li>
+		
+		<li> <b> VTextAlign </b> -
+			<p>
+				Attribute value type: Enum (irr::gui::GUIAlignmentNames in EGUIAlignment.h) <br>
+				Default value: "upperLeft"
+			</p>
+			<p>
+				Indicates how the text within an element is to be aligned vertically.
+				For example: "upperLeft" should cause the text to be placed on the top edge of the text box.
+			</p>
+		</li>
+		
+		<li> <b> </b>
+		</li>
+		
+	</ul> <!-- end list of attributes that accept enumeration values -->
+	
+
+
+	<!-- ****************** Functions and Example Usage ******************** -->
+	<h2 id="CO_functionsandexampleusage">Functions and Example Usage</h2>
+	<h3 style="text-align:center;">Functions</h3>
+	<ul>
+		<li>
+			<h4>
+				CSSLibrary( IrrlichtDevice* device )
+				<b style="color:green;">(Constructor)</b>
+			</h4>
+			Parameters:
+			<ul>
+				<li> device - Pointer to the irrlicht engine. </li>
+			</ul>
+			<p>
+				Intended to be initialized and stored in a pointer.
+			</p>
+		</li>
+		
+		<li>
+			<h4>
+				~CSSLibrary()
+				<b style="color:green;">(Destructor)</b>
+				Clears the list of CSSTagData objects stored in this library.
+			</h4>
+		</li>
+		
+		<li>
+			<h4>void addStyle()</h4>
+			<p>
+				Adds a blank style whose assigned name is its position in the list of styles.
+			</p>
+		</li>
+		
+		<li>
+			<h4>
+				void addStyle(
+					irr::core::stringc styletext,
+					irr::core::stringc stylename="",
+					CSSTagType styletype=CSSTYPE_NEITHER
+					)
+			</h4>
+			Parameters
+			<ul>
+				<li> styletext - The text containing the CSS information needing to be parsed. </li>
+				<li> stylename - Name of the style. </li>
+				<li> styletype - If this should be treeated like a CSS class, CSS ID, or neither. </li>
+			</ul>
+			<p>
+				The content of styletext is parsed immediately and stored in a new style tag with the
+				given name and type.
+				See <a href="#FE_applyinginlinestyle" >example</a> for more information.
+			</p>
+		</li>
+		
+		<li>
+			<h4>CSSTagData* addStyleAndGet()</h4>
+			Adds a blank style tag and returns a pointer to it.
+		</li>
+		
+		<li>
+			<h4>bool ParseCSSFile(irr::io::path filename)</h4>
+			Parses the given file if it can be loaded.
+			<br>
+			Returns true if the file was loaded and parsed successfully.
+		</li>
+		
+		<li>
+			<h4>bool ParseCSSFile(irr::io::path filename)</h4>
+			Parses the given file if it can be loaded.
+			<br>
+			Returns true if the file was loaded and parsed successfully.
+		</li>
+		
+		<li>
+			<h4>CSSTagData* getCSSStyle( irr::s32 index )</h4>
+			Parameters:
+			<ul>
+				<li> index - List of styles index of the style to be returned. </li>
+			</ul>
+		</li>
+		
+		<li>
+			<h4>irr::s32 findCSSClass( irr::core::stringc name )</h4>
+			Parameters:
+			<ul>
+				<li> name - Name of the style to be found. </li>
+			</ul>
+			Returns the index of the style in the list of styles.
+			This function is meant to be used in conjuction with CSSLibrary::getCSSStyle().
+			NOTE: This function will only search styles that are classes.
+		</li>
+		
+		<li>
+			<h4>irr::s32 findCSSID( irr::core::stringc name )</h4>
+			Parameters:
+			<ul>
+				<li> name - Name of the style to be found. </li>
+			</ul>
+			Returns the index of the style in the list of styles.
+			This function is meant to be used in conjuction with CSSLibrary::getCSSStyle().
+			NOTE: This function will only search styles that are IDs.
+		</li>
+		
+		<li>
+			<h4>irr::s32 findCSSRandom( irr::core::stringc name )</h4>
+			Parameters:
+			<ul>
+				<li> name - Name of the style to be found. </li>
+			</ul>
+			Returns the index of the style in the list of styles.
+			This function is meant to be used in conjuction with CSSLibrary::getCSSStyle().
+		</li>
+		
+		<li>
+			<h4>
+				void applyStyleToGUIElement(
+					irr::gui::IGUIElement * element,
+					CSSTagData * css
+					)
+			</h4>
+			Parameters:
+			<ul>
+				<li> element - GUI element to which the style is to be applied. </li>
+				<li> css - Pointer to the style to be applied to the GUI element. </li>
+			</ul>
+			Applies a style to the GUI element. The reason we use this function is because it handles a few
+			behind-the-scenes details in preparing the style for being applied to the GUI element.
+		</li>
+		
+		<li>
+			<h4>
+				void applyStyleToGUIElement(
+					irr::gui::IGUIElement * element,
+					irr::core::stringc stylename,
+					irr::core::stringc styletype="random"
+					)
+			</h4>
+			Parameters:
+			<ul>
+				<li> element - GUI element to which the style is to be applied. </li>
+				<li> stylename - Name of the style to be applied to the GUI element. </li>
+				<li> styletype - If a specific type of style is to be searched for.
+					Accepted specific values are "class" and "id". Everything else defaults to "random". </li>
+			</ul>
+			Applies a style to the GUI element. The reason we use this function is because it handles a few
+			behind-the-scenes details in preparing the style for being applied to the GUI element.
+			<comment>This is the function you would normally use.</comment>
+		</li>
+		
+		<li>
+			<h4>
+				CSSTagData* buildStyleFromGUIElement(
+						irr::gui::IGUIElement * element,
+						irr::core::stringc stylename=""
+					)
+			</h4>
+			Parameters:
+			<ul>
+				<li> element - GUI element to use as the template for the style. </li>
+				<li> stylename - Name of the style being created. </li>
+			</ul>
+			Creates and returns a pointer to a style that was formed by serializing the given GUI element.
+			<br>
+			<redtext>This function is in progress and does not fully handle all GUI alignment states.</redtext>
+		</li>
+		
+		<li>
+			<h4>CSSTagData* interpretStyling( irr::core::stringc styletext )</h4>
+			Parameters:
+			<ul>
+				<li> styletext - Text to parse / interpret as CSS data. </li>
+			</ul>
+			Parses the given text and generates a new style tag with it.
+			See <a href="#FE_applyinginlinestyle" >example</a> for more information.
+		</li>
+		
+		<li>
+			<h4>
+				void applyInlineStyling(
+						irr::gui::IGUIElement * element,
+						irr::core::stringc styletext
+					)
+			</h4>
+			Parameters:
+			<ul>
+				<li> element - GUI element to which the style is to be applied. </li>
+				<li> styletext - CSS-formatted styling containing information to be applied to the GUI element. </li>
+			</ul>
+			Generates a temporary style from the given text and applies it to the given GUI element.
+			For usage, see <a href="#FE_applyinginlinestyle" >example</a>
+		</li>
+		
+	</ul>
+	
+	
+	
+	<!-- ****************** EXAMPLES -->
+	
+	<h3 style="text-align:center;">Examples</h3>
+	
+	<p id="FE_examplestyle">
+		<h4>Example Style</h4>
+		<p>
+			Styles look just like CSS. Remember that for classes and IDs, the type marker (a period (.) for classes
+			and a pound sign (#) for IDs) must come directly before the name (no spacing).
+		</p>
+		<div class="codebox"> In the CSS file (file extension is irrelevant): <br> <br> <code>
+			<comment>/* Note that comments are exactly the same as in CSS. */</comment> <br>
+			<tag_text>.mystyle</tag_text> <br>
+			{
+			<p style="padding-left:20px;">
+				position: absolute; <br>
+				left: 20px; <br>
+				right: 50; <comment> /* Note that "px" is irrelevant. */ </comment> <br>
+				top : 10 ; <comment> /*... as is spacing from the colon and semicolon. */ </comment> <br>
+				bottom: 0; <br>
+				<comment> /* Alternatively, we could use: <br>
+				Rect: 20 10 50 0 */ </comment>
+			</p>
+			}
+		</code> </div>
+	</p>
+	
+	<p id="FE_findstyle">
+		<h4>Finding and applying styles</h4>
+		<p>
+			Generally you would use the function CSSLibrary::applyStyleToGUIElement() in the following manner:
+		</p>
+		<div class="codebox"> In the C++ file: <br> <br> <code>
+			IGUIElement* gui_element = <comment>/* Storing here a pointer to a GUI element */</comment> <br>
+			CSSLibrary* library = <comment>/* Pre-initialized and parsed library */</comment> <br>
+			
+			<br>
+			library->applyStyleToGUIElement( element, "mystyle" );
+		</code> </div>
+		<p>
+			Note that since we specified "class", only a style that mimics a CSS class will be applied to the GUI
+			element.
+		</p>
+		<p>
+			It isn't necessary to use the other functions for finding CSS tags (since they are called by the
+			aforementioned function anyways), but in case you want to, here's how it would work:
+		</p>
+		<div class="codebox"> In the C++ file: <br> <br> <code>
+			<comment> // Finding the index of the desired style... </comment> <br>
+			irr::s32 index = library->findCSSRandom( "mystyle" ); <br>
+			
+			<br>
+			<comment> // Obtaining a pointer to the desired style... </comment> <br>
+			CSSTagData* csstag = library->getCSSStyle( index ); <br>
+			
+			<br>
+			<comment> // Now we can apply it directly to the element... </comment> <br>
+			library->applyStyleToGUIElement( gui_element, csstag );
+		</code> </div>
+		<p>
+			As noted elsewhere, utilize applyStyleToGUIElement() because it handles preparing the CSSTagData
+			for applying to the element.
+		</p>
+	</p>
+	
+	<p id="FE_applyinginlinestyle">
+		<h4>Applying Inline Styles</h4>
+		<p>
+			This applies to all functions that receive a parameter containing style text: <br>
+			Style text is any text that contains CSS information formatted as though it were the body of a
+			CSS tag from a file. Tabbing and newline characters are irrelevant.
+			This text can be provided from XML node attributes or even created on-the-spot. All that is
+			needed is to have this style text passed to CSSLibrary::interpretStyling() to receive a non-stored
+			CSSTagData instance, which can then be stored or deleted immediately after usage.
+		</p>
+		<p>
+			A shortcut for styling GUI elements with temporary CSS tags is to utilize the function
+			CSSLibrary::applyInlineStyling(). For example:
+		</p>
+		<div class="codebox"> In the C++ file: <br> <br> <code>
+			<comment> /* Let's create some style text to apply to our GUI element. */ </comment> <br>
+			irr::core::stringc text = " position : fixed; width :30; height: 10px; " <br>
+			
+			<br>
+			library->applyInlineStyling( gui_element, text );
+			
+			<br>
+			<comment> /* Note that this style text isn't enough to define our element's perimeter, thus,
+			for incomplete styles (those not possessing all of the attributes necessary for completely defining
+			the element), it is useful to use CSSLibrary::interpretStyling() directly and assign the temporary
+			style a parent element. Any attributes missing from the style text will be searched for in the parent.
+			*/ </comment> <br>
+			CSSTagData* csstag = library->interpretStyling( text ); <br>
+			
+			<br>
+			<comment> /* We pick a random parent. */ </comment> <br>
+			csstag->setParentTag( library->getCSSStyle(0) ); <br>
+			
+			<br>
+			<comment> /* Actual application of the style to the GUI element. */ </comment> <br>
+			library->applyStyleToGUIElement( gui_element, csstag );
+			
+			<br>
+			<comment> /* Note that it is safe to delete the temporary style since the parent does not
+			contain a pointer to its child. */ </comment> <br>
+			<bluetext>delete</bluetext> csstag;
+		</code> </div>
+	</p>
+	
+	
+	<!-- ****************** Known Bugs ******************** -->
+	
+	<h2 id="CO_knownbugs">Known Bugs and Oddities</h2>
+	<p>
+		No known bugs specifically with CSSLibrary. Like everything else, it works if you use it exactly correct
+		- no leway. For example, attempting to save a class style from file that includes a space between the
+		name and the type marker (the period (.) ) will cause a freezup for some unknown reason.
+	</p>
+	<p>
+		Peculiar feature: The attribute "Rect", if not explicitly given, is controlled by the attributes
+		"left", "right", "top", "bottom", "height", and "width" so that their information can be serialized
+		and applied to the element seamlessly.
+	</p>
+	<p id="BUG_inheritance">
+		Oddity: When nodes are allowed to inherit CSS information from their parent nodes, they do not
+		merely take the positioning attributes necessary to create any box. Instead, the attributes are
+		searched for in the following order (if missing): "left", "right", "top", "bottom", "height", "width".
+		For example, if "left" is missing and either only a "right" or a "width" value is provided, the first
+		left encountered in a parent node will be used for positioning the GUI element. Only if it is not
+		found will the other missing attribute be searched for.
+		The downside of this is that you cannot use a browser to test the appearance of your interface
+		(with a few minor alterations) before attempting to load it with XPLOsion. 
+	</p>
+	
+	
+	<!-- ****************** To Do ******************** -->
+	
+	<h2 id="CO_othertodo">Other To-Dos</h2>
+	
+	<ul>
+		<li>
+			Finish implementing CSSLibrary::buildStyleFromGUIElement()
+		</li>
+	</ul>
+
+</body>
+
+</html>
