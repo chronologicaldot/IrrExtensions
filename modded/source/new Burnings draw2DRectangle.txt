@@ -1,0 +1,146 @@
+/*
+This is the new Burnings Renderer draw2DRectangle I've created.
+It creates a cleaner, CORRECT color gradient, whereas the original cheated and was wrong (and therefore incorrect when used for GUI color-pickers).
+Based on Irrlicht revision 5064. It will work with revision 5589, but it will need to be updated for newer versions (like 5823) because the newer versions have a new render target system.
+
+
+To Do:
+
+> Change all of the color names. I used the wrong names, and I've flipped them... again. :(
+> Clip to screen size.
+> Set the realClip to the clip if it exists
+*/
+
+//!Draws an 2d rectangle with a gradient.
+void CBurningVideoDriver::draw2DRectangle(const core::rect<s32>& position,
+    SColor colorLeftUp, SColor colorRightUp, SColor colorLeftDown, SColor colorRightDown,
+    const core::rect<s32>* clip)
+{
+
+if ( !RenderTargetSurface )
+{
+	setRenderTarget(BackBuffer);
+}
+
+core::rect<s32> realClip( position );
+if ( clip )
+	realClip.clipAgainst(*clip);
+
+if ( !realClip.isValid() )
+	return;
+
+f64 da, dr, dg, db, lda, ldr, ldg, ldb, rda, rdr, rdg, rdb;
+
+f32 ula, ulr, ulg, ulb, ura, urr, urg, urb;
+
+f32 la, lr, lg, lb, ra, rr, rg, rb, a, r, g, b; //, color;
+u32 u32a, u32b, u32g, u32b;
+
+tVideoSample* dst; // destination pixel
+
+ula = upperLeftColor.getAlpha();
+ulr = upperLeftColor.getRed();
+ulg = upperLeftColor.getGreen();
+ulb = upperLeftColor.getBlue();
+ura = upperRightColor.getAlpha();
+urr = upperRightColor.getRed();
+urg = upperRightColor.getGreen();
+urb = upperRightColor.getBlue();
+
+u32 w = (u32) position.getWidth();
+u32 h = (u32) position.getHeight();
+f32 invw = 1.f / (f32)w;
+f32 invh = 1.f / (f32)h;
+
+s32 startX = position.UpperLeftCorner.X;
+s32 startY = position.UpperLeftCorner.Y;
+
+// Perform clipping to clip
+if ( w + startX > realClip->LowerRightCorner.X )
+{
+	w = realClip->LowerRightCorner.X - startX;
+}
+if ( h + startY > realClip->LowerRightCorner.Y )
+{
+	h = realClip->LowerRightCorner.Y - startY;
+}
+if ( startX > realClip->UpperLeftCorner.X )
+{
+	w -= startX - realClip->UpperLeftCorner.X; // remove however much startX is in excess over clipping X
+	startX = realClip->UpperLeftCorner.X;
+}
+if ( startY > realClip->UpperLeftCorner.Y )
+{
+	h -= startY - realClip->UpperLeftCorner.Y; // remove however much startY is in excess over clipping Y
+	startY = realClip->UpperLeftCorner.Y;
+}
+
+// Clip to screen
+// ... to do...
+/* Note, you may consider doing some of this earlier (i.e. before clipping the startX with the clipping rect) */
+
+lda = (lowerLeftColor.getAlpha() - ula) * invh;
+ldr = (lowerLeftColor.getRed() - ulr) * invh;
+ldg = (lowerLeftColor.getGreen() - ulg) * invh;
+ldb = (lowerLeftColor.getBlue() - ulb) * invh;
+rda = (lowerRightColor.getAlpha() - ura) * invh;
+rdr = (lowerRightColor.getRed() - urr) * invh;
+rdg = (lowerRightColor.getGreen() - urg) * invh;
+rdb = (lowerRightColor.getBlue() - urb) * invh;
+
+la = (f32) ula;
+lr = (f32) ulr;
+lg = (f32) ulg;
+lb = (f32) ulb;
+ra = (f32) ura;
+rr = (f32) urr;
+rg = (f32) urg;
+rb = (f32) urb;
+
+f32 dx, dy;
+for ( dy = 0; dy < h; dy += 1 )
+{
+	//la = ula + (u32)( dy*lda );
+	la += lda;
+	lr += ldr;
+	lg += ldg;
+	lb += ldb;
+	ra += rda;
+	rr += rdr;
+	rg += rdg;
+	rb += rdb;
+
+	da = invw * (ra - la );
+	dr = invw * (rr - lr );
+	dg = invw * (rg - lg );
+	db = invw * (rb - lb );
+
+	a = la;
+	r = lr;
+	g = lg;
+	b = lb;
+
+	// Get back-buffer point
+	dst = (tVideoSample*)RenderTargetSurface->lock() + (startY + dy)*renderTargetSize.Width + (startX + dx);
+
+	for ( dx = 0; dx < w; dx += 1 )
+	{
+		//a = la + dx*da;
+		a += da;
+		r += dr
+		g += dg;
+		b += db;
+
+		u32a = u32( a < 255 ? a : 255 );
+		u32r = u32( r < 255 ? r : 255 );
+		u32g = u32( g < 255 ? g : 255 );
+		u32b = u32( b < 255 ? b : 255 );
+		dst[dx] = (u32a << 32) | (u32r << 16) | (u32g << 8) | (u32b);
+	}
+}
+
+} // end function
+
+
+
+

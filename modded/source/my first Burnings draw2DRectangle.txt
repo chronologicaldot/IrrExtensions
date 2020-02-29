@@ -1,0 +1,107 @@
+/*
+This is my OLD version of the draw2DRectangle function for Burnings Renderer.
+Use the new one instead. This is here for reference.
+*/
+
+
+//!Draws an 2d rectangle with a gradient.
+void CBurningVideoDriver::draw2DRectangle(const core::rect<s32>& position,
+    SColor colorLeftUp, SColor colorRightUp, SColor colorLeftDown, SColor colorRightDown,
+    const core::rect<s32>* clip)
+{
+#if 1 // USE_BURNINGS_PRETTY_DRAW2DRECT
+    if ( !RenderTargetSurface )
+    {
+        setRenderTarget(BackBuffer);
+    }
+ 
+    // Done in setRenderTarget
+    //RenderTargetSize = RenderTargetSurface->getDimension();
+ 
+    core::rect<s32> realClip( position );
+    if ( clip )
+        realClip.clipAgainst(*clip);
+ 
+    if ( !realClip.isValid() )
+        return;
+ 
+    // Rectangle bounds given by %
+    u32 x0 = (u32) ( realClip.UpperLeftCorner.X < 0 ? 0 : realClip.UpperLeftCorner.X );
+    u32 y0 = (u32) ( realClip.UpperLeftCorner.Y < 0 ? 0 : realClip.UpperLeftCorner.Y );
+    u32 x100 = (u32)realClip.LowerRightCorner.X < RenderTargetSize.Width ? (u32)realClip.LowerRightCorner.X : RenderTargetSize.Width-1;
+    u32 y100 = (u32)realClip.LowerRightCorner.Y < RenderTargetSize.Height ? (u32)realClip.LowerRightCorner.Y : RenderTargetSize.Height-1;
+ 
+    u32 x, y, w, h, rx, ry, rw, rh;
+    f32 ryh, rxw;
+    w = x100 - x0; // render area width
+    h = y100 - y0; // render area height
+    //s32 flatAlpha, flatRed, flatGreen, flatBlue;
+ 
+    /* The rectangle colors should be drawn as though the rectangle were the same size,
+    even if part of it is clipped. */
+    rw = position.getWidth(); // real width
+    rh = position.getHeight(); // real height
+ 
+    u32 colorLeftUpColor = colorLeftUp.color;
+    u32 colorLeftDownColor = colorLeftDown.color;
+    u32 colorRightUpColor = colorRightUp.color;
+    u32 colorRightDownColor = colorRightDown.color;
+ 
+    //SColor pixelColor; = colorLeftUp;
+    u32 pixelColor;
+    //SColor leftColor, rightColor;
+    u32 leftColor, rightColor;
+ 
+    tVideoSample* dst; // render target surface (just a pointer to a u32 array of size RenderTargetSize)
+ 
+    y=0;
+    ry = position.UpperLeftCorner.Y < 0 ? (u32)( position.UpperLeftCorner.Y * -1 ) : 0;
+    for ( ; y < h ; y++ )
+    {
+        ryh = (f32)ry/(f32)rh;
+        //leftColor = colorLeftDown.getInterpolated( colorLeftUp, (f32)ry/(f32)rh );
+ 
+        leftColor =
+                    ( (u32( (colorLeftDownColor>>24)*ryh + (colorLeftUpColor>>24)*(1.f-ryh) )) << 24 )
+                    + ( (u32( ((colorLeftDownColor>>16) & 0xff)*ryh + ((colorLeftUpColor>>16) & 0xff)*(1.f-ryh) )) << 16 )
+                    + ( (u32( ((colorLeftDownColor>>8) & 0xff)*ryh + ((colorLeftUpColor>>8) & 0xff)*(1.f-ryh) )) << 8 )
+                    + ( u32( (colorLeftDownColor & 0xff)*ryh + (colorLeftUpColor & 0xff)*(1.f-ryh) ) );
+ 
+        //rightColor = colorRightDown.getInterpolated( colorRightUp, (f32)ry/(f32)rh );
+        rightColor =
+                    ( (u32( (colorRightDownColor>>24)*ryh + (colorRightUpColor>>24)*(1.f-ryh) )) << 24 )
+                    + ( (u32( ((colorRightDownColor>>16) & 0xff)*ryh + ((colorRightUpColor>>16) & 0xff)*(1.f-ryh) )) << 16 )
+                    + ( (u32( ((colorRightDownColor>>8) & 0xff)*ryh + ((colorRightUpColor>>8) & 0xff)*(1.f-ryh) )) << 8 )
+                    + ( u32( (colorRightDownColor & 0xff)*ryh + (colorRightUpColor & 0xff)*(1.f-ryh) ) );
+ 
+        // left and right side
+        //RenderTargetSurface->setPixel( x0, y + y0, leftColor, false );
+        //RenderTargetSurface->setPixel( x100, y + y0, rightColor, false );
+        dst = (tVideoSample*)RenderTargetSurface->lock() + (y+y0)*RenderTargetSize.Width + x0;
+        dst[0] = (tVideoSample)leftColor; //.color;
+        dst[w-1] = (tVideoSample)rightColor; //.color;
+ 
+        x = 1;
+        rx = position.UpperLeftCorner.X < 0 ? (u32)( position.UpperLeftCorner.X * -1 ) : 0;
+        for ( ; x < w-1; x++ )
+        {
+            rxw = (f32)x/(f32)rw;
+ 
+            //pixelColor = rightColor.getInterpolated( leftColor, (f32)rx/(f32)rw );
+            pixelColor =
+                    ( (u32( (rightColor>>24)*rxw + (leftColor>>24)*(1.f-rxw) )) << 24 )
+                    + ( (u32( ((rightColor>>16) & 0xff)*rxw + ((leftColor>>16) & 0xff)*(1.f-rxw) )) << 16 )
+                    + ( (u32( ((rightColor>>8) & 0xff)*rxw + ((leftColor>>8) & 0xff)*(1.f-rxw) )) << 8 )
+                    + ( u32( (rightColor & 0xff)*rxw + (leftColor & 0xff)*(1.f-rxw) ) );
+ 
+            //RenderTargetSurface->setPixel( x + x0, y + y0, pixelColor, false ); // <-- Reeeally slow
+            dst[x] = (tVideoSample)pixelColor; //.color;
+ 
+            rx++;
+        }
+ 
+        ry++;
+    }
+    //RenderTargetSurface->unlock(); // unnecessary for Burnings
+#endif
+}
