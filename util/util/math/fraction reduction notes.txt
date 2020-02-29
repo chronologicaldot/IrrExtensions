@@ -1,0 +1,159 @@
+16/10 = (2*8)/(2*5)
+
+big = 16
+small = 10
+mod_bg = 6
+factor = 10 - 6 = 4 (should be 2)
+big % factor == 0
+small % factor != 0
+
+
+18/10 = (2*9)/(2*5)
+
+big = 18
+small = 10
+mod_bg = 8
+factor = 10 - 8 = 2
+big % factor == 0
+small % factor == 0
+
+
+21/28 = (7*4)/(7*3)
+
+big = 28
+small = 21
+mod_bg = 7
+factor = 14 (should be 7)
+big % factor == 0
+small % factor != 0
+
+
+13/4
+
+big = 13
+small = 4
+mod_bg = 1
+factor = 4 - 1 = 3
+big % factor != 0
+small % factor != 0
+
+
+16/4
+
+big = 16
+small = 4
+mod_bg = 0
+factor = 4
+big % factor == 0
+small % factor == 0
+
+The mod_bg contains the common factor between the big and small. That is, the factor is one of the multiples of the mod_bg.
+
+
+121/22 = (11*11)/(11*2)
+
+big = 121
+small = 22
+mod_bg = 121 - (22*5) = 121 - 110 = 11
+
+
+550/220 = (5*10*11)/(2*10*11) = (5*5*2*11)/(2*5*2*11)
+
+big = 550
+small = 220
+mod_bg = 550 - 2*220 = 550 - 440 = 110
+
+When small < big/2, mod_bg is the factor it seems.
+
+
+550/440
+
+big = 550
+small = 440
+mod_bg = 110
+
+
+
+Let B be big, S be small, M be mod_bg, and all calculated the same as before. If there is a common factor D, then:
+D = B/b = S/s = M/m, where b, s, and m are the unique other factors such that: B = b*D, S = s*D, and M = m*D.
+
+m = M/D = M*s/S
+m = M*b/B
+
+We also know that, when m < s:
+m + s = b
+if and only if D exists.
+Thus:
+m = M*(m+s)/B
+s = m*S/M
+Thus:
+m = M*(m+(m*S/M))/B
+= (M*m + S*m)/B
+=> 1 = (M + S)/B
+=> B = M + S
+But that's an identity.
+
+m = M*(m+s)/B
+=> 1 = (M + s/m)/B
+=> B = M + s/m
+
+
+Chinese number theorem?
+16/10 ->
+16 - 10 = 6
+10 - 6 = 4
+6 - 4 = 2 = factor
+4 - 2 = 2
+
+18/10 ->
+18 - 10 = 8
+10 - 8 = 2 = factor
+8 - 2 = 6 (answer is greater than second number)
+2 - 6 = -4 (invalid)
+
+550/220 ->
+550 - 220 = 330
+220 - 330 = -110 (invalid)
+
+Maybe use mods?
+16/10 ->
+16 % 10 = 6 (big % small)
+10 % 6 = 4 (small % mod_bg = mod_mod)
+6 % 4 = 2 (mod_bg % mod_mod)
+4 % 2 = 2 (same answer)
+2 % 2 = 0 (common denominator is 2)
+
+18/10 ->
+18 % 10 = 8 (big % small)
+10 % 8 = 2 (small % mod_bg = mod_mod)
+8 % 2 = 0 (mod_bg % mod_mod) (common denominator is 2)
+
+550/220 ->
+550 % 220 = 110 (big % small)
+220 % 110 = 0 (small % mod_bg = mod_mod) (fast convergence: mod_mod = 0)
+
+
+(7*3*2)/(5*3) = 42/15 ->
+42 % 15 = 12
+15 % 12 = 3
+12 % 3 = 0
+
+
+1598/272 ->
+1598 % 272 = 238
+272 % 238 = 34
+238 % 34 = 0
+
+So it looks like:
+If you mod the big by the small and repeat the process over and over, you will eventually reach the common factor, which is the last value before zero.
+
+
+1987/451 ->
+1987 % 451 = 183
+451 % 183 = 85
+183 % 85 = 13
+85 % 13 = 7
+13 % 7 = 6
+7 % 6 = 1
+
+Since the result here is 1, there is no common factor.
