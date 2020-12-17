@@ -18,7 +18,7 @@ GUIMarkedSlider::GUIMarkedSlider(
 	IGUIElement*  parent,
 	s32  id
 )
-	: IGUIElement( EGUIET_SCROLLBAR, environment, parent, id, rectangle )
+	: IGUIElement( /*EGUIET_SCROLLBAR*/ EGUIET_ELEMENT , environment, parent, id, rectangle )
 	, MinValue(0)
 	, MaxValue(100.f)
 	, CurrentValue(0)
