@@ -567,6 +567,26 @@ void GUISColorSelect::draw()
 					);
 }
 
+void GUISColorSelect::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	out->addColor("Color", color);
+}
+
+void GUISColorSelect::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::deserializeAttributes(in,options);
+
+	setColor(in->getColor("Color", color));
+}
+
 }
 }
 

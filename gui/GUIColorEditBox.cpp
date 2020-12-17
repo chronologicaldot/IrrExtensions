@@ -459,5 +459,28 @@ void GUIColorEditBox::clear()
 	Text = L"00000000";
 }
 
+void GUIColorEditBox::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	out->addColor("Color", color);
+}
+
+void GUIColorEditBox::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::deserializeAttributes(in,options);
+
+	// Override setText()
+	if ( in->existsAttribute("Color") ) {
+		color = in->getColor("Color", color);
+	}
+}
+
 }
 }

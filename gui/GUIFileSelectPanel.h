@@ -176,6 +176,9 @@ protected:
 public:
 	//! Draw
 	virtual void draw();
+
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "fileSelectPanel"; }
 };
 
 }}

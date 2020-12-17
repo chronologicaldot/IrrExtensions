@@ -46,6 +46,8 @@ public:
 
 		if ( renderTarget )
 			videoDriver->removeRenderTarget( renderTarget );
+		if ( depthStencil )
+			videoDriver->removeRenderTarget( depthStencil );
 
 		if ( removeTexturesOnDestroy )
 		{
@@ -120,6 +122,11 @@ public:
 			Environment->getVideoDriver()->removeRenderTarget(renderTarget);
 			renderTarget = 0;
 		}
+		if ( depthStencil )
+		{
+			Environment->getVideoDriver()->removeRenderTarget(depthStencil);
+			depthStencil = 0;
+		}
 	}
 
 	bool setUseAlphaChannel( bool yes )
@@ -141,6 +148,8 @@ public:
 												video::SColor(0xffffffff), useAlphaChannel );
 		}
 	}
+
+	// TODO: Serialization
 };
 
 }}

@@ -56,6 +56,20 @@ public:
 	// Post rendering (for cursor time)
 	virtual void OnPostRender(u32 timeMs);
 
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "colorEditbox"; }
+
+	// For completeness, we allow both setText and setColor to set the color
+	virtual void serializeAttributes(
+		irr::io::IAttributes* out,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
+	virtual void deserializeAttributes(
+		irr::io::IAttributes* in,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
 protected:
 	// Attempts to set the cursor position - Returns whether or not it could
 	bool setCursorIndexFromPosition( vector2di pPos );

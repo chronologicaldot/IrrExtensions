@@ -212,6 +212,37 @@ void GUIVectorPanel::sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pEle
 	Parent->OnEvent(event);
 }
 
+void GUIVectorPanel::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	out->addBool("Edit3D", edit3D);
+	out->AddFloat("X", X);
+	out->AddFloat("Y", X);
+	out->AddFloat("Z", X);
+}
+
+void GUIVectorPanel::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::deserializeAttributes(in,options);
+
+	edit3D = in->getBool("Edit3D", edit3D);
+	if ( edit3D )
+		setEdit3DVector();
+	else
+		setEdit2DVector();
+
+	X = in->getFloat("X");
+	Y = in->getFloat("Y");
+	Z = in->getFloat("Z");
+}
+
 }}
 
 #endif // #ifndef GUI_VECTOR_PANEL_CPP

@@ -116,6 +116,9 @@ public:
 	void setAmbientLight( irr::video::SColor pColor );
 
 	virtual bool OnEvent( const SEvent& event );
+
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "materialPanel"; }
 protected:
 	bool OnGuiEvent( const SEvent& event );
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement=0 );

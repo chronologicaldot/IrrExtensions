@@ -53,6 +53,9 @@ public:
 	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const;
 	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "scrollPane"; }
+
 protected:
 	void recalculateChildBounds();
 	void shiftChildrenToPosition( s32 x, s32 y );

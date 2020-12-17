@@ -66,6 +66,19 @@ public:
 	getRotation() will be returned with degrees. */
 	bool rotatesInDegrees();
 
+	virtual void serializeAttributes(
+		irr::io::IAttributes* out,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
+	virtual void deserializeAttributes(
+		irr::io::IAttributes* in,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "matrixPanel"; }
+
 private:
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement );
 };

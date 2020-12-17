@@ -219,6 +219,26 @@ bool GUIMatrixPanel::rotatesInDegrees()
 	return rotInDeg;
 }
 
+void GUIMatrixPanel::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	out->addBool("RotateInDegrees", rotInDeg);
+}
+
+void GUIMatrixPanel::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::deserializeAttributes(in,options);
+
+	rotInDeg = in->getBool("RotateInDegrees", rotInDeg);
+}
+
 }}
 
 #endif // #ifndef GUI_MATRIX_PANEL_CPP

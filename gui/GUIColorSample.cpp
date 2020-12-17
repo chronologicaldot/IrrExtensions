@@ -122,6 +122,36 @@ void GUIColorSample::draw()
 	}
 }
 
+void GUIColorSample::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	out->addColor("UpperLeftColor", upperLeft);
+	out->addColor("UpperRightColor", upperRight);
+	out->addColor("LowerLeftColor", lowerLeft);
+	out->addColor("LowerRightColor", lowerRight);
+	out->addBool("DrawBorder", drawBorder);
+	out->addInt("BorderWidth", borderWidth);
+}
+
+void GUIColorSample::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+	)
+{
+	IGUIElement::deserializeAttributes(in,options);
+
+	upperLeft = in->getColor("UpperLeftColor", upperLeft);
+	upperRight = in->getColor("UpperRightColor", upperRight);
+	lowerLeft = in->getColor("LowerLeftColor", lowerLeft);
+	lowerRight = in->getColor("LowerRightColor", lowerRight);
+	borderWidth = in->getInt("BorderWidth", borderWidth);
+	setDrawBorder( in->getBool("DrawBorder", drawBorder) );
+}
+
 }}
 
 #endif // #ifndef GUI_COLOR_SAMPLE_CPP

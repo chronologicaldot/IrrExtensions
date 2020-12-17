@@ -50,6 +50,19 @@ public:
 	virtual void updateAbsolutePosition(); // changes the sizes of the child elements
 	virtual bool OnEvent( const SEvent& event );
 
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "vectorPanel"; }
+
+	virtual void serializeAttributes(
+		irr::io::IAttributes* out,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
+	virtual void deserializeAttributes(
+		irr::io::IAttributes* in,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
 private:
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement );
 };
