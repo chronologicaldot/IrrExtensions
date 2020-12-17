@@ -52,7 +52,7 @@ private:
 	bool  DrawNumbers;
 	f32  NumberSpacing;
 	bool  IsVertical;
-	f32  SliderSize;
+	f32  SliderRadius;
 	core::vector2di  StartMousePos;
 	video::ITexture*  SliderTexture;
 };

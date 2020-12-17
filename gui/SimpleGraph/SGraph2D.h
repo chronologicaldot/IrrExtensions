@@ -315,7 +315,7 @@ public:
 	// ------------ Drawing functions ------------
 
 		//! Draw to the graph
-	/* Draws on the graph a single point whose coordinates are preppared
+	/* Draws on the graph a single point whose coordinates are prepared
 	according to the graph's coordinate system.
 	You should use this function for standard operations. */
 	void drawOnGraph(
@@ -330,7 +330,7 @@ public:
 		);
 
 		//! Draw on the graph - Polar coord
-	/* Draws on the graph a single point whose coordinates are preppared
+	/* Draws on the graph a single point whose coordinates are prepared
 	according to the graph's coordinate system but are polar corrdinates.
 	\param point - A radius (X value) and an angle (Y value).
 	You should use this function for standard operations. */

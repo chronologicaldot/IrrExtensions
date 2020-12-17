@@ -328,4 +328,47 @@ bool isInSliderArea( s32 x, s32 y ) {
 	return (core::recti(AbsoluteRect.UpperLeftCorner, core::dimension2du(SliderRadius*2))).isPointInside(x,y);
 }
 
+void GUIMarkedSlider::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
+{
+	IGUIElement::serializeAttributes(out,options);
+
+	f32  MinValue;
+	f32  MaxValue;
+	f32  CurrentValue;
+	bool  DrawFrame;
+	bool  DrawTicks;
+	bool  DrawNumbers;
+	f32  NumberSpacing;
+	bool  IsVertical;
+	f32  SliderRadius;
+
+	out->addFloat("MinValue", MinValue);
+	out->addFloat("MaxValue", MaxValue);
+	out->addFloat("CurrentValue", CurrentValue);
+	out->addBool("DrawFrame", DrawFrame);
+	out->addBool("DrawTicks", DrawTicks);
+	out->addBool("DrawNumbers", DrawNumbers);
+	out->addFloat("NumberSpacing", NumberSpacing);
+	out->addBool("IsVertical", IsVertical);
+	out->addFloat("SliderRadius", SliderRadius);
+}
+
+void GUIMarkedSlider::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options)
+{
+	IGUIElement::deserializeAttributes(in, options);
+
+	MinValue = in->getFloat("MinValue", MinValue);
+	MaxValue = in->getFloat("MaxValue", MaxValue);
+	CurrentValue = in->getFloat("CurrentValue", CurrentValue);
+	DrawFrame = in->getBool("DrawFrame", DrawFrame);
+	DrawTicks = in->getBool("DrawTicks", DrawTicks);
+	DrawNumbers = in->getBool("DrawNumbers", DrawNumbers);
+	NumberSpacing = in->getFloat("NumberSpacing", NumberSpacing);
+	IsVertical = in->getBool("IsVertical", IsVertical);
+
+	f32 sliderRadius = in->getFloat("SliderRadius", SliderRadius);
+	if ( sliderRadius != SliderRadius )
+		setSliderSize(SliderRadius*2); // Updates image cache
+}
+
 }}
