@@ -29,7 +29,7 @@ public:
 	{
 	}
 
-	~IGraph2D()
+	virtual ~IGraph2D()
 	{
 	}
 
@@ -99,6 +99,9 @@ public:
 		irr::io::IAttributes* in,
 		irr::io::SAttributeReadWriteOptions* options=0
 		)=0;
+
+	virtual const c8* getTypeName() const { return staticTypeName(); }
+	static const c8* staticTypeName() const { return "iGraph2D"; }
 };
 
 } // end namespace gui
