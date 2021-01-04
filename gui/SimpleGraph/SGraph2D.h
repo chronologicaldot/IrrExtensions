@@ -181,14 +181,14 @@ public:
 
 		//! Get Iterable Range for X-Axis
 	/* Returns an incrementor whose range spans the visible x-axis of the
-	graph, whose step yields one point per pixel acroos the screen, and whose
+	graph, whose step yields one point per pixel across the screen, and whose
 	starting position is the one necessary for all points drawn with this as
 	a guide to cross the entire graph window. */
 	Inc<irr::f32> getIterableXRange();
 
 		//! Get Iterable Range for Y-Axis
 	/* Returns an incrementor whose range spans the visible y-axis of the
-	graph, whose step yields one point per pixel acroos the screen, and whose
+	graph, whose step yields one point per pixel across the screen, and whose
 	starting position is the one necessary for all points drawn with this as
 	a guide to cross the entire graph window. */
 	Inc<irr::f32> getIterableYRange();
