@@ -51,7 +51,7 @@ public:
 	virtual bool OnEvent( const SEvent& event );
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "vectorPanel"; }
+	static const c8* staticTypeName() { return "vectorPanel"; }
 
 	virtual void serializeAttributes(
 		irr::io::IAttributes* out,

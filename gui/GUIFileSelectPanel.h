@@ -178,7 +178,7 @@ public:
 	virtual void draw();
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "fileSelectPanel"; }
+	static const c8* staticTypeName() { return "fileSelectPanel"; }
 };
 
 }}

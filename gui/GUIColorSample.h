@@ -42,7 +42,7 @@ public:
 	virtual void draw();
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "colorSample"; }
+	static const c8* staticTypeName() { return "colorSample"; }
 
 	virtual void serializeAttributes(
 		irr::io::IAttributes* out,

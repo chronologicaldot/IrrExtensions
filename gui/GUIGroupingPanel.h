@@ -57,7 +57,7 @@ public:
 	virtual void draw() _IRR_OVERRIDE_;
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "groupingPanel"; }
+	static const c8* staticTypeName() { return "groupingPanel"; }
 
 	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const _IRR_OVERRIDE_;
 	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_;

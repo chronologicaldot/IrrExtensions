@@ -101,7 +101,7 @@ public:
 		)=0;
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "iGraph2D"; }
+	static const c8* staticTypeName() { return "iGraph2D"; }
 };
 
 } // end namespace gui

@@ -58,7 +58,7 @@ public:
 	virtual bool OnEvent( const SEvent& event )  _IRR_OVERRIDE_;
 	virtual void draw()  _IRR_OVERRIDE_;
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "dropdownSelector"; }
+	static const c8* staticTypeName() { return "dropdownSelector"; }
 	virtual void serializeAttributes( io::IAttributes* out, io::SAttributeReadWriteOptions* options ) const  _IRR_OVERRIDE_;
 	virtual void deserializeAttributes( io::IAttributes* in, io::SAttributeReadWriteOptions* options )  _IRR_OVERRIDE_;
 

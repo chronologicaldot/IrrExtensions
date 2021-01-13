@@ -77,7 +77,7 @@ public:
 		);
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "matrixPanel"; }
+	static const c8* staticTypeName() { return "matrixPanel"; }
 
 private:
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement );

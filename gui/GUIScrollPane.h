@@ -54,7 +54,7 @@ public:
 	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "scrollPane"; }
+	static const c8* staticTypeName() { return "scrollPane"; }
 
 protected:
 	void recalculateChildBounds();

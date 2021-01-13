@@ -57,7 +57,7 @@ public:
 	virtual void OnPostRender(u32 timeMs);
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "colorEditbox"; }
+	static const c8* staticTypeName() { return "colorEditbox"; }
 
 	// For completeness, we allow both setText and setColor to set the color
 	virtual void serializeAttributes(

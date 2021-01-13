@@ -18,7 +18,7 @@ class SlickGUISkin : public IGUISkin
 {
 	bool DrawMoreRound;
 	IGUIEnvironment* Environment;
-	IVideoDriver* VideoDriver;
+	irr::video::IVideoDriver* VideoDriver;
 	video::SColor Colors[EGDC_COUNT];
 	s32 Sizes[EGDS_COUNT];
 	u32 Icons[EGDI_COUNT];
@@ -32,70 +32,69 @@ public:
 	SlickGUISkin( IGUIEnvironment*, bool startIconsFromZero, bool drawMoreRound );
 	~SlickGUISkin();
 
-	virtual video::SColor getColor(EGUI_DEFAULT_COLOR color) const;
+	virtual video::SColor getColor(EGUI_DEFAULT_COLOR color) const override;
 
-	virtual void setColor(EGUI_DEFAULT_COLOR which, video::SColor newColor);
+	virtual void setColor(EGUI_DEFAULT_COLOR which, video::SColor newColor) override;
 
-	virtual s32 getSize(EGUI_DEFAULT_SIZE size);
+	virtual s32 getSize(EGUI_DEFAULT_SIZE size) const override;
 
-	virtual void setSize(EGUI_DEFAULT_SIZE which, s32 size);
+	virtual void setSize(EGUI_DEFAULT_SIZE which, s32 size) override;
 
-	virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT text) const;
+	virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT text) const override;
 
-	virtual void setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText);
+	virtual void setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText) override;
 
-	virtual IGUIFont* getFont(EGUI_DEFAULT_FONT which=EGDF_DEFAULT) const;
+	virtual IGUIFont* getFont(EGUI_DEFAULT_FONT which=EGDF_DEFAULT) const override;
 
-	virtual void setFont(IGUIFont* font, EGUI_DEFAULT_FONT which=EGDF_DEFAULT);
+	virtual void setFont(IGUIFont* font, EGUI_DEFAULT_FONT which=EGDF_DEFAULT) override;
 
-	virtual IGUISpriteBank* getSpriteBank() const;
+	virtual IGUISpriteBank* getSpriteBank() const override;
 
-	virtual void setSpriteBank(IGUISpriteBank* bank);
+	virtual void setSpriteBank(IGUISpriteBank* bank) override;
 
-	virtual u32 getIcon(EGUI_DEFAULT_ICON icon) const;
+	virtual u32 getIcon(EGUI_DEFAULT_ICON icon) const override;
 
-	virtual void setIcon(EGUI_DEFAULT_ICON icon, u32 index);
+	virtual void setIcon(EGUI_DEFAULT_ICON icon, u32 index) override;
 
 	virtual void draw3DButtonPaneStandard(IGUIElement* element,
 		const core::rect<s32>& rect,
-		const core::rect<s32>* clip=0);
+		const core::rect<s32>* clip=0) override;
 
 	virtual void draw3DButtonPanePressed(IGUIElement* element,
 		const core::rect<s32>& rect,
-		const core::rect<s32>* clip=0);
+		const core::rect<s32>* clip=0) override;
 
 	virtual void draw3DSunkenPane(IGUIElement* element,
 		video::SColor bgcolor, bool flat, bool fillBackGround,
 		const core::rect<s32>& rect,
-		const core::rect<s32>* clip=0);
+		const core::rect<s32>* clip=0) override;
 
 	virtual core::rect<s32> draw3DWindowBackground(IGUIElement* element,
 		bool drawTitleBar, video::SColor titleBarColor,
 		const core::rect<s32>& rect,
 		const core::rect<s32>* clip=0,
-
-		core::rect<s32>* checkClientArea=0);
+		core::rect<s32>* checkClientArea=0) override;
 
 	virtual void draw3DMenuPane(IGUIElement* element,
 		const core::rect<s32>& rect,
-		const core::rect<s32>* clip=0);
+		const core::rect<s32>* clip=0) override;
 
 	virtual void draw3DToolBar(IGUIElement* element,
 		const core::rect<s32>& rect,
-		const core::rect<s32>* clip=0);
+		const core::rect<s32>* clip=0) override;
 
 	virtual void draw3DTabButton(IGUIElement* element, bool active,
-		const core::rect<s32>& rect, const core::rect<s32>* clip=0, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT);
+		const core::rect<s32>& rect, const core::rect<s32>* clip=0, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT) override;
 
 	virtual void draw3DTabBody(IGUIElement* element, bool border, bool background,
-		const core::rect<s32>& rect, const core::rect<s32>* clip=0, s32 tabHeight=-1, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT );
+		const core::rect<s32>& rect, const core::rect<s32>* clip=0, s32 tabHeight=-1, gui::EGUI_ALIGNMENT alignment=EGUIA_UPPERLEFT ) override;
 
 	virtual void drawIcon(IGUIElement* element, EGUI_DEFAULT_ICON icon,
 		const core::position2di position, u32 starttime=0, u32 currenttime=0,
-		bool loop=false, const core::rect<s32>* clip=0);
+		bool loop=false, const core::rect<s32>* clip=0) override;
 
 	virtual void draw2DRectangle(IGUIElement* element, const video::SColor &color,
-		const core::rect<s32>& pos, const core::rect<s32>* clip = 0) = 0;
+		const core::rect<s32>& pos, const core::rect<s32>* clip = 0) override;
 
 	//! get the type of this skin
 	virtual EGUI_SKIN_TYPE getType() const { return EGST_UNKNOWN; }
