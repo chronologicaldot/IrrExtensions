@@ -111,9 +111,9 @@ public:
 	bool inRange( T& value, bool bound_inclusive=true )
 	{
 		if ( bound_inclusive )
-			return min <= value && value <= max;
+			return start <= value && value <= end;
 
-		else return min < value && value < max;
+		else return start < value && value < end;
 	}
 
 	// ***************** With other types *******************
@@ -210,8 +210,8 @@ public:
 	template<class T2>
 	bool inRange( T2& value, bool bound_inclusive=true )
 	{
-		if ( (bound_inclusive? min<=value : min<value) )
-			if ( (bound_inclusive? value<=max : value<max) )
+		if ( (bound_inclusive? start<=value : start<value) )
+			if ( (bound_inclusive? value<=end : value<end) )
 				return true;
 
 		return false;

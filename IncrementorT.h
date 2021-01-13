@@ -217,7 +217,7 @@ public:
 	{
 		if ( min > max )
 		{
-			T m = min;
+			Num m = min;
 			min = max;
 			max = m;
 		}
