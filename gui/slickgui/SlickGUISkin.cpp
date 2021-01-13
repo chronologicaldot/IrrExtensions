@@ -527,20 +527,20 @@ void SlickGUISkin::drawRoundOutline(
 	const s32 bottom = rect.LowerRightCorner.Y;
 
 	if ( DrawMoreRound ) {
-		draw2DVerticalLine( core::vector2di(left, top+2), bottom-top-4, colorLeft );
-		draw2DHorizontalLine( core::vector2di(left+2, top), right-left-4, colorTop );
-		draw2DVerticalLine( core::vector2di(right, top+2), bottom-top-4, colorRight );
-		draw2DHorizontalLine( core::vector2di(left+2, bottom), right-left-4, colorBottom );
+		draw2DVerticalLine( core::vector2di(left, top+2), bottom-top-3, colorLeft );
+		draw2DHorizontalLine( core::vector2di(left+2, top), right-left-3, colorTop );
+		draw2DVerticalLine( core::vector2di(right, top+2), bottom-top-3, colorRight );
+		draw2DHorizontalLine( core::vector2di(left+2, bottom), right-left-3, colorBottom );
 
 		drawPixel( left+1, top+1, colorTop, clip );
-		drawPixel( right+1, top+1, colorTop, clip );
-		drawPixel( left+1, bottom+1, colorBottom, clip );
-		drawPixel( right+1, bottom+1, colorBottom, clip );
+		drawPixel( right-1, top+1, colorTop, clip );
+		drawPixel( left+1, bottom-1, colorBottom, clip );
+		drawPixel( right-1, bottom-1, colorBottom, clip );
 	} else {
-		draw2DVerticalLine( core::vector2di(left, top+1), bottom-top-2, colorLeft );
-		draw2DHorizontalLine( core::vector2di(left+1, top), right-left-2, colorTop );
-		draw2DVerticalLine( core::vector2di(right, top+1), bottom-top-2, colorRight );
-		draw2DHorizontalLine( core::vector2di(left+1, bottom), right-left-2, colorBottom );
+		draw2DVerticalLine( core::vector2di(left, top+1), bottom-top-1, colorLeft );
+		draw2DHorizontalLine( core::vector2di(left+1, top), right-left-1, colorTop );
+		draw2DVerticalLine( core::vector2di(right, top+1), bottom-top-1, colorRight );
+		draw2DHorizontalLine( core::vector2di(left+1, bottom), right-left-1, colorBottom );
 	}
 }
 
