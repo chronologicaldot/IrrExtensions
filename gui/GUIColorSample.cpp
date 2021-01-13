@@ -144,12 +144,12 @@ void GUIColorSample::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes(in,options);
 
-	upperLeft = in->getColor("UpperLeftColor", upperLeft);
-	upperRight = in->getColor("UpperRightColor", upperRight);
-	lowerLeft = in->getColor("LowerLeftColor", lowerLeft);
-	lowerRight = in->getColor("LowerRightColor", lowerRight);
-	borderWidth = in->getInt("BorderWidth", borderWidth);
-	setDrawBorder( in->getBool("DrawBorder", drawBorder) );
+	upperLeft = in->getAttributeAsColor("UpperLeftColor", upperLeft);
+	upperRight = in->getAttributeAsColor("UpperRightColor", upperRight);
+	lowerLeft = in->getAttributeAsColor("LowerLeftColor", lowerLeft);
+	lowerRight = in->getAttributeAsColor("LowerRightColor", lowerRight);
+	borderWidth = in->getAttributeAsInt("BorderWidth", borderWidth);
+	setDrawBorder( in->getAttributeAsBool("DrawBorder", drawBorder) );
 }
 
 }}

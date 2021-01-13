@@ -478,7 +478,7 @@ void GUIColorEditBox::deserializeAttributes(
 
 	// Override setText()
 	if ( in->existsAttribute("Color") ) {
-		color = in->getColor("Color", color);
+		color = in->getAttributeAsColor("Color", color);
 	}
 }
 

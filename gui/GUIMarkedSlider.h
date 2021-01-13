@@ -19,7 +19,7 @@ namespace gui {
 class GUIMarkedSlider : public IGUIElement {
 
 public:
-	GUIMarkedSlider(bool  vertical, f32  sliderSize, core::rect<s32>  rectangle, IGUIEnvironment*  environment, IGUIElement*  parent=0, s32  id=-1 )
+	GUIMarkedSlider(bool  vertical, f32  sliderSize, core::rect<s32>  rectangle, IGUIEnvironment*  environment, IGUIElement*  parent=0, s32  id=-1 );
 	~GUIMarkedSlider();
 
 	virtual bool OnEvent( const SEvent&  event ) _IRR_OVERRIDE_;
@@ -37,6 +37,8 @@ public:
 	void setDrawNumbers( bool );
 	void setNumberSpacing( f32 ); // Distance between drawn numbers
 	void setSliderSize( f32 );
+
+	bool isInSliderArea( s32 x, s32 y );
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
 	static const c8* staticTypeName() { return "markedSlider"; }
@@ -56,6 +58,7 @@ private:
 	f32  NumberSpacing;
 	bool  IsVertical;
 	f32  SliderRadius;
+	bool SliderSelected;
 	core::vector2di  StartMousePos;
 	video::ITexture*  SliderTexture;
 };

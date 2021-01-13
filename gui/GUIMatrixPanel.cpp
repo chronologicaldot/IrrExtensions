@@ -236,7 +236,7 @@ void GUIMatrixPanel::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes(in,options);
 
-	rotInDeg = in->getBool("RotateInDegrees", rotInDeg);
+	rotInDeg = in->getAttributeAsBool("RotateInDegrees", rotInDeg);
 }
 
 }}

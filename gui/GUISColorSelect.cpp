@@ -574,7 +574,7 @@ void GUISColorSelect::serializeAttributes(
 {
 	IGUIElement::serializeAttributes(out,options);
 
-	out->addColor("Color", color);
+	out->addColor("Color", getColor());
 }
 
 void GUISColorSelect::deserializeAttributes(
@@ -584,7 +584,7 @@ void GUISColorSelect::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes(in,options);
 
-	setColor(in->getColor("Color", color));
+	setColor(in->getAttributeAsColor("Color", getColor()));
 }
 
 }

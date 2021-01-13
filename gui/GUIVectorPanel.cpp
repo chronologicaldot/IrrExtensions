@@ -220,9 +220,9 @@ void GUIVectorPanel::serializeAttributes(
 	IGUIElement::serializeAttributes(out,options);
 
 	out->addBool("Edit3D", edit3D);
-	out->AddFloat("X", X);
-	out->AddFloat("Y", X);
-	out->AddFloat("Z", X);
+	out->addFloat("X", X);
+	out->addFloat("Y", X);
+	out->addFloat("Z", X);
 }
 
 void GUIVectorPanel::deserializeAttributes(
@@ -232,15 +232,15 @@ void GUIVectorPanel::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes(in,options);
 
-	edit3D = in->getBool("Edit3D", edit3D);
+	edit3D = in->getAttributeAsBool("Edit3D", edit3D);
 	if ( edit3D )
 		setEdit3DVector();
 	else
 		setEdit2DVector();
 
-	X = in->getFloat("X");
-	Y = in->getFloat("Y");
-	Z = in->getFloat("Z");
+	X = in->getAttributeAsFloat("X");
+	Y = in->getAttributeAsFloat("Y");
+	Z = in->getAttributeAsFloat("Z");
 }
 
 }}

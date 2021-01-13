@@ -1,7 +1,8 @@
 // Copyright 2018 Nicolaus Anderson
 
-#include "GUIMarkedSlider"
+#include "GUIMarkedSlider.h"
 #include <irrMath.h>
+#include <SColor.h>
 #include <IVideoDriver.h>
 #include <IGUIFont.h>
 #include <IGUISkin.h>
@@ -28,6 +29,7 @@ GUIMarkedSlider::GUIMarkedSlider(
 	, NumberSpacing(10.f)
 	, IsVertical( vertical )
 	, SliderRadius( sliderSize / 2 )
+	, SliderSelected(false)
 	, StartMousePos(0)
 	, SliderTexture(0)
 {
@@ -35,8 +37,8 @@ GUIMarkedSlider::GUIMarkedSlider(
 	Environment->getVideoDriver();
 }
 
-GUIMarkedSlider::OnEvent( const SEvent&  event ) {
-	if ( event.eventType == EET_MOUSE_INPUT_EVENT ) {
+bool GUIMarkedSlider::OnEvent( const SEvent&  event ) {
+	if ( event.EventType == EET_MOUSE_INPUT_EVENT ) {
 		switch ( event.MouseInput.Event ) {
 		case EMIE_LMOUSE_PRESSED_DOWN:
 			if ( isInSliderArea( event.MouseInput.X, event.MouseInput.Y ) ) {
@@ -44,9 +46,9 @@ GUIMarkedSlider::OnEvent( const SEvent&  event ) {
 				StartMousePos.set( event.MouseInput.X, event.MouseInput.Y );
 			} else {
 				if ( IsVertical ) {
-					setValue( event.MouseInput.Y - AbsoluteRect.UpperLeftCorner.Y - SliderSize );
+					setValue( event.MouseInput.Y - AbsoluteRect.UpperLeftCorner.Y - SliderRadius*2 );
 				} else {
-					setValue( event.MouseInput.X - AbsoluteRect.UpperLeftCorner.X - SliderSize );
+					setValue( event.MouseInput.X - AbsoluteRect.UpperLeftCorner.X - SliderRadius*2 );
 				}
 			}
 			return true;
@@ -128,13 +130,23 @@ void GUIMarkedSlider::setSliderSize( f32 sliderSize ) {
 	updateImageCache();
 }
 
+bool GUIMarkedSlider::isInSliderArea( s32 x, s32 y ) {
+	// Create a rectangle formed by the upper left corner of the absolute position of this element
+	// and having a size that is the same as the slider radius times 2
+	core::recti r(
+		AbsoluteRect.UpperLeftCorner,
+		core::dimension2du(SliderRadius*2,SliderRadius*2)
+	);
+	return r.isPointInside( core::vector2di(x,y) );
+}
+
 void GUIMarkedSlider::updateImageCache() {
 
 	video::IVideoDriver*  vid = Environment->getVideoDriver();
-	SColor  lightColor = Environment->getSkin()->getColor( EGDC_3D_LIGHT );
-	SColor  shadowColor = Environment->getSkin()->getColor( EGDC_3D_SHADOW );
-	SColor  textColor = Environment->getSkin()->getColor( EGDC_BUTTON_TEXT );
-	core::dimension2du  imageSize( (u32)SliderRadius * 2 );
+	video::SColor  lightColor = Environment->getSkin()->getColor( EGDC_3D_LIGHT );
+	video::SColor  shadowColor = Environment->getSkin()->getColor( EGDC_3D_SHADOW );
+	video::SColor  textColor = Environment->getSkin()->getColor( EGDC_BUTTON_TEXT );
+	core::dimension2du  imageSize( (u32)SliderRadius * 2, (u32)SliderRadius * 2 );
 	core::vector2di  sliderSpot( (s32)SliderRadius );
 
 	if ( ! SliderTexture )
@@ -146,12 +158,12 @@ void GUIMarkedSlider::updateImageCache() {
 		vid->draw2DPolygon( core::vector2di( (s32)SliderRadius - 1 ), (s32)SliderRadius, lightColor, 40 );
 		vid->draw2DPolygon( core::vector2di( (s32)SliderRadius - 2 ), (s32)SliderRadius, shadowColor, 40 );
 		sliderSpot.Y = 3; // Avoid drawing over the other bands
-		vid->draw2DLine( sliderSpot, core::vector(sliderSpot.X, (s32)imageSize.Height - 3), textColor );
+		vid->draw2DLine( sliderSpot, core::vector2di(sliderSpot.X, (s32)imageSize.Height - 3), textColor );
 	}
 	vid->setRenderTarget(0);
 }
 
-void GUIMarkerSlider::draw() {
+void GUIMarkedSlider::draw() {
 	if ( ! SliderTexture ) {
 		// ERROR, so just draw children
 		IGUIElement::draw();
@@ -165,8 +177,9 @@ void GUIMarkerSlider::draw() {
 	video::IVideoDriver*  vid = Environment->getVideoDriver();
 	IGUISkin*  skin = Environment->getSkin();
 	video::SColor  lightColor = skin->getColor( EGDC_3D_LIGHT );
-	video::SColor  darkColor = skin->getColor( EGDC_3D_SHADOW );
+	video::SColor  shadowColor = skin->getColor( EGDC_3D_SHADOW );
 	video::SColor  textColor = skin->getColor( EGDC_BUTTON_TEXT );
+	video::SColor  faceColor = skin->getColor( EGDC_3D_FACE );
 	s32  halfTextHeight = skin->getFont()->getKerningHeight() / 2;
 
 	core::vector2di  drawStart, drawEnd, drawSave, drawSave2; // drawSaves are temporary storage variables
@@ -181,7 +194,7 @@ void GUIMarkerSlider::draw() {
 	core::recti  numberTextRect;
 
 	if ( DrawFrame ) {
-		skin->drawSunkenPanel(this, AbsoluteRect, &AbsoluteClippingRect);
+		skin->draw3DSunkenPane(this, faceColor, false, true, AbsoluteRect, &AbsoluteClippingRect);
 	}
 
 	if ( IsVertical ) {
@@ -236,7 +249,7 @@ void GUIMarkerSlider::draw() {
 				skin->getFont()->draw( numberText.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
 				drawValue - NumberSpacing;
 				numberTextRect = core::recti( drawSave, drawSave2 );
-				numberTextRect.move(0, - (s32)( drawSpacing * lineIndex ) );
+				numberTextRect += core::vector2di(0, - (s32)( drawSpacing * lineIndex ) );
 			}
 
 			// Draw the last number separately so that it's correctly lined up
@@ -244,12 +257,12 @@ void GUIMarkerSlider::draw() {
 			drawSave2.Y = drawStart.Y + halfTextHeight;
 			numberTextRect = core::recti(drawSave, drawSave2);
 			const core::stringw numberTextFinal( MinValue );
-			skin->getFont()->draw( numberText.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
+			skin->getFont()->draw( numberTextFinal.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
 		}
 
 		// Draw the slider marker last
 		drawStart.set( halfElemWidth - sSliderRadius, CurrentValue - sSliderRadius );
-		vid->draw2DImage( SliderTexture, AbsoluteRect + drawStart, SliderTextureRect, &AbsoluteClipping, video::SColor(-1), true );
+		vid->draw2DImage( SliderTexture, AbsoluteRect.UpperLeftCorner + drawStart, SliderTextureRect, &AbsoluteClippingRect, video::SColor(-1), true );
 	} else {
 		// Horizontal Slider
 
@@ -257,7 +270,7 @@ void GUIMarkerSlider::draw() {
 
 		drawStart.X = AbsoluteRect.UpperLeftCorner.X + sSliderRadius;
 		drawStart.Y = AbsoluteRect.UpperLeftCorner.Y + halfElemHeight;
-		drawEnd.X = AbsoluterRect.LowerRightCorner.X - sSliderRadius;
+		drawEnd.X = AbsoluteRect.LowerRightCorner.X - sSliderRadius;
 		drawEnd.Y = AbsoluteRect.UpperLeftCorner.Y + halfElemHeight;
 
 		vid->draw2DLine( drawStart, drawEnd, lightColor );
@@ -303,29 +316,23 @@ void GUIMarkerSlider::draw() {
 				skin->getFont()->draw( numberText.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
 				drawValue + NumberSpacing;
 				numberTextRect = core::recti( drawSave, drawSave2 );
-				numberTextRect.move( (s32)( drawSpacing * lineIndex ), 0 );
+				numberTextRect += core::vector2di( (s32)( drawSpacing * lineIndex ), 0 );
 			}
 
 			// Draw the last number separately so that it's correctly lined up
-			drawSave.X = drawEnd.X
+			drawSave.X = drawEnd.X;
 			drawSave2.X = AbsoluteRect.LowerRightCorner.X;
 			numberTextRect = core::recti(drawSave, drawSave2);
 			const core::stringw numberTextFinal( MinValue );
-			skin->getFont()->draw( numberText.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
+			skin->getFont()->draw( numberTextFinal.c_str(), numberTextRect, textColor, false, false, &AbsoluteClippingRect );
 		}
 
 		// Draw the slider marker last
 		drawStart.set( CurrentValue - sSliderRadius, halfElemHeight );
-		vid->draw2DImage( SliderTexture, AbsoluteRect + drawStart, SliderTextureRect, &AbsoluteClipping, video::SColor(-1), true );
+		vid->draw2DImage( SliderTexture, AbsoluteRect.UpperLeftCorner + drawStart, SliderTextureRect, &AbsoluteClippingRect, video::SColor(-1), true );
 	}
 
 	IGUIElement::draw(); // Children
-}
-
-bool isInSliderArea( s32 x, s32 y ) {
-	// Create a rectangle formed by the upper left corner of the absolute position of this element
-	// and having a size that is the same as the slider radius times 2
-	return (core::recti(AbsoluteRect.UpperLeftCorner, core::dimension2du(SliderRadius*2))).isPointInside(x,y);
 }
 
 void GUIMarkedSlider::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
@@ -357,16 +364,16 @@ void GUIMarkedSlider::deserializeAttributes(io::IAttributes* in, io::SAttributeR
 {
 	IGUIElement::deserializeAttributes(in, options);
 
-	MinValue = in->getFloat("MinValue", MinValue);
-	MaxValue = in->getFloat("MaxValue", MaxValue);
-	CurrentValue = in->getFloat("CurrentValue", CurrentValue);
-	DrawFrame = in->getBool("DrawFrame", DrawFrame);
-	DrawTicks = in->getBool("DrawTicks", DrawTicks);
-	DrawNumbers = in->getBool("DrawNumbers", DrawNumbers);
-	NumberSpacing = in->getFloat("NumberSpacing", NumberSpacing);
-	IsVertical = in->getBool("IsVertical", IsVertical);
+	MinValue = in->getAttributeAsFloat("MinValue", MinValue);
+	MaxValue = in->getAttributeAsFloat("MaxValue", MaxValue);
+	CurrentValue = in->getAttributeAsFloat("CurrentValue", CurrentValue);
+	DrawFrame = in->getAttributeAsBool("DrawFrame", DrawFrame);
+	DrawTicks = in->getAttributeAsBool("DrawTicks", DrawTicks);
+	DrawNumbers = in->getAttributeAsBool("DrawNumbers", DrawNumbers);
+	NumberSpacing = in->getAttributeAsFloat("NumberSpacing", NumberSpacing);
+	IsVertical = in->getAttributeAsBool("IsVertical", IsVertical);
 
-	f32 sliderRadius = in->getFloat("SliderRadius", SliderRadius);
+	f32 sliderRadius = in->getAttributeAsFloat("SliderRadius", SliderRadius);
 	if ( sliderRadius != SliderRadius )
 		setSliderSize(SliderRadius*2); // Updates image cache
 }
