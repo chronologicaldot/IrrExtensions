@@ -37,6 +37,10 @@ GUIMarkedSlider::GUIMarkedSlider(
 	Environment->getVideoDriver();
 }
 
+GUIMarkedSlider::~GUIMarkedSlider()
+{
+}
+
 bool GUIMarkedSlider::OnEvent( const SEvent&  event ) {
 	if ( event.EventType == EET_MOUSE_INPUT_EVENT ) {
 		switch ( event.MouseInput.Event ) {
