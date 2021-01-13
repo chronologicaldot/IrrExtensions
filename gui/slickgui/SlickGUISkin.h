@@ -14,6 +14,10 @@ namespace video {
 
 namespace gui {
 
+class IGUISpriteBank;
+class IGUIEnvironment;
+
+
 class SlickGUISkin : public IGUISkin
 {
 	bool DrawMoreRound;
@@ -40,7 +44,7 @@ public:
 
 	virtual void setSize(EGUI_DEFAULT_SIZE which, s32 size) override;
 
-	virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT text) const override;
+	virtual const wchar_t* getDefaultText(EGUI_DEFAULT_TEXT which) const override;
 
 	virtual void setDefaultText(EGUI_DEFAULT_TEXT which, const wchar_t* newText) override;
 
@@ -103,10 +107,10 @@ public:
 	void drawPixel( u32 x, u32 y, const video::SColor&, const core::rect<s32>* clip=0 );
 
 	//! Draw a line clipped
-	void draw2DVerticalLine( const core::vector2d<s32>& start, u32 length,
+	void draw2DVerticalLine( core::vector2d<s32> start, u32 length,
 			const video::SColor&, const core::rect<s32>* clip=0 );
 
-	void draw2DHorizontalLine( const core::vector2d<s32>& start, u32 length,
+	void draw2DHorizontalLine( core::vector2d<s32> start, u32 length,
 			const video::SColor&, const core::rect<s32>* clip=0 );
 
 	//! Draw a rectangle outline with rounded edges

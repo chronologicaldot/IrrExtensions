@@ -3,6 +3,9 @@
 #include "SlickGUISkin.h"
 #include <IGUIFont.h>
 #include <IVideoDriver.h>
+#include <IGUISpriteBank.h>
+#include <IGUIEnvironment.h>
+#include <IGUIElement.h>
 
 namespace irr {
 namespace gui {
@@ -134,8 +137,8 @@ SlickGUISkin::~SlickGUISkin()
 			Fonts[i]->drop();
 	}
 
-	if (SpriteBank)
-		SpriteBank->drop();
+	if (Sprites)
+		Sprites->drop();
 }
 
 video::SColor SlickGUISkin::getColor(EGUI_DEFAULT_COLOR color) const
@@ -165,10 +168,10 @@ void SlickGUISkin::setSize(EGUI_DEFAULT_SIZE which, s32 size)
 		Sizes[which] = size;
 }
 
-const wchar_t* SlickGUISkin::getDefaultText(EGUI_DEFAULT_TEXT text) const
+const wchar_t* SlickGUISkin::getDefaultText(EGUI_DEFAULT_TEXT which) const
 {
-	if (text < EGDT_COUNT)
-		return Texts[which];
+	if (which < EGDT_COUNT)
+		return Texts[which].c_str();
 	return 0;
 }
 
@@ -243,8 +246,8 @@ void SlickGUISkin::draw3DButtonPaneStandard(
 
 	core::vector2di shadowRight( rect.LowerRightCorner.X, rect.UpperLeftCorner.Y-1 );
 	core::vector2di shadowBottom( rect.UpperLeftCorner.X, rect.LowerRightCorner.Y );
-	draw2DVerticalLine( shadowRight, getColor(EDGC_3D_SHADOW), clip );
-	draw2DHorizontalLine( shadowBottom, getColor(EDGC_3D_SHADOW), clip );
+	draw2DVerticalLine( shadowRight, rect.getHeight()-2, getColor(EGDC_3D_SHADOW), clip );
+	draw2DHorizontalLine( shadowBottom, rect.getWidth()-2, getColor(EGDC_3D_SHADOW), clip );
 
 	const video::SColor regularColor = getColor(EGDC_3D_LIGHT);
 	const video::SColor leftTopColor = Environment->hasFocus(element) ?
@@ -265,8 +268,8 @@ void SlickGUISkin::draw3DButtonPanePressed(
 
 	core::vector2di shadowLeft( rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y+1 );
 	core::vector2di shadowTop( rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y );
-	draw2DVerticalLine( shadowLeft, getColor(EDGC_3D_SHADOW), clip );
-	draw2DHorizontalLine( shadowTop, getColor(EDGC_3D_SHADOW), clip );
+	draw2DVerticalLine( shadowLeft, rect.getHeight()-2, getColor(EGDC_3D_SHADOW), clip );
+	draw2DHorizontalLine( shadowTop, rect.getWidth()-2, getColor(EGDC_3D_SHADOW), clip );
 
 	const video::SColor regularColor = getColor(EGDC_3D_LIGHT);
 	drawRoundOutline( rect, clip, regularColor, regularColor, regularColor, regularColor );
@@ -285,11 +288,11 @@ void SlickGUISkin::draw3DSunkenPane(
 
 	// Ignore "flat" setting
 
-	if ( fillBackground ) {
+	if ( fillBackGround ) {
 		draw2DRectangle( element, bgcolor, rect, clip );
 	}
 
-	const video::SColor  outerBorderColor = getColor(EGDC_LIGHT);
+	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	drawRoundOutline(rect, clip, outerBorderColor, outerBorderColor, outerBorderColor, outerBorderColor);
 }
@@ -305,27 +308,27 @@ core::rect<s32> SlickGUISkin::draw3DWindowBackground(
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
 
-	if ( checkClientArea ) {
-		if ( drawTitleBar ) {
-			checkClientArea.UpperLeftCorner =
-				rect.UpperLeftCorner - core::vector2di(2, 2+getSize(EGDS_WINDOW_BUTTON_WIDTH));
-		} else {
-			checkClientArea.UpperLeftCorner = rect.UpperLeftCorner - core::vector2di(2);
-		}
-		checkClientArea.LowerRightCorner = rect.LowerRightCorner - core::vector2di(2);
-		return;
-	}
-
-	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
-								rect.LowerRightCorner - core::vector2di(1) );
-
-	draw2DRectangle( element, getColor(EGDC_WINDOW), backgroundArea, clip );
-
 	core::rect<s32> titlebarArea( rect.UpperLeftCorner + core::vector2di(2),
 							core::vector2di(
 								rect.LowerRightCorner.X - 2,
-								rect.UpperLeftCorner.Y + getSize(EDGS_WINDOW_BUTTON_WIDTH)
+								rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH)
 							));
+
+	if ( checkClientArea ) {
+		if ( drawTitleBar ) {
+			checkClientArea->UpperLeftCorner =
+				rect.UpperLeftCorner - core::vector2di(2, 2+getSize(EGDS_WINDOW_BUTTON_WIDTH));
+		} else {
+			checkClientArea->UpperLeftCorner = rect.UpperLeftCorner - core::vector2di(2);
+		}
+		checkClientArea->LowerRightCorner = rect.LowerRightCorner - core::vector2di(2);
+		return titlebarArea + core::vector2di(5,5); // Offset titlebar text
+	}
+
+	// Draw background
+	draw2DRectangle( element, getColor(EGDC_WINDOW), backgroundArea, clip );
+
+	// Draw titlebar
 	draw2DRectangle( element, Environment->hasFocus(element)?
 					getColor(EGDC_ACTIVE_CAPTION) : getColor(EGDC_INACTIVE_CAPTION),
 					titlebarArea, clip );
@@ -334,6 +337,8 @@ core::rect<s32> SlickGUISkin::draw3DWindowBackground(
 							getColor(EGDC_3D_HIGH_LIGHT) : getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	drawRoundOutline(rect, clip, focusColor, getColor(EGDC_3D_LIGHT), focusColor, getColor(EGDC_3D_LIGHT));
+
+	return titlebarArea + core::vector2di(5,5); // Offset titlebar text
 }
 
 void SlickGUISkin::draw3DMenuPane(
@@ -346,8 +351,8 @@ void SlickGUISkin::draw3DMenuPane(
 	core::rect<s32> middleArea( rect.UpperLeftCorner + core::vector2di(2),
 								rect.LowerRightCorner - core::vector2di(2) );
 
-	draw2DRectangle( element, getColor(EGDC_FACE), middleArea, clip );
-	const video::SColor  outerBorderColor = getColor(EGDC_LIGHT);
+	draw2DRectangle( element, getColor(EGDC_3D_FACE), middleArea, clip );
+	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	drawSquareOutline(rect, clip, getColor(EGDC_3D_LIGHT));
 }
@@ -362,8 +367,8 @@ void SlickGUISkin::draw3DToolBar(
 	core::rect<s32> middleArea( rect.UpperLeftCorner + core::vector2di(2),
 								rect.LowerRightCorner - core::vector2di(2) );
 
-	draw2DRectangle( element, getColor(EGDC_FACE), middleArea, clip );
-	const video::SColor  outerBorderColor = getColor(EGDC_LIGHT);
+	draw2DRectangle( element, getColor(EGDC_3D_FACE), middleArea, clip );
+	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	VideoDriver->draw2DRectangle( getColor(EGDC_3D_LIGHT), rect, clip );
 }
@@ -377,24 +382,24 @@ void SlickGUISkin::draw3DTabButton(
 {
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
-	videoDriver->draw2DRectangle( getColor(EDGC_3D_FACE), backgroundArea, clip );
+	VideoDriver->draw2DRectangle( getColor(EGDC_3D_FACE), backgroundArea, clip );
 
-	video::SColor shadowColor = getColor(EDGC_3D_SHADOW);
+	video::SColor shadowColor = getColor(EGDC_3D_SHADOW);
 	draw2DVerticalLine(backgroundArea.UpperLeftCorner, rect.getHeight()-1, shadowColor, clip); 
 	core::vector2di upperRightCorner( backgroundArea.LowerRightCorner.X, backgroundArea.UpperLeftCorner.Y );
 	draw2DVerticalLine(upperRightCorner, rect.getHeight()-1, shadowColor, clip);
 
-	video::SColor borderColor = active ? getColor(EDGC_3D_HIGHLIGHT) : getColor(EDGC_LIGHT);
+	video::SColor borderColor = active ? getColor(EGDC_3D_HIGH_LIGHT) : getColor(EGDC_3D_LIGHT);
 	core::rect<s32> trueRect = rect;
-	core::rect<s32> lowerLeftCorner( backgroundArea.UpperLeftCorner.X, backgroundArea.LowerRightCorner.Y );
+	core::vector2di lowerLeftCorner( backgroundArea.UpperLeftCorner.X, backgroundArea.LowerRightCorner.Y );
 	if ( alignment == EGUIA_UPPERLEFT ) {
-		trueRect.LowerRight.Y += 1;
+		trueRect.LowerRightCorner.Y += 1;
 		draw2DHorizontalLine(lowerLeftCorner, rect.getWidth() - 2, shadowColor, clip);
-		drawRoundRectangle(trueRect, clip, borderColor, borderColor, borderColor, getColor(EDGC_3D_FACE));
+		drawRoundOutline(trueRect, clip, borderColor, borderColor, borderColor, getColor(EGDC_3D_FACE));
 	} else {
-		trueRect.LowerRight.Y -= 1;
+		trueRect.LowerRightCorner.Y -= 1;
 		draw2DHorizontalLine(backgroundArea.UpperLeftCorner, rect.getWidth() - 2, shadowColor, clip);
-		drawRoundRectangle(trueRect, clip, borderColor, borderColor, getColor(EDGC_3D_FACE), borderColor);
+		drawRoundOutline(trueRect, clip, borderColor, borderColor, getColor(EGDC_3D_FACE), borderColor);
 	}
 }
 
@@ -412,17 +417,17 @@ void SlickGUISkin::draw3DTabBody(
 
 	if ( background ) {
 		if ( alignment == EGUIA_UPPERLEFT ) {
-			backgroundArea.UpperLeftCorner.Y += core::vector2di(tabHeight+1);
+			backgroundArea.UpperLeftCorner.Y += tabHeight+1;
 		} else {
-			backgroundArea.LowerRightCorner.Y -= core::vector2di(tabHeight+1);
+			backgroundArea.LowerRightCorner.Y -= tabHeight+1;
 		}
-		videoDriver->draw2DRectangle(getColor(EDGC_3D_FACE), backgroundArea, clip);
+		VideoDriver->draw2DRectangle(getColor(EGDC_3D_FACE), backgroundArea, clip);
 	}
 	core::rect<s32> outerArea( backgroundArea.UpperLeftCorner - core::vector2di(1),
 							backgroundArea.LowerRightCorner + core::vector2di(1) );
 	if ( border ) {
-		drawSquareOutline(backgroundArea, clip, getColor(EDGC_3D_SHADOW)
-		drawSquareOutline(outerArea, clip, getColor(EDGC_3D_LIGHT));
+		drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
+		drawSquareOutline(outerArea, clip, getColor(EGDC_3D_LIGHT));
 	}
 }
 
@@ -462,7 +467,7 @@ void SlickGUISkin::drawPixel( u32 x, u32 y, const video::SColor& color, const co
 	VideoDriver->drawPixel(x,y,color);
 }
 
-void SlickGUISkin::draw2DVerticalLine( const core::vector2d<s32>& start, u32 length,
+void SlickGUISkin::draw2DVerticalLine( core::vector2d<s32> start, u32 length,
 		const video::SColor& color, const core::rect<s32>* clip )
 {
 	core::vector2d<s32> finish( start.X, start.Y + length );
@@ -477,7 +482,7 @@ void SlickGUISkin::draw2DVerticalLine( const core::vector2d<s32>& start, u32 len
 		if ( clip->UpperLeftCorner.Y > start.Y )
 			start.Y = clip->UpperLeftCorner.Y;
 		if ( clip->LowerRightCorner.Y < finish.Y )
-			finish.Y = clip.LowerRightCorner.Y;
+			finish.Y = clip->LowerRightCorner.Y;
 
 		if ( start.Y > finish.Y ) // Maybe should be start.Y >= finish.Y
 			return;
@@ -486,7 +491,7 @@ void SlickGUISkin::draw2DVerticalLine( const core::vector2d<s32>& start, u32 len
 	VideoDriver->draw2DLine(start, finish, color);
 }
 
-void SlickGUISkin::draw2DHorizontalLine( const core::vector2d<s32>& start, u32 length,
+void SlickGUISkin::draw2DHorizontalLine( core::vector2d<s32> start, u32 length,
 		const video::SColor& color, const core::rect<s32>* clip )
 {
 	core::vector2d<s32> finish( start.X + length, start.Y );
@@ -501,7 +506,7 @@ void SlickGUISkin::draw2DHorizontalLine( const core::vector2d<s32>& start, u32 l
 		if ( clip->UpperLeftCorner.X > start.X )
 			start.X = clip->UpperLeftCorner.X;
 		if ( clip->LowerRightCorner.X < finish.X )
-			finish.X = clip.LowerRightCorner.X;
+			finish.X = clip->LowerRightCorner.X;
 
 		if ( start.X > finish.X ) // Maybe should be start.X >= finish.X
 			return;
@@ -516,12 +521,12 @@ void SlickGUISkin::drawRoundOutline(
 	const video::SColor& colorTop, const video::SColor& colorBottom
 	)
 {
-	const s32 left = pos.UpperLeftCorner.X;
-	const s32 right = pos.LowerRightCorner.X;
-	const s32 top = pos.UpperLeftCorner.Y;
-	const s32 bottom = pos.LowerRightCorner.Y;
+	const s32 left = rect.UpperLeftCorner.X;
+	const s32 right = rect.LowerRightCorner.X;
+	const s32 top = rect.UpperLeftCorner.Y;
+	const s32 bottom = rect.LowerRightCorner.Y;
 
-	if ( drawMoreRound ) {
+	if ( DrawMoreRound ) {
 		draw2DVerticalLine( core::vector2di(left, top+2), bottom-top-4, colorLeft );
 		draw2DHorizontalLine( core::vector2di(left+2, top), right-left-4, colorTop );
 		draw2DVerticalLine( core::vector2di(right, top+2), bottom-top-4, colorRight );
@@ -562,15 +567,15 @@ void SlickGUISkin::drawSquareOutline(
 	const core::rect<s32>& rect, const core::rect<s32>* clip,
 	const video::SColor& color )
 {
-	const s32 left = pos.UpperLeftCorner.X;
-	const s32 right = pos.LowerRightCorner.X;
-	const s32 top = pos.UpperLeftCorner.Y;
-	const s32 bottom = pos.LowerRightCorner.Y;
+	const s32 left = rect.UpperLeftCorner.X;
+	const s32 right = rect.LowerRightCorner.X;
+	const s32 top = rect.UpperLeftCorner.Y;
+	const s32 bottom = rect.LowerRightCorner.Y;
 
-	draw2DVerticalLine( vector2di(left, top+1), bottom-top, color, clip );
-	draw2DHorizontalLine( vector2di(left, top), right-left, color, clip);
-	draw2DVerticalLine( vector2di(right, top+1), bottom-top, color, clip );
-	draw2DHorizontalLine( vector2di(left, bottom), right-left, color, clip);
+	draw2DVerticalLine( core::vector2di(left, top+1), bottom-top, color, clip );
+	draw2DHorizontalLine( core::vector2di(left, top), right-left, color, clip);
+	draw2DVerticalLine( core::vector2di(right, top+1), bottom-top, color, clip );
+	draw2DHorizontalLine( core::vector2di(left, bottom), right-left, color, clip);
 }
 
 } // namespace gui
