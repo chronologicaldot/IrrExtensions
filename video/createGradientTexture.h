@@ -7,7 +7,8 @@ See irrlicht.h for more details.
 
 #include <irrlicht.h>
 
-#pragma once
+#ifndef IRR_CREATE_GRADIENT_IMAGE_TEXTURE_H
+#define IRR_CREATE_GRADIENT_IMAGE_TEXTURE_H
 
 namespace irr
 {
@@ -50,3 +51,5 @@ ITexture* createGradientTexture(
 
 } // end namespace video
 } // end namespace irr
+
+#endif

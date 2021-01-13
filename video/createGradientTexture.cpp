@@ -5,8 +5,6 @@ See createGradientTexture.h for details.
 
 #include "createGradientTexture.h"
 
-#pragma once
-
 namespace irr
 {
 namespace video
