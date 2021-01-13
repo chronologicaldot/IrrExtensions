@@ -1,7 +1,7 @@
 // (c) 2015-2019 Nicolaus Anderson
 
 #ifndef GUI_FILE_SELECT_PANEL_H
-#define GUI_MATERIAL_PANEL_H
+#define GUI_FILE_SELECT_PANEL_H
 
 #include <IGUIElement.h>
 

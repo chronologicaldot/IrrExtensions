@@ -4,7 +4,8 @@
 #include <IGUIElement.h>
 #include <IGUIEnvironment.h>
 
-#pragma once
+#ifndef GUI_COLOR_EDITBOX_H
+#define GUI_COLOR_EDITBOX_H
 
 /* Class GUI Color Edit Box
 
@@ -90,3 +91,5 @@ protected:
 
 }
 }
+
+#endif

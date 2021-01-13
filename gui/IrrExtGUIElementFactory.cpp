@@ -1,7 +1,6 @@
 // (C) 2020 Nicolaus Anderson
 
 #include "IrrExtGUIElementFactory.h"
-#include <IGUIEnvironment.h>
 #include <ISceneManager.h>
 // EXCLUDE: GUIWindow2
 #include "SimpleGraph/SGraph2D.h"
