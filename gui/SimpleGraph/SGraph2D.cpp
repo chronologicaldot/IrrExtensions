@@ -147,7 +147,7 @@ Range<irr::f32> irr::gui::SGraph2D::getYAxisRange()
 
 Inc<irr::f32> irr::gui::SGraph2D::getIterableXRange()
 {
-	Inc<irr::f32> inc(CYC_REPEAT);
+	Inc<irr::f32> inc(Inc<irr::f32>::CYC_REPEAT);
 
 	inc.setRange( getXAxisRange() );
 	inc.setStep( window.getWidth() / ((irr::f32)AbsoluteRect.getWidth()) );
@@ -158,7 +158,7 @@ Inc<irr::f32> irr::gui::SGraph2D::getIterableXRange()
 
 Inc<irr::f32> irr::gui::SGraph2D::getIterableYRange()
 {
-	Inc<irr::f32> inc(CYC_REPEAT);
+	Inc<irr::f32> inc(Inc<irr::f32>::CYC_REPEAT);
 
 	inc.setRange( getYAxisRange() );
 	inc.setStep( window.getHeight() / ((irr::f32)AbsoluteRect.getHeight()) );

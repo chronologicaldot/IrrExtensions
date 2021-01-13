@@ -14,8 +14,7 @@ using std::cout;
 #endif
 
 
-#include <SGraph2D.h>
-//#include <SGraph2D.cpp>
+#include "SGraph2D.h"
 
 using namespace irr;
 using namespace gui;
