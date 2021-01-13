@@ -23,10 +23,10 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Colors[EGDC_ACTIVE_BORDER]		= 0xffb1b1b1;
 	Colors[EGDC_ACTIVE_CAPTION]		= 0xff006078;
 	Colors[EGDC_APP_WORKSPACE]		= 0xff111315;
-	Colors[EGDC_BUTTON_TEXT]		= 0xffa6a6a6;
+	Colors[EGDC_BUTTON_TEXT]		= 0xffc5c5c5; //0xffa6a6a6;
 	Colors[EGDC_GRAY_TEXT]			= 0xff6e6e6e;
 	Colors[EGDC_HIGH_LIGHT]			= 0xff000000;
-	Colors[EGDC_HIGH_LIGHT_TEXT]	= 0xffc5c5c5;
+	Colors[EGDC_HIGH_LIGHT_TEXT]	= 0xfff1f1f1; //0xffc5c5c5;
 	Colors[EGDC_INACTIVE_BORDER]	= 0xff6e6e6e;
 	Colors[EGDC_INACTIVE_CAPTION]	= 0xff475760;
 	Colors[EGDC_TOOLTIP]			= 0xffffffff;
@@ -287,9 +287,9 @@ void SlickGUISkin::draw3DSunkenPane(
 								rect.LowerRightCorner - core::vector2di(1) );
 
 	// Ignore "flat" setting
-
+	// Ignore suggested background fill color
 	if ( fillBackGround ) {
-		draw2DRectangle( element, bgcolor, rect, clip );
+		draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), rect, clip );
 	}
 
 	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
