@@ -31,7 +31,7 @@ class GUIGroupingPanel : public IGUIElement
 	ITexture* LLtexture;
 	ITexture* LRtexture;
 public:
-	GUIGroupingPanel( const wchar_t* pText, IGUIEnvironment* pEnvironment, IGUIElement* pParent, recti pRect, s32 id );
+	GUIGroupingPanel( const wchar_t* pText, IGUIEnvironment* pEnvironment, IGUIElement* pParent, const recti& pRect, s32 id=-1 );
 
 	//! Set the text
 	/* This function both sets the text and peforms some calculations for composing the client area. */

@@ -48,7 +48,7 @@ public:
 	}
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
-	static const c8* staticTypeName() const { return "sProgressBar"; }
+	static const c8* staticTypeName() { return "sProgressBar"; }
 
 	virtual void serializeAttributes( irr::io::IAttributes* out, irr::io::SAttributeReadWriteOptions* options )
 	{
@@ -60,8 +60,8 @@ public:
 	virtual void deserializeAttributes( irr::io::IAttributes* in, irr::io::SAttributeReadWriteOptions* options )
 	{
 		IGUIElement::serializeAttributes(in,options);
-		setProgress( in->getFloat("Progress",value) );
-		setBackgroundColor( in->getColor("BackgroundColor") );
+		setProgress( in->getAttributeAsFloat("Progress",value) );
+		setBackgroundColor( in->getAttributeAsColor("BackgroundColor") );
 	}
 };
 

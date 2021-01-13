@@ -86,9 +86,9 @@ public:
 			IGUIEnvironment* envir,
 			IGUIElement* parent,
 			irr::s32 id,
-			irr::core::recti& rectangle,
+			const irr::core::recti& rectangle,
 				// Graph parameters
-			irr::core::rectf& graphWindow,
+			const irr::core::rectf& graphWindow,
 			bool marks = false,
 			bool ticks = false,
 			bool x_labels = true,

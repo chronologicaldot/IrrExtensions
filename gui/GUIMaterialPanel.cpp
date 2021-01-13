@@ -1,8 +1,5 @@
 // (c) 2014 Nicolaus Anderson
 
-#ifndef GUI_MATERIAL_PANEL_CPP
-#define GUI_MATERIAL_PANEL_CPP
-
 #include "GUIMaterialPanel.h"
 #include <IGUIButton.h>
 #include <IGUICheckBox.h>
@@ -849,6 +846,3 @@ void GUIMaterialPanel::createSelectTextureDialog()
 
 }
 }
-
-#endif
-

@@ -17,7 +17,7 @@ using video::IVideoDriver;
 using video::SColor;
 using core::vector2di;
 
-GUIGroupingPanel::GUIGroupingPanel( const wchar_t* pText, IGUIEnvironment* pEnvironment, IGUIElement* pParent, recti pRect, s32 id )
+GUIGroupingPanel::GUIGroupingPanel( const wchar_t* pText, IGUIEnvironment* pEnvironment, IGUIElement* pParent, const recti& pRect, s32 id )
 	: IGUIElement( EGUIET_ELEMENT, pEnvironment, pParent, id, pRect )
 	, showBorder( true )
 	, borderRadius( 6 )

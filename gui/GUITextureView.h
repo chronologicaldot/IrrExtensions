@@ -46,8 +46,6 @@ public:
 
 		if ( renderTarget )
 			videoDriver->removeRenderTarget( renderTarget );
-		if ( depthStencil )
-			videoDriver->removeRenderTarget( depthStencil );
 
 		if ( removeTexturesOnDestroy )
 		{
@@ -121,11 +119,6 @@ public:
 		{
 			Environment->getVideoDriver()->removeRenderTarget(renderTarget);
 			renderTarget = 0;
-		}
-		if ( depthStencil )
-		{
-			Environment->getVideoDriver()->removeRenderTarget(depthStencil);
-			depthStencil = 0;
 		}
 	}
 

@@ -24,7 +24,7 @@ class IGraph2D : public IGUIElement
 {
 public:
 
-	IGraph2D( IGUIEnvironment* envir, IGUIElement* parent, irr::s32 id, irr::core::recti& rectangle )
+	IGraph2D( IGUIEnvironment* envir, IGUIElement* parent, irr::s32 id, const irr::core::recti& rectangle )
 		: IGUIElement( EGUIET_ELEMENT, envir, parent, id, rectangle )
 	{
 	}

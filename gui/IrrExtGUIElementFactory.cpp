@@ -4,22 +4,22 @@
 #include <IGUIEnvironment.h>
 #include <ISceneManager.h>
 // EXCLUDE: GUIWindow2
-#include <SimpleGraph/SGraph.h>
-#include <GUIColorEditBox.h>
-#include <GUIColorSample.h>
-#include <GUIDualSection.h>
-#include <GUIDropdownSelector.h>
-#include <GUIFileSelectPanel.h>
-#include <GUIGroupingPanel.h>
-#include <GUIMarkedSlider.h>
-#include <GUIMaterialPanel.h>
-#include <GUIMatrixPanel.h>
-#include <GUISProgressBar.h>
-#include <GUISColorSelect.h>
-#include <GUIScrollPane.h>
-#include <GUITextureView.h>
-#include <GUITreeTable.h> // Requires irrTree: util/irrTree/irrTree/irrTree.h
-#include <GUIVectorPanel.h>
+#include "SimpleGraph/SGraph2D.h"
+#include "GUIColorEditBox.h"
+#include "GUIColorSample.h"
+#include "GUIDualSection.h"
+#include "GUIDropdownSelector.h"
+#include "GUIFileSelectPanel.h"
+#include "GUIGroupingPanel.h"
+#include "GUIMarkedSlider.h"
+#include "GUIMaterialPanel.h"
+#include "GUIMatrixPanel.h"
+#include "GUISProgressBar.h"
+#include "GUISColorSelect.h"
+#include "GUIScrollPane.h"
+#include "GUITextureView.h"
+#include "GUITreeTable.h" // Requires irrTree: util/irrTree/irrTree/irrTree.h
+#include "GUIVectorPanel.h"
 
 
 namespace irr {
@@ -31,16 +31,16 @@ IrrExtGUIElementFactory::IrrExtGUIElementFactory( IGUIEnvironment* environment, 
 {}
 
 IGUIElement*
-addGUIElement(EGUI_ELEMENT_TYPE type, IGUIElement* parent) {
+IrrExtGUIElementFactory::addGUIElement(EGUI_ELEMENT_TYPE type, IGUIElement* parent) {
 	return 0;
 }
 
 IGUIElement*
-addGUIElement(const c8* typeName, IGUIElement* parent) {
+IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) {
 	core::stringc elemname(typeName);
 
-	if ( elemname == SGraph::staticTypeName() ) {
-		return new SGraph( Environment, parent, -1, core::recti(), core::rectf(-1,-1,1,1) );
+	if ( elemname == SGraph2D::staticTypeName() ) {
+		return new SGraph2D( Environment, parent, -1, core::recti(), core::rectf(-1,-1,1,1) );
 	}
 	else if ( elemname == GUIColorEditBox::staticTypeName() ) {
 		return new GUIColorEditBox( Environment, parent, core::recti() );
@@ -63,7 +63,7 @@ addGUIElement(const c8* typeName, IGUIElement* parent) {
 		Alternatively, add it to items set by serializeAttributes(). */
 		return new GUIGroupingPanel( L"", Environment, parent, core::recti() );
 	}
-	else if ( elemname = GUIMarkedSlider::staticTypeName() ) {
+	else if ( elemname == GUIMarkedSlider::staticTypeName() ) {
 		// Default: vertical
 		return new GUIMarkedSlider( true, 100, core::recti(), Environment, parent );
 	}
@@ -99,17 +99,17 @@ addGUIElement(const c8* typeName, IGUIElement* parent) {
 }
 
 s32
-getCreatableGUIElementTypeCount() const {
+IrrExtGUIElementFactory::getCreatableGUIElementTypeCount() const {
 	return 16;
 }
 
 EGUI_ELEMENT_TYPE
-getCreateableGUIElementType(s32 idx) const {
+IrrExtGUIElementFactory::getCreateableGUIElementType(s32 idx) const {
 	return EGUIET_ELEMENT;
 }
 
 const c8*
-getCreateableGUIElementTypeName(s32 idx) const {
+IrrExtGUIElementFactory::getCreateableGUIElementTypeName(s32 idx) const {
 	switch(idx)
 	{
 	case 0: return SGraph::staticTypeName();
@@ -133,7 +133,7 @@ getCreateableGUIElementTypeName(s32 idx) const {
 }
 
 const c8*
-getCreateableGUIElementTypeName(EGUI_ELEMENT_TYPE type) const {
+IrrExtGUIElementFactory::getCreateableGUIElementTypeName(EGUI_ELEMENT_TYPE type) const {
 	return "";
 }
 
