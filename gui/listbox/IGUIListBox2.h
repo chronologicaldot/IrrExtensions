@@ -53,7 +53,7 @@ namespace gui
 		virtual const wchar_t* getListItem(u32 id) const = 0;
 
 		//! returns data associated with the selected list item
-		virtual IReferenceCounted* getListItemData(u32 id) const; // added by Nic Anderson
+		virtual IReferenceCounted* getListItemData(u32 id) const = 0; // added by Nic Anderson
 
 		//! adds an list item, returns id of item
 		virtual u32 addItem(const wchar_t* text, IReferenceCounted* data) = 0; // changed by Nic Anderson
