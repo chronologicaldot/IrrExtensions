@@ -41,12 +41,17 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Colors[EGDC_GRAY_EDITABLE]		= 0xff15252c;
 	Colors[EGDC_FOCUSED_EDITABLE]	= 0xff051720;
 
+	SpareBackgroundColor = 0xff273740; // 0xff003344;
+	//SpareBackgroundActiveColor = 0xff275950;
+	SpareBackgroundActiveColor = 0xff274848;
+
 	Sizes[EGDS_SCROLLBAR_SIZE] = 20;
 	Sizes[EGDS_MENU_HEIGHT] = 30;
 	Sizes[EGDS_WINDOW_BUTTON_WIDTH] = 20;
 	Sizes[EGDS_CHECK_BOX_WIDTH] = 10;
 	Sizes[EGDS_BUTTON_WIDTH] = 100;
-	Sizes[EGDS_BUTTON_HEIGHT] = 40;
+	//Sizes[EGDS_BUTTON_HEIGHT] = 40;
+	Sizes[EGDS_BUTTON_HEIGHT] = 30;
 	Sizes[EGDS_TEXT_DISTANCE_X] = 5;
 	Sizes[EGDS_TEXT_DISTANCE_Y] = 4;
 	Sizes[EGDS_TITLEBARTEXT_DISTANCE_X] = 5;
@@ -56,12 +61,12 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Sizes[EGDS_MESSAGE_BOX_MAX_TEXT_WIDTH] = 500;
 	Sizes[EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT] = 0;
 	Sizes[EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT] = 99999;
-	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_X] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_Y] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_X] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_Y] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_X] = 2;
-	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_Y] = 2;
+	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_X] = 1;
+	Sizes[EGDS_BUTTON_PRESSED_IMAGE_OFFSET_Y] = 1;
+	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_X] = 1;
+	Sizes[EGDS_BUTTON_PRESSED_TEXT_OFFSET_Y] = 1;
+	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_X] = 1;
+	Sizes[EGDS_BUTTON_PRESSED_SPRITE_OFFSET_Y] = 1;
 
 	if ( startIconsFromZero ) {
 		Icons[EGDI_WINDOW_MAXIMIZE] = 0;
@@ -242,10 +247,10 @@ void SlickGUISkin::draw3DButtonPaneStandard(
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
 
-	draw2DRectangle( element, getColor(EGDC_3D_FACE), rect, clip );
+	draw2DRectangle( element, getColor(EGDC_3D_FACE), backgroundArea, clip );
 
-	core::vector2di shadowRight( rect.LowerRightCorner.X, rect.UpperLeftCorner.Y-1 );
-	core::vector2di shadowBottom( rect.UpperLeftCorner.X, rect.LowerRightCorner.Y );
+	core::vector2di shadowRight( rect.LowerRightCorner.X-1, rect.UpperLeftCorner.Y+1 );
+	core::vector2di shadowBottom( rect.UpperLeftCorner.X+1, rect.LowerRightCorner.Y-1 );
 	draw2DVerticalLine( shadowRight, rect.getHeight()-2, getColor(EGDC_3D_SHADOW), clip );
 	draw2DHorizontalLine( shadowBottom, rect.getWidth()-2, getColor(EGDC_3D_SHADOW), clip );
 
@@ -264,10 +269,10 @@ void SlickGUISkin::draw3DButtonPanePressed(
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
 
-	draw2DRectangle( element, getColor(EGDC_WINDOW), rect, clip );
+	draw2DRectangle( element, getColor(EGDC_WINDOW), backgroundArea, clip );
 
-	core::vector2di shadowLeft( rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y+1 );
-	core::vector2di shadowTop( rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y );
+	core::vector2di shadowLeft( rect.UpperLeftCorner.X+1, rect.UpperLeftCorner.Y+1 );
+	core::vector2di shadowTop( rect.UpperLeftCorner.X+1, rect.UpperLeftCorner.Y+1 );
 	draw2DVerticalLine( shadowLeft, rect.getHeight()-2, getColor(EGDC_3D_SHADOW), clip );
 	draw2DHorizontalLine( shadowTop, rect.getWidth()-2, getColor(EGDC_3D_SHADOW), clip );
 
@@ -289,7 +294,12 @@ void SlickGUISkin::draw3DSunkenPane(
 	// Ignore "flat" setting
 	// Ignore suggested background fill color
 	if ( fillBackGround ) {
-		draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), rect, clip );
+		//draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), rect, clip );
+		if ( Environment->getFocus() == element )
+			draw2DRectangle( element, SpareBackgroundActiveColor, rect, clip );
+		else {
+			draw2DRectangle( element, SpareBackgroundColor, rect, clip );
+		}
 	}
 
 	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
@@ -348,11 +358,9 @@ void SlickGUISkin::draw3DMenuPane(
 {
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
-	core::rect<s32> middleArea( rect.UpperLeftCorner + core::vector2di(2),
-								rect.LowerRightCorner - core::vector2di(2) );
 
-	draw2DRectangle( element, getColor(EGDC_3D_FACE), middleArea, clip );
-	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
+	draw2DRectangle( element, getColor(EGDC_3D_FACE), backgroundArea, clip );
+	//const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	drawSquareOutline(rect, clip, getColor(EGDC_3D_LIGHT));
 }
@@ -364,11 +372,9 @@ void SlickGUISkin::draw3DToolBar(
 {
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
-	core::rect<s32> middleArea( rect.UpperLeftCorner + core::vector2di(2),
-								rect.LowerRightCorner - core::vector2di(2) );
 
-	draw2DRectangle( element, getColor(EGDC_3D_FACE), middleArea, clip );
-	const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
+	draw2DRectangle( element, getColor(EGDC_3D_FACE), backgroundArea, clip );
+	//const video::SColor  outerBorderColor = getColor(EGDC_3D_LIGHT);
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	VideoDriver->draw2DRectangle( getColor(EGDC_3D_LIGHT), rect, clip );
 }

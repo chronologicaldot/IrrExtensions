@@ -24,6 +24,8 @@ class SlickGUISkin : public IGUISkin
 	IGUIEnvironment* Environment;
 	irr::video::IVideoDriver* VideoDriver;
 	video::SColor Colors[EGDC_COUNT];
+	video::SColor SpareBackgroundColor;
+	video::SColor SpareBackgroundActiveColor;
 	s32 Sizes[EGDS_COUNT];
 	u32 Icons[EGDI_COUNT];
 	IGUIFont* Fonts[EGDF_COUNT];
