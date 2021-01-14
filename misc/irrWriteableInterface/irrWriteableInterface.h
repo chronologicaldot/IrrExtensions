@@ -20,12 +20,13 @@
   Since this uses the irrlicht engine, see irrlicht.h for more details.
 */
 
+#ifndef IRR_WRITEABLE_INTERFACE_H
+#define IRR_WRITEABLE_INTERFACE_H
+
 #include <irrlicht.h>
 #include "TextContainer.h"
 
 using namespace irr;
-
-#pragma once
 
 // Mode for writing
 enum STDOUT_MODE
@@ -51,9 +52,9 @@ class WriteableInterface
 {
 protected:
 	//! Container
-	/* Linus Listix string used for holding all of the cahracters before they
+	/* Container used for holding all of the characters before they
 	are output to file or console. */
-	TextContainer * container;
+	TextContainer* container;
 
 	//! Output mode
 	/* Indicates to what the information should be written.

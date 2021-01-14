@@ -4,6 +4,9 @@
 See irrWriteableInterface.h for copyright details.
 */
 
+#ifndef IRR_WIN_WRITER_H
+#define IRR_WIN_WRITER_H
+
 #include <iostream>
 
 #include <irrlicht.h>
@@ -15,8 +18,6 @@ using std::cout;
 using std::cin;
 
 using namespace irr;
-
-#pragma once
 
 
 //! Standard Windows Console Writer for irrlicht
@@ -127,3 +128,5 @@ public:
 		writeToStdOut( getInputFromConsole() );
 	}
 };
+
+#endif

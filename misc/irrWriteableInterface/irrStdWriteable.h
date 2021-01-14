@@ -4,13 +4,14 @@
 See irrWriteableInterface.h for copyright details.
 */
 
+#ifndef IRR_STD_WRITEABLE_H
+#define IRR_STD_WRITEABLE_H
+
 #include <irrlicht.h>
 #include "TextContainer.h"
 #include "irrWriteableInterface.h"
 
 using namespace irr;
-
-#pragma once
 
 
 //! Class irrStdWriteable
@@ -220,3 +221,5 @@ public:
 		}
 	}
 };
+
+#endif
