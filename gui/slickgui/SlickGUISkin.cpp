@@ -21,14 +21,14 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Colors[EGDC_3D_HIGH_LIGHT]		= 0xffb1b1b1;
 	Colors[EGDC_3D_LIGHT]			= 0xff6e6e6e;
 	Colors[EGDC_ACTIVE_BORDER]		= 0xffb1b1b1;
-	Colors[EGDC_ACTIVE_CAPTION]		= 0xff006078;
+	Colors[EGDC_ACTIVE_CAPTION]		= 0xfffdfdfd;
 	Colors[EGDC_APP_WORKSPACE]		= 0xff111315;
 	Colors[EGDC_BUTTON_TEXT]		= 0xffc5c5c5; //0xffa6a6a6;
 	Colors[EGDC_GRAY_TEXT]			= 0xff6e6e6e;
 	Colors[EGDC_HIGH_LIGHT]			= 0xff000000;
 	Colors[EGDC_HIGH_LIGHT_TEXT]	= 0xfff1f1f1; //0xffc5c5c5;
 	Colors[EGDC_INACTIVE_BORDER]	= 0xff6e6e6e;
-	Colors[EGDC_INACTIVE_CAPTION]	= 0xff475760;
+	Colors[EGDC_INACTIVE_CAPTION]	= 0xffc0c0c0;
 	Colors[EGDC_TOOLTIP]			= 0xffffffff;
 	Colors[EGDC_TOOLTIP_BACKGROUND]	= 0xff15587b;
 	Colors[EGDC_SCROLLBAR]			= 0xff1b1f24;
@@ -41,12 +41,14 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Colors[EGDC_GRAY_EDITABLE]		= 0xff15252c;
 	Colors[EGDC_FOCUSED_EDITABLE]	= 0xff051720;
 
+	InactiveHeaderColor = 0xff475760;
+	ActiveHeaderColor = 0xff006078;
 	SpareBackgroundColor = 0xff273740; // 0xff003344;
 	//SpareBackgroundActiveColor = 0xff275950;
 	SpareBackgroundActiveColor = 0xff274848;
 
 	Sizes[EGDS_SCROLLBAR_SIZE] = 20;
-	Sizes[EGDS_MENU_HEIGHT] = 30;
+	Sizes[EGDS_MENU_HEIGHT] = 40;
 	Sizes[EGDS_WINDOW_BUTTON_WIDTH] = 20;
 	Sizes[EGDS_CHECK_BOX_WIDTH] = 10;
 	Sizes[EGDS_BUTTON_WIDTH] = 100;
@@ -55,7 +57,7 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Sizes[EGDS_TEXT_DISTANCE_X] = 5;
 	Sizes[EGDS_TEXT_DISTANCE_Y] = 4;
 	Sizes[EGDS_TITLEBARTEXT_DISTANCE_X] = 5;
-	Sizes[EGDS_TITLEBARTEXT_DISTANCE_Y] = 4;
+	Sizes[EGDS_TITLEBARTEXT_DISTANCE_Y] = 1;
 	Sizes[EGDS_MESSAGE_BOX_GAP_SPACE] = 17;
 	Sizes[EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH] = 0;
 	Sizes[EGDS_MESSAGE_BOX_MAX_TEXT_WIDTH] = 500;
@@ -321,18 +323,18 @@ core::rect<s32> SlickGUISkin::draw3DWindowBackground(
 	core::rect<s32> titlebarArea( rect.UpperLeftCorner + core::vector2di(2),
 							core::vector2di(
 								rect.LowerRightCorner.X - 2,
-								rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH)
+								rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH) + 5
 							));
 
 	if ( checkClientArea ) {
 		if ( drawTitleBar ) {
 			checkClientArea->UpperLeftCorner =
-				rect.UpperLeftCorner - core::vector2di(2, 2+getSize(EGDS_WINDOW_BUTTON_WIDTH));
+				rect.UpperLeftCorner + core::vector2di(2, 2+getSize(EGDS_WINDOW_BUTTON_WIDTH)+5);
 		} else {
-			checkClientArea->UpperLeftCorner = rect.UpperLeftCorner - core::vector2di(2);
+			checkClientArea->UpperLeftCorner = rect.UpperLeftCorner + core::vector2di(2);
 		}
 		checkClientArea->LowerRightCorner = rect.LowerRightCorner - core::vector2di(2);
-		return titlebarArea + core::vector2di(5,5); // Offset titlebar text
+		return titlebarArea;
 	}
 
 	// Draw background
@@ -340,7 +342,7 @@ core::rect<s32> SlickGUISkin::draw3DWindowBackground(
 
 	// Draw titlebar
 	draw2DRectangle( element, Environment->hasFocus(element)?
-					getColor(EGDC_ACTIVE_CAPTION) : getColor(EGDC_INACTIVE_CAPTION),
+					ActiveHeaderColor : InactiveHeaderColor,
 					titlebarArea, clip );
 
 	const video::SColor  focusColor = Environment->hasFocus(element)?
@@ -348,7 +350,7 @@ core::rect<s32> SlickGUISkin::draw3DWindowBackground(
 	drawSquareOutline(backgroundArea, clip, getColor(EGDC_3D_SHADOW));
 	drawRoundOutline(rect, clip, focusColor, getColor(EGDC_3D_LIGHT), focusColor, getColor(EGDC_3D_LIGHT));
 
-	return titlebarArea + core::vector2di(5,5); // Offset titlebar text
+	return titlebarArea;
 }
 
 void SlickGUISkin::draw3DMenuPane(
