@@ -43,9 +43,8 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 
 	InactiveHeaderColor = 0xff475760;
 	ActiveHeaderColor = 0xff006078;
-	SpareBackgroundColor = 0xff273740; // 0xff003344;
-	//SpareBackgroundActiveColor = 0xff275950;
-	SpareBackgroundActiveColor = 0xff274848;
+	SpareBackgroundColor = 0xff051720; //0xff273740; // 0xff003344;
+	SpareBackgroundActiveColor = 0xff15252c; //0xff274848; //0xff275950;
 
 	Sizes[EGDS_SCROLLBAR_SIZE] = 20;
 	Sizes[EGDS_MENU_HEIGHT] = 40;
@@ -296,11 +295,11 @@ void SlickGUISkin::draw3DSunkenPane(
 	// Ignore "flat" setting
 	// Ignore suggested background fill color
 	if ( fillBackGround ) {
-		//draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), rect, clip );
+		//draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), backgroundArea, clip );
 		if ( Environment->getFocus() == element )
-			draw2DRectangle( element, SpareBackgroundActiveColor, rect, clip );
+			draw2DRectangle( element, SpareBackgroundActiveColor, backgroundArea, clip );
 		else {
-			draw2DRectangle( element, SpareBackgroundColor, rect, clip );
+			draw2DRectangle( element, SpareBackgroundColor, backgroundArea, clip );
 		}
 	}
 
