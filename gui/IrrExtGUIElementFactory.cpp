@@ -13,6 +13,7 @@
 #include "GUIMarkedSlider.h"
 #include "GUIMaterialPanel.h"
 #include "GUIMatrixPanel.h"
+#include "GUIPanel.h"
 #include "GUISProgressBar.h"
 #include "GUISColorSelect.h"
 #include "GUIScrollPane.h"
@@ -73,6 +74,9 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 		// Default: rotate in degrees
 		return new GUIMatrixPanel( true, Environment, parent, core::recti() );
 	}
+	else if ( elemname == GUIPanel::staticTypeName() ) {
+		return new GUIPanel( Environment, parent, core::recti() );
+	}
 	else if ( elemname == GUISProgressBar::staticTypeName() ) {
 		return new GUISProgressBar( Environment, parent, core::recti() );
 	}
@@ -81,11 +85,6 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 	}
 	else if ( elemname == GUIScrollPane::staticTypeName() ) {
 		return new GUIScrollPane( Environment, parent, core::recti() );
-	}
-	else if ( elemname == GUITextureView::staticTypeName() ) {
-		// FIXME: GUITextureView requires a unique ID so it can give a unique name to render targets
-		static u32 i = 1; ++i;
-		return new GUITextureView(0, Environment, parent, core::recti(), i);
 	}
 	else if ( elemname == GUITreeTable::staticTypeName() ) {
 		return new GUITreeTable( Environment, parent, core::recti() );
@@ -121,10 +120,10 @@ IrrExtGUIElementFactory::getCreateableGUIElementTypeName(s32 idx) const {
 	case 7: return GUIMarkedSlider::staticTypeName();
 	case 8: return GUIMaterialPanel::staticTypeName();
 	case 9: return GUIMatrixPanel::staticTypeName();
-	case 10: return GUISProgressBar::staticTypeName();
-	case 11: return GUISColorSelect::staticTypeName();
-	case 12: return GUIScrollPane::staticTypeName();
-	case 13: return GUITextureView::staticTypeName();
+	case 10: return GUIPanel::staticTypeName();
+	case 11: return GUISProgressBar::staticTypeName();
+	case 12: return GUISColorSelect::staticTypeName();
+	case 13: return GUIScrollPane::staticTypeName();
 	case 14: return GUITreeTable::staticTypeName();
 	case 15: return GUIVectorPanel::staticTypeName();
 	default: return "";

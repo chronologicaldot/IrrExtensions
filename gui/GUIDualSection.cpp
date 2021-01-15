@@ -121,7 +121,7 @@ bool GUIDualSection::OnEvent( const SEvent& event )
 					bottomRightRect.UpperLeftCorner.X += deltaPos;
 					currShift += (f32)deltaPos / (f32)RelativeRect.getWidth();
 				}
-				if ( deltaPos != 0 )
+				//if ( deltaPos != 0 )
 				{
 					sectionTopLeft->setRelativePosition( topLeftRect );
 					sectionTopLeft->updateAbsolutePosition();

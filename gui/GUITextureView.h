@@ -1,4 +1,7 @@
 // (c) 2015 Nicolaus Anderson
+/*
+	TODO: This may be removed in the future!
+*/
 
 #ifndef GUI_TEXTURE_H
 #define GUI_TEXTURE_H
