@@ -138,8 +138,8 @@ public:
 	\param size - New axis min or max
 	\param isMax - If the value given is for the maximum
 	*/
-	virtual void setGraphSizeX( irr::f32 size, bool isMax=true );
-	virtual void setGraphSizeY( irr::f32 size, bool isMax=true );
+	virtual void setGraphSizeX( irr::f32 size, bool isMax );
+	virtual void setGraphSizeY( irr::f32 size, bool isMax );
 
 		//! Set scale
 	/* Changes the scale of the ranges of values in the graph without changing
@@ -325,13 +325,13 @@ public:
 	You should use this function for standard operations. */
 	void drawOnGraph(
 		irr::core::vector2df point,
-		irr::video::SColor color=irr::video::SColor(255,0,0,0)
+		irr::video::SColor color=irr::video::SColor(0)
 		);
 
 	void drawOnGraph(
 		irr::f32 x,
 		irr::f32 y,
-		irr::video::SColor color=irr::video::SColor(255,0,0,0)
+		irr::video::SColor color=irr::video::SColor(0)
 		);
 
 		//! Draw on the graph - Polar coord
@@ -341,13 +341,13 @@ public:
 	You should use this function for standard operations. */
 	void drawOnGraphPolar(
 		irr::core::vector2df point,
-		irr::video::SColor color=irr::video::SColor(255,0,0,0)
+		irr::video::SColor color=irr::video::SColor(0)
 		);
 
 	void drawOnGraphPolar(
 		irr::f32 radius,
 		irr::f32 angle,
-		irr::video::SColor color=irr::video::SColor(255,0,0,0)
+		irr::video::SColor color=irr::video::SColor(0)
 		);
 
 		//! Draw to the graph
@@ -355,7 +355,7 @@ public:
 	the AbsoluteRect and need merely be shifted. */
 	void drawRawPoint(
 		irr::core::vector2df point,
-		irr::video::SColor color=irr::video::SColor(255,0,0,0)
+		irr::video::SColor color=irr::video::SColor(0)
 		);
 
 protected:

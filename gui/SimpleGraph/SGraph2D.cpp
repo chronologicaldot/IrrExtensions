@@ -8,6 +8,9 @@ License: Same terms as irrlicht
 
 #include "SGraph2D.h"
 
+
+#include <stdio.h>
+
 #ifndef __SIMPLEGRAPH2D_CPP__
 #define __SIMPLEGRAPH2D_CPP__
 
@@ -15,7 +18,6 @@ void irr::gui::SGraph2D::setGraphSize( irr::core::rectf& size )
 {
 	// Change the points so they can be drawn correctly on the new window
 	changeGraphWindow( size );
-
 	ReallocateGraphSpace();
 }
 
@@ -23,37 +25,32 @@ void irr::gui::SGraph2D::setGraphSizeX( irr::f32 size, bool isMax )
 {
 	irr::core::rectf new_window(window);
 
+	// Note that LowerRightCorner is actually the top
 	if ( isMax )
 	{
 		new_window.LowerRightCorner.X = size;
 	} else {
 		new_window.UpperLeftCorner.X = size;
 	}
-
 	new_window.repair();
-
 	// Change the points so they can be drawn correctly on the new window
 	changeGraphWindow( new_window );
-
 	ReallocateGraphSpace();
 }
 
 void irr::gui::SGraph2D::setGraphSizeY( irr::f32 size, bool isMax )
 {
 	irr::core::rectf new_window(window);
-
+	// Note that LowerRightCorner is actually the top
 	if ( isMax )
 	{
-		new_window.UpperLeftCorner.Y = size;
-	} else {
 		new_window.LowerRightCorner.Y = size;
+	} else {
+		new_window.UpperLeftCorner.Y = size;
 	}
-
 	new_window.repair();
-
 	// Change the points so they can be drawn correctly on the new window
 	changeGraphWindow( new_window );
-
 	ReallocateGraphSpace();
 }
 
@@ -591,6 +588,8 @@ void irr::gui::SGraph2D::serializeAttributes(
 	out->addColor( "XAxisColor", xaxis_color );
 	out->addColor( "YAxisColor", yaxis_color );
 	out->addColor( "PointColor", point_color );
+	out->addColor( "XMarkColor", xmark_color );
+	out->addColor( "YMarkColor", ymark_color );
 	out->addColor( "XAxisTickColor", xmark_color );
 	out->addColor( "YAxisTickColor", ymark_color );
 
@@ -598,6 +597,8 @@ void irr::gui::SGraph2D::serializeAttributes(
 	out->addBool( "UseTicks", UseTicks );
 	out->addFloat( "MarkerXSpacing", markXgap );
 	out->addFloat( "MarkerYSpacing", markYgap );
+	out->addBool( "ShowXAxisMarks", showXaxisMarks );
+	out->addBool( "ShowYAxisMarks", showYaxisMarks );
 
 	out->addBool( "ShowXAxis", showXaxis );
 	out->addBool( "ShowYAxis", showYaxis );
@@ -620,19 +621,23 @@ void irr::gui::SGraph2D::deserializeAttributes(
 	IGUIElement::deserializeAttributes( in, options );
 
 	irr::core::recti win;
+	irr::core::rectf winf;
 	if ( in->existsAttribute("Window") ) {
 		win = in->getAttributeAsRect( "Window" );
-		window.UpperLeftCorner.X = (irr::f32)(win.UpperLeftCorner.X);
-		window.UpperLeftCorner.Y = (irr::f32)(win.UpperLeftCorner.Y);
-		window.LowerRightCorner.X = (irr::f32)(win.LowerRightCorner.X);
-		window.LowerRightCorner.Y = (irr::f32)(win.LowerRightCorner.Y);
+		winf.UpperLeftCorner.X = (irr::f32)(win.UpperLeftCorner.X);
+		winf.UpperLeftCorner.Y = (irr::f32)(win.UpperLeftCorner.Y);
+		winf.LowerRightCorner.X = (irr::f32)(win.LowerRightCorner.X);
+		winf.LowerRightCorner.Y = (irr::f32)(win.LowerRightCorner.Y);
 	}
+	changeGraphWindow(winf);
 
 	hasBackground		=	in->getAttributeAsBool( "FillBackground", hasBackground );
 	background_color	=	in->getAttributeAsColor( "BGColor", background_color );
 	xaxis_color			=	in->getAttributeAsColor( "XAxisColor", xaxis_color );
 	yaxis_color			=	in->getAttributeAsColor( "YAxisColor", yaxis_color );
 	point_color			=	in->getAttributeAsColor( "PointColor", point_color );
+	xmark_color			=	in->getAttributeAsColor( "XMarkColor", xmark_color );
+	ymark_color			=	in->getAttributeAsColor( "YMarkColor", ymark_color );
 	xmark_color			=	in->getAttributeAsColor( "XAxisTickColor", xmark_color );
 	ymark_color			=	in->getAttributeAsColor( "YAxisTickColor", ymark_color );
 
@@ -640,6 +645,8 @@ void irr::gui::SGraph2D::deserializeAttributes(
 	UseTicks			=	in->getAttributeAsBool( "UseTicks", UseTicks );
 	markXgap			=	in->getAttributeAsFloat( "MarkerXSpacing", markXgap );
 	markYgap			=	in->getAttributeAsFloat( "MarkerYSpacing", markXgap );
+	showXaxisMarks		=	in->getAttributeAsBool( "ShowXAxisMarks", showXaxisMarks );
+	showYaxisMarks		=	in->getAttributeAsBool( "ShowYAxisMarks", showYaxisMarks );
 
 	showXaxis			=	in->getAttributeAsBool( "ShowXAxis", showXaxis );
 	showYaxis			=	in->getAttributeAsBool( "ShowYAxis", showYaxis );
@@ -652,6 +659,8 @@ void irr::gui::SGraph2D::deserializeAttributes(
 	usePolyPts			=	in->getAttributeAsBool( "UsePolygons", usePolyPts );
 	polyRadius			=	in->getAttributeAsFloat( "PolygonRadius", polyRadius );
 	polyPts				=	in->getAttributeAsInt( "PolygonVertices", polyPts );
+
+	ReallocateGraphSpace();
 }
 
 void irr::gui::SGraph2D::drawOnGraph(
@@ -669,6 +678,9 @@ void irr::gui::SGraph2D::drawOnGraph(
 	// Convert to the actual GUI window's coordinate system
 	point.X *= ((irr::f32)AbsoluteRect.getWidth()) / window.getWidth();
 	point.Y *= ((irr::f32)AbsoluteRect.getHeight()) / window.getHeight();
+
+	if ( color.getAlpha() == 0 )
+		color = point_color;
 
 	// Save
 	graphImage.push_back(
@@ -699,6 +711,9 @@ void irr::gui::SGraph2D::drawOnGraphPolar(
 	cartesian.Y = point.X // radius
 		* sin( point.Y * irr::core::DEGTORAD ); // sin(angle)
 
+	if ( color.getAlpha() == 0 )
+		color = point_color;
+
 	drawOnGraph( cartesian, color );
 }
 
@@ -724,6 +739,9 @@ void irr::gui::SGraph2D::drawRawPoint(
 	point.Y -= window.UpperLeftCorner.Y
 		// conversion of shift to GUI element size
 		* ((irr::f32)AbsoluteRect.getHeight()) / window.getHeight();
+
+	if ( color.getAlpha() == 0 )
+		color = point_color;
 
 	// Save
 	graphImage.push_back(
@@ -777,6 +795,9 @@ void irr::gui::SGraph2D::drawToGUI(
 	if ( window.getArea() == 0.0f )
 		return;
 
+	if ( AbsoluteClippingRect.getWidth() == 0 || AbsoluteClippingRect.getHeight() == 0 )
+		return;
+
 	/* This function has been passed a value that needs to be prepared
 	to fit in the window in addition to it being offset. */
 	
@@ -816,6 +837,38 @@ void irr::gui::SGraph2D::drawToGUI(
 		* AbsoluteRect.getHeight() / window.getHeight() // coordinate system conversion
 		);
 
+	// Shorten to fit in the clipping rectangle
+	if ( drawline.start.X == drawline.end.X ) // Vertical Line
+		if ( drawline.start.X < AbsoluteClippingRect.UpperLeftCorner.X
+			|| drawline.start.X > AbsoluteClippingRect.LowerRightCorner.X )
+			return; // Don't draw
+
+	if ( drawline.start.Y == drawline.end.Y ) // Horizontal Line
+		if ( drawline.start.Y < AbsoluteClippingRect.UpperLeftCorner.Y
+			|| drawline.start.Y > AbsoluteClippingRect.LowerRightCorner.Y )
+			return; // Don't draw
+
+	// FIXME: We assume only vertical and horizontal lines. Angled lines will be messed up.
+	drawline.start.X = irr::core::clamp(
+		drawline.start.X,
+		AbsoluteClippingRect.UpperLeftCorner.X,
+		AbsoluteClippingRect.LowerRightCorner.X
+	);
+	drawline.start.Y = irr::core::clamp(
+		drawline.start.Y,
+		AbsoluteClippingRect.UpperLeftCorner.Y,
+		AbsoluteClippingRect.LowerRightCorner.Y
+	);
+	drawline.end.X = irr::core::clamp(
+		drawline.end.X,
+		AbsoluteClippingRect.UpperLeftCorner.X,
+		AbsoluteClippingRect.LowerRightCorner.X
+	);
+	drawline.end.Y = irr::core::clamp(
+		drawline.end.Y,
+		AbsoluteClippingRect.UpperLeftCorner.Y,
+		AbsoluteClippingRect.LowerRightCorner.Y
+	);
 
 	// Draw the line
 	viddriver->draw2DLine( drawline.start, drawline.end, color );
