@@ -138,6 +138,7 @@ public:
 		for (; li != queue.end(); ++li) {
 			(*li)->setAlignment(EGUIA_UPPERLEFT,EGUIA_LOWERRIGHT,EGUIA_UPPERLEFT,EGUIA_UPPERLEFT);
 			(*li)->setRelativePosition(core::vector2di(startX, startY + currY));
+			itemRect = (*li)->getRelativeRect();
 			currY += itemRect.getHeight() + gapY;
 		}
 	}
