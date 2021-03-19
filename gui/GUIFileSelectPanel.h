@@ -179,6 +179,16 @@ public:
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
 	static const c8* staticTypeName() { return "fileSelectPanel"; }
+
+	virtual void serializeAttributes(
+		irr::io::IAttributes* out,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
+
+	virtual void deserializeAttributes(
+		irr::io::IAttributes* in,
+		irr::io::SAttributeReadWriteOptions* options=0
+		);
 };
 
 }}

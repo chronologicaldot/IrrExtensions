@@ -395,6 +395,38 @@ void GUIFileSelectPanel::draw()
 	IGUIElement::draw();
 }
 
+void
+GUIFileSelectPanel::serializeAttributes(
+	irr::io::IAttributes* out,
+	irr::io::SAttributeReadWriteOptions* options
+){
+	out->addBool("RestoreStartDirectoryWhenDone", restoreDirWhenDone);
+	out->addBool("RestoreStartDirectoryWhenCancelled", restoreDirWhenCancelled);
+#ifndef _IRR_WCHAR_FILESYSTEM
+	out->addString("InitialWorkingDirectory", initialWorkingDir.c_str());
+#else
+	out->addStringW("InitialWorkingDirectory", initialWorkingDir.c_str());
+#endif
+	out->addBool("DrawBack", drawBack);
+}
+
+void
+GUIFileSelectPanel::deserializeAttributes(
+	irr::io::IAttributes* in,
+	irr::io::SAttributeReadWriteOptions* options
+){
+	restoreDirWhenDone = in->getAttributeAsBool("RestoreStartDirectoryWhenDone", restoreDirWhenDone);
+	restoreDirWhenCancelled = in->getAttributeAsBool("RestoreStartDirectoryWhenCancelled", restoreDirWhenCancelled);
+	if ( in->existsAttribute("InitialWorkingDirectory") ) {
+#ifndef _IRR_WCHAR_FILESYSTEM
+		initialWorkingDir = in->getAttributeAsString("InitialWorkingDirectory", initialWorkingDir.c_str());
+#else
+		initialWorkingDir = in->getAttributeAsStringW("InitialWorkingDirectory", initialWorkingDir.c_str());
+#endif
+	}
+	drawBack = in->getAttributeAsBool("DrawBack", drawBack);
+}
+
 }}
 
 #endif
