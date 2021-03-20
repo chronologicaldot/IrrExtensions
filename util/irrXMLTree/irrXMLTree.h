@@ -24,7 +24,7 @@
 #define IRRXMLTREE_H
 
 #include <irrlicht.h>
-#include "../irrTree/irrTree/irrTree.h"
+#include "../irrTree/irrTree.h"
 //#include <irrTree.cpp> - include only when debugging irrXMLTree.h standalone
 
 using namespace irr;

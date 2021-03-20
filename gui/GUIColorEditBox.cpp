@@ -476,9 +476,14 @@ void GUIColorEditBox::deserializeAttributes(
 {
 	IGUIElement::deserializeAttributes(in,options);
 
+	bool notifyParentOfEvent = false;
+	if ( in->existsAttribute("NotifyParentOfColorChange") ) {
+		notifyParentOfEvent = in->getAttributeAsBool("NotifyParentOfColorChange");
+	}
+
 	// Override setText()
 	if ( in->existsAttribute("Color") ) {
-		color = in->getAttributeAsColor("Color", color);
+		setColor( in->getAttributeAsColor("Color", color), notifyParentOfEvent );
 	}
 }
 
