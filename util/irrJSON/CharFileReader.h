@@ -56,6 +56,7 @@ public:
 			fileSize = pFile->getSize();
 			file = new c8[fileSize];
 			pFile->read( (void*)file, fileSize ); // copy contents into the array
+			//fileSize /= sizeof(c8); // Account for data type
 		}
 	}
 
@@ -81,7 +82,7 @@ public:
 			fileSize = pFile->getSize();
 			file = new c8[fileSize];
 			pFile->read( (void*)file, fileSize ); // copy contents into the array
-			fileSize /= sizeof(c8); // Account for data type
+			//fileSize /= sizeof(c8); // Account for data type
 		}
 	}
 
@@ -257,36 +258,11 @@ public:
 		bigEndian = isSystemBigEndian();
 	}
 
-	/* Returns the current unicode-8 character.
-	NOTE: */
-	const string<c8> getCurrU8Char()
-	{
-		c8 c = 0;
-		u8 i = 1;
-		string<c8> out; // May need to be const
-		
-		if ( !reader || reader->atPreBegin() )
-			return out;
-
-		c = reader->curr();
-		if ( (c & unicode8SizeMark) > 0 )
-		{
-			i = (c & unicode8SizeBits) >> 4;
-		}
-		out.append(c);
-		for ( ; i > 1; i>>=2 )
-		{
-			out.append(reader->next());
-		}
-		reader->seek(-3, ESeek_CURRENT);
-		return out;
-	}
-
-	/* Returns the current unicode-8 character as a string. */
+	/* Returns the next unicode-8 character as a string. */
 	const string<c8> getNextU8Char()
 	{
 		u8 i = 1;
-		string<c8> out; // May need to be const
+		string<c8> out;
 
 		if ( !reader )
 			return out;
@@ -302,7 +278,7 @@ public:
 		{
 			out.append(reader->next());
 		}
-		reader->seek(-3, ESeek_CURRENT);
+		//reader->seek(-3, ESeek_CURRENT);
 		return out;
 	}
 
@@ -348,47 +324,6 @@ public:
 		return out;
 	}
 
-	/* Returns a unicode-8 string deliminated by the given unicode-8 characters.
-	Skips adding characters given by skipChars. */
-	const string<c8> getToken( const string<c8>* delims, u32 numDelims, const string<c8>* skipChars, u32 numSkipChars )
-	{
-		string<c8> c;
-		u32 d;
-		string<c8> out; // may need to be const
-		bool add;
-
-		if ( !reader )
-			return out;
-
-		while ( ! reader->atEOF() )
-		{
-			c = getNextU8Char();
-			for ( d = 0; d < numDelims; d++ )
-			{
-				if ( c == delims[d] )
-				{
-					if ( out.size() == 0 )
-						out.append(c);
-					else
-						reader->seek(-1); // Deliminator should be put in the next string
-					return out;
-				}
-			}
-			add = true;
-			for ( d = 0; d < numSkipChars; d++ )
-			{
-				if ( c == skipChars[d] )
-				{
-					add = false;
-					if ( out.size() )
-						return out;
-				}
-			}
-			if ( add )
-				out.append(c);
-		}
-		return out;
-	}
 };
 
 }}

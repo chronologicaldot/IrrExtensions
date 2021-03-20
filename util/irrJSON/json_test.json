@@ -1,0 +1,4 @@
+start : {
+	child1 : { "Hello" : 1 },
+	child2 : { World : 2 }
+}

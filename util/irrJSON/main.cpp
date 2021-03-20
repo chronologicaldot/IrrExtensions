@@ -19,8 +19,8 @@ void logNode( /*irr::ILogger* logger,*/ irrTreeNode* node )
 	irrJSONElement* elem = (irrJSONElement*)(node->getElem());
 	if ( elem )
 	{
-		//logger->log( "\n\nNode name", elem->getName().c_str() );
-		out.append( "\n\n\nNode name: " ).append( elem->getName().c_str() );
+		//logger->log( "Node name", elem->getName().c_str() );
+		out.append( "Node name: " ).append( elem->getName().c_str() );
 		list<irrJSONElement::Attribute>::Iterator i = elem->getAttributes().begin();
 		for ( ; i != elem->getAttributes().end(); ++i )
 		{
@@ -32,10 +32,12 @@ void logNode( /*irr::ILogger* logger,*/ irrTreeNode* node )
 				.append( (*i).value.c_str() );
 		}
 	}
+	out.append("\nCHILDREN {\n");
 	for ( u32 c=0; c < node->children.size(); c++ )
 	{
 		logNode( /*logger,*/ node->children[c] );
 	}
+	out.append("}\n");
 }
 
 int main()

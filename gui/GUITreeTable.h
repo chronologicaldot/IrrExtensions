@@ -4,7 +4,7 @@
 #define GUITREETABLE_H
 
 #include <IGUIElement.h>
-#include "../util/irrTree/irrTree/irrTree.h"
+#include "../util/irrTree/irrTree.h"
 #include <IGUIWindow.h>
 
 /* Compile option: _COMPILE_GUI_TREE_TABLE_NICE_
