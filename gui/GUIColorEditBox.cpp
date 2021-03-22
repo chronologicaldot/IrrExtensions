@@ -233,7 +233,7 @@ void GUIColorEditBox::updateCursorRect()
 	cursorRect.LowerRightCorner.X = start.X + indexCoord + lastIndexCoord;
 	cursorRect.LowerRightCorner.Y = start.Y + textSize.Height;
 
-	cursorRect.repair();
+	//cursorRect.repair(); // Causes (a bug:) box to not appear when cursoxIdx>5
 }
 
 bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
@@ -263,13 +263,13 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 
 	case KEY_LEFT:
 		if ( cursorIdx > 0 )
-			cursorIdx--;
+			--cursorIdx;
 		updateCursorRect();
 		return true;
 
 	case KEY_RIGHT:
 		if ( cursorIdx < 7 )
-			cursorIdx++;
+			++cursorIdx;
 		updateCursorRect();
 		return true;
 
@@ -278,7 +278,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD0:
 		color.color = savedColor;
 		Text[cursorIdx] = '0';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -287,7 +287,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD1:
 		color.color = (1 << cursorByte) | savedColor;
 		Text[cursorIdx] = '1';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -296,7 +296,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD2:
 		color.color = (2 << cursorByte) | savedColor;
 		Text[cursorIdx] = '2';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -305,7 +305,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD3:
 		color.color = (3 << cursorByte) | savedColor;
 		Text[cursorIdx] = '3';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -314,7 +314,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD4:
 		color.color = (4 << cursorByte) | savedColor;
 		Text[cursorIdx] = '4';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -323,7 +323,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD5:
 		color.color = (5 << cursorByte) | savedColor;
 		Text[cursorIdx] = '5';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -332,7 +332,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD6:
 		color.color = (6 << cursorByte) | savedColor;
 		Text[cursorIdx] = '6';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -341,7 +341,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD7:
 		color.color = (7 << cursorByte) | savedColor;
 		Text[cursorIdx] = '7';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -350,7 +350,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD8:
 		color.color = (8 << cursorByte) | savedColor;
 		Text[cursorIdx] = '8';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -359,7 +359,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_NUMPAD9:
 		color.color = (9 << cursorByte) | savedColor;
 		Text[cursorIdx] = '9';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -368,7 +368,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 		// same as: color.color = (0xa0 << cursorByte) | savedColor;
 		color.color = (10 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'a';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -376,7 +376,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_KEY_B:
 		color.color = (11 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'b';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -384,7 +384,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_KEY_C:
 		color.color = (12 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'c';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -392,7 +392,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_KEY_D:
 		color.color = (13 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'd';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -400,7 +400,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_KEY_E:
 		color.color = (14 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'e';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -408,7 +408,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 	case KEY_KEY_F:
 		color.color = (15 << cursorByte) | savedColor;
 		Text[cursorIdx] = 'f';
-		cursorIdx++;
+		++cursorIdx;
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
@@ -423,6 +423,7 @@ void GUIColorEditBox::convertTextToColor()
 {
 	color.color = 0;
 	u32 i;
+	if ( Text.size() != 8 ) Text = L"ff000000"; // User used setText(), so fix it.
 	for ( i=0; i < 8; i++ )
 	{
 		if ( Text[i] <= 'f' && Text[i] >= 'a' )
@@ -440,6 +441,7 @@ void GUIColorEditBox::convertColorToText()
 {
 	u32 i;
 	u8 chr;
+	if ( Text.size() != 8 ) Text = L"ff000000"; // User used setText(), so fix it.
 	for ( i=0; i < 8; i++ )
 	{
 		/* On this computer, when going FROM u32 TO u8, you have to shift the
