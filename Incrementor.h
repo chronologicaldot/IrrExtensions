@@ -345,7 +345,7 @@ public:
 
 	Inc& operator+=( Inc& other )
 	{
-		value = other.value;
+		value += other.value;
 
 		return *this;
 	}
