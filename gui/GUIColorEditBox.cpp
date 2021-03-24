@@ -78,7 +78,7 @@ bool GUIColorEditBox::OnEvent( const SEvent& event )
 
 	case EET_KEY_INPUT_EVENT:
 		if ( event.KeyInput.PressedDown )
-		if ( insertChar( event.KeyInput.Key ) )
+		if ( insertChar( event.KeyInput.Key, event.KeyInput.Char ) )
 		{
 			if ( Parent )
 			{
@@ -236,43 +236,65 @@ void GUIColorEditBox::updateCursorRect()
 	//cursorRect.repair(); // Causes (a bug:) box to not appear when cursoxIdx>5
 }
 
-bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
+bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode, wchar_t pKey )
 {
 	u32 cursorByte = (7-cursorIdx)*4;
 	//u32 savedColor = color.color & ( 0xffffffff ^ (0xf0000000 >> cursorByte) );
 	u32 savedColor = color.color & ( ~ ( 0x0000000f << cursorByte ) );
 
+	// Some systems (e.g. X11) fill event.KeyCode.Char correctly for NumPad but still pass the same KeyCode
+	// as if NumLock were off.
+	if ( pKey == 0 ) {
+		switch ( pKeyCode )
+		{
+			// Cursor movement
+		case KEY_HOME:
+			cursorIdx = 0;
+			updateCursorRect();
+			return true;
+
+		case KEY_END:
+			cursorIdx = 7;
+			updateCursorRect();
+			return true;
+
+		case KEY_DELETE:
+			clear();
+			cursorIdx = 0;
+			updateCursorRect();
+			return true;
+
+		case KEY_LEFT:
+			if ( cursorIdx > 0 )
+				--cursorIdx;
+			updateCursorRect();
+			return true;
+
+		case KEY_RIGHT:
+			if ( cursorIdx < 7 )
+				++cursorIdx;
+			updateCursorRect();
+			return true;
+
+		default:
+			return false;
+		}
+	}
+
+	u32 c_bit;
+	if ( pKey >= L'0' && pKey <= '9' ) {
+		c_bit = (u32) pKey - L'0';
+		color.color = (c_bit << cursorByte) | savedColor;
+		Text[cursorIdx] = pKey;
+		++cursorIdx;
+		if ( cursorIdx > 7 ) cursorIdx = 0;
+		updateCursorRect();
+		return true;
+	}
+
 	switch ( pKeyCode )
 	{
-		// Cursor movement
-	case KEY_HOME:
-		cursorIdx = 0;
-		updateCursorRect();
-		return true;
-
-	case KEY_END:
-		cursorIdx = 7;
-		updateCursorRect();
-		return true;
-
-	case KEY_DELETE:
-		clear();
-		cursorIdx = 0;
-		updateCursorRect();
-		return true;
-
-	case KEY_LEFT:
-		if ( cursorIdx > 0 )
-			--cursorIdx;
-		updateCursorRect();
-		return true;
-
-	case KEY_RIGHT:
-		if ( cursorIdx < 7 )
-			++cursorIdx;
-		updateCursorRect();
-		return true;
-
+/*
 		// Inserting characters
 	case KEY_KEY_0:
 	case KEY_NUMPAD0:
@@ -363,6 +385,7 @@ bool GUIColorEditBox::insertChar( EKEY_CODE pKeyCode )
 		if ( cursorIdx > 7 ) cursorIdx = 0;
 		updateCursorRect();
 		return true;
+*/
 
 	case KEY_KEY_A:
 		// same as: color.color = (0xa0 << cursorByte) | savedColor;

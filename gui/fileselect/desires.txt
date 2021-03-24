@@ -1,0 +1,45 @@
+Desires for a new GUIFileSelectWindow
+
+- File viewing area with multiple display options (list, small icons, large icons)
+- Hidden file display/hide
+- File type (extension) filters (with full file type names), settable from serialization interface
+- Multiple file select, acquirable from getSelectedFiles() and serialization interface
+- Enable/disable selection of folders/directories
+- File name editbox with name filtering
+- Back button with directory access history
+- Goto parent directory button
+- Goto main computer directory button
+- Goto main user directory button
+- POSSIBLY: Favorite/Bookmark location goto button
+
+
+
+serializeAttributes(...) {
+	//...
+	if ( filters.size() ) {
+		out->addInt("FilterCount", filters.size());
+		for ( u32 f=0; f < filters.size(); ++f ) {
+			stringc filterName("Filter");
+			filterName += f;
+			stringc filterExt = filterName;
+			filterName += "Name";
+			out->addString(filterName, filters[f].name);
+			filterExt += "Ext";
+			out->addString(filterExt, filters[f].extension);
+		}
+	}
+
+	if ( IsFileSelected ) // Triggered to true after a selection is made.
+	{
+		out->addInt("SelectedFileCount", selectedFiles.size());
+		for ( u32 sf=0; sf < selectedFiles.size(); ++sf ) {
+			stringc selFileName("SelectedFile");
+			selFileName += sf;
+			stringc selFileIsDir = selFileName;
+			selFileName += "Name";
+			out->addString(selFileName, selectedFiles[sf].name);
+			selFileIsDir += "IsDirectory"; // Directory
+			out->addString(selFileIsDir, selectedFiles[sf].isDirectory);
+		}
+	}
+}

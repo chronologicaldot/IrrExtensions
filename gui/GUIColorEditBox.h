@@ -79,7 +79,7 @@ protected:
 	void updateCursorRect();
 
 	// Attempts to insert a character
-	bool insertChar( EKEY_CODE pKeyCode );
+	bool insertChar( EKEY_CODE pKeyCode, wchar_t pKey );
 
 	// Internal conversion functions
 	void convertTextToColor();
