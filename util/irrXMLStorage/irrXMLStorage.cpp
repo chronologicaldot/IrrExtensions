@@ -30,7 +30,7 @@ and the Parse function will not work. */
 bool irrXMLStorage::LoadFile( io::IFileSystem* file_sys, io::path filename )
 {
 	// Load the file and create a reader
-	reader = file_sys->createXMLReader( filename.c_str() );
+	reader = file_sys->createXMLReaderUTF8( filename.c_str() );
 
 	// Indicate if a file could not be opened
 	return (hasFile = (reader != 0));
