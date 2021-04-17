@@ -236,14 +236,6 @@ public:
 		} else return false;
 	}
 
-
-	//! implicit cast to irrTreeElement
-	/**/
-	operator irrTreeElement&() const
-	{
-		return (irrTreeElement&)(*this);
-	}
-
 	//! implicit cast to irrTreeElement *
 	/**/
 	operator irrTreeElement*() const
@@ -270,16 +262,6 @@ public:
 	{
 		this->children.push_back( new irrXMLTreeNode(id,this) );
 	}
-
-	//operator irrTreeNode& () const
-	//{
-	//	return (irrTreeNode&)*this;
-	//}
-
-	//operator irrTreeNode*() const
-	//{
-	//	return (irrTreeNode*)this;
-	//}
 };
 
 #endif
