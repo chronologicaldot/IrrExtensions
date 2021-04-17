@@ -11,6 +11,9 @@ namespace scene {
 }
 namespace gui {
 
+class IGUIElement;
+class IGUIEnvironment;
+
 //! IrrEXT GUI Element Factory
 /*
 	Produces the GUI elements of the IrrExt project by chronologicaldot (Nic Anderson).

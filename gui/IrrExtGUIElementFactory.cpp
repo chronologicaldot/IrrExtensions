@@ -87,10 +87,10 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 		static u32 i = 1; ++i;
 		return new GUITextureView(0, Environment, parent, core::recti(), i);
 	}
-	else if elemname == GUITreeTable::staticTypeName() ) {
+	else if ( elemname == GUITreeTable::staticTypeName() ) {
 		return new GUITreeTable( Environment, parent, core::recti() );
 	}
-	else if elemname == GUIVectorPanel::staticTypeName() ) {
+	else if ( elemname == GUIVectorPanel::staticTypeName() ) {
 		return new GUIVectorPanel( Environment, parent, core::recti() );
 	}
 
@@ -111,7 +111,7 @@ const c8*
 IrrExtGUIElementFactory::getCreateableGUIElementTypeName(s32 idx) const {
 	switch(idx)
 	{
-	case 0: return SGraph::staticTypeName();
+	case 0: return SGraph2D::staticTypeName();
 	case 1: return GUIColorEditBox::staticTypeName();
 	case 2: return GUIColorSample::staticTypeName();
 	case 3: return GUIDualSection::staticTypeName();

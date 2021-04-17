@@ -108,7 +108,7 @@ public:
 			texture = videoDriver->addRenderTargetTexture( targetSize, internalName, video::ECF_A8R8G8B8 );
 			depthStencil = videoDriver->addRenderTargetTexture( targetSize, internalName + "Depth", video::ECF_G16R16F );
 			// ^ What color format should the stencil buffer be for OpenGL? A8R8G8B8?
-			// Entity uses ECF_G16R16F, though I suppose it doesn't matter as long as its 32-bits.
+			// User named Entity uses ECF_G16R16F, but I suppose it doesn't matter as long as its 32-bits.
 
 			renderTarget = videoDriver->addRenderTarget();
 			renderTarget->setTexture(texture, depthStencil);
@@ -125,7 +125,7 @@ public:
 		}
 	}
 
-	bool setUseAlphaChannel( bool yes )
+	void setUseAlphaChannel( bool yes )
 	{
 		useAlphaChannel = yes;
 	}
