@@ -69,10 +69,10 @@ public:
 
 class irrJSON
 {
+	IFileSystem* fileSystem;
 	string<c8> delimChars;
 	string<c8> skipChars;
 	string<c8> quoteDelimChars;
-	IFileSystem* fileSystem;
 
 	CharFileReader* reader;
 	CharFileAccessor* accessor;

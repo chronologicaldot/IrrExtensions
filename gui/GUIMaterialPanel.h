@@ -2,8 +2,8 @@
 
 #include <IGUIElement.h>
 
-#ifndef GUI_MATERIAL_PANEL_H
-#define GUI_MATERIAL_PANEL_H
+#ifndef GUI_MATERIAL_PANEL_H_
+#define GUI_MATERIAL_PANEL_H_
 
 namespace irr {
 

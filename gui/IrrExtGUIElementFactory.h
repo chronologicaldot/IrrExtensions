@@ -4,7 +4,6 @@
 #define IRR_EXT_GUI_ELEMENT_FACTORY_H
 
 #include <IGUIElementFactory.h>
-#include <IGUIEnvironment.h>
 
 namespace irr {
 namespace scene {
