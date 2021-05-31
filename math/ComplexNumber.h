@@ -1,5 +1,8 @@
 // Copyright 2014-2016 Nicolaus Anderson
 
+#ifndef COMPLEX_NUMBER_H
+#define COMPLEX_NUMBER_H
+
 template<class T>
 struct ComplexNumber
 {
@@ -168,3 +171,6 @@ struct ComplexNumber
 		return (temp /= other);
 	}
 };
+
+
+#endif

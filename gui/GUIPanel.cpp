@@ -26,26 +26,31 @@ void GUIPanel::setBackgroundType( EGUIDrawType type )
 
 void GUIPanel::draw()
 {
-	switch(BackgroundType) {
-	case EGUIDT_BUTTON:
-		Environment->getSkin()->draw3DButtonPaneStandard(this, AbsoluteRect, &AbsoluteClippingRect);
-		break;
+	if ( DrawBackground )
+	{
+		switch(BackgroundType) {
+		case EGUIDT_BUTTON:
+			Environment->getSkin()->draw3DButtonPaneStandard(this, AbsoluteRect, &AbsoluteClippingRect);
+			break;
 
-	case EGUIDT_BUTTON_PRESSED:
-		Environment->getSkin()->draw3DButtonPanePressed(this, AbsoluteRect, &AbsoluteClippingRect);
-		break;
+		case EGUIDT_BUTTON_PRESSED:
+			Environment->getSkin()->draw3DButtonPanePressed(this, AbsoluteRect, &AbsoluteClippingRect);
+			break;
 
-	case EGUIDT_SUNKENPANE:
-		Environment->getSkin()->draw3DSunkenPane(this, BackgroundColor, false, true, AbsoluteRect, &AbsoluteClippingRect);
-		break;
+		case EGUIDT_SUNKENPANE:
+			Environment->getSkin()->draw3DSunkenPane(this, BackgroundColor, false, true, AbsoluteRect, &AbsoluteClippingRect);
+			break;
 
-	case EGUIDT_WINDOW:
-		Environment->getSkin()->draw3DWindowBackground(this, DrawTitleBar, TitleBarColor, AbsoluteRect, &AbsoluteClippingRect);
-		break;
+		case EGUIDT_WINDOW:
+			Environment->getSkin()->draw3DWindowBackground(this, DrawTitleBar, TitleBarColor, AbsoluteRect, &AbsoluteClippingRect);
+			break;
 
-	default:
-		break;
+		default:
+			break;
+		}
 	}
+
+	IGUIElement::draw();
 }
 
 void GUIPanel::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const

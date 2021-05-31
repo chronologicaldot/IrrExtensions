@@ -54,6 +54,7 @@ public:
 	{
 		IGUIElement::serializeAttributes(out,options);
 		out->addFloat("Progress", value);
+		out->addBool("Horizontal", horiz);
 		out->addColor("BackgroundColor", backColor);
 	}
 
@@ -61,6 +62,7 @@ public:
 	{
 		IGUIElement::serializeAttributes(in,options);
 		setProgress( in->getAttributeAsFloat("Progress",value) );
+		horiz = in->getAttributeAsBool("Horizontal", horiz);
 		setBackgroundColor( in->getAttributeAsColor("BackgroundColor") );
 	}
 };

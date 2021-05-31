@@ -1,5 +1,8 @@
 // Copyright 2016-2018 Nicolaus Anderson
 
+#ifndef MATH_FRACTION_H
+#define MATH_FRACTION_H
+
 namespace math {
 
 class Fraction
@@ -132,3 +135,6 @@ protected:
 
 
 }
+
+
+#endif

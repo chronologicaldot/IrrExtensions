@@ -59,6 +59,17 @@ public:
 	}
 
 	void
+	setWithoutRef( pointer data ) {
+		if ( dataptr == data )
+			return;
+		drop();
+		if ( data == 0 )
+			dataptr == nullptr;
+		else
+			dataptr = data;
+	}
+
+	void
 	share( irrptr<element_type>& other ) {
 		if ( dataptr == other.dataptr )
 			return;

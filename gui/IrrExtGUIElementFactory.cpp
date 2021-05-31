@@ -13,6 +13,7 @@
 #include "GUIMarkedSlider.h"
 #include "GUIMaterialPanel.h"
 #include "GUIMatrixPanel.h"
+#include "GUIPanel.h"
 #include "GUISProgressBar.h"
 #include "GUISColorSelect.h"
 #include "GUIScrollPane.h"
@@ -73,6 +74,9 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 		// Default: rotate in degrees
 		return new GUIMatrixPanel( true, Environment, parent, core::recti() );
 	}
+	else if ( elemname == GUIPanel::staticTypeName() ) {
+		return new GUIPanel( Environment, parent, core::recti() )
+	}
 	else if ( elemname == GUISProgressBar::staticTypeName() ) {
 		return new GUISProgressBar( Environment, parent, core::recti() );
 	}
@@ -99,7 +103,7 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 
 s32
 IrrExtGUIElementFactory::getCreatableGUIElementTypeCount() const {
-	return 16;
+	return 17;
 }
 
 EGUI_ELEMENT_TYPE
@@ -121,12 +125,13 @@ IrrExtGUIElementFactory::getCreateableGUIElementTypeName(s32 idx) const {
 	case 7: return GUIMarkedSlider::staticTypeName();
 	case 8: return GUIMaterialPanel::staticTypeName();
 	case 9: return GUIMatrixPanel::staticTypeName();
-	case 10: return GUISProgressBar::staticTypeName();
-	case 11: return GUISColorSelect::staticTypeName();
-	case 12: return GUIScrollPane::staticTypeName();
-	case 13: return GUITextureView::staticTypeName();
-	case 14: return GUITreeTable::staticTypeName();
-	case 15: return GUIVectorPanel::staticTypeName();
+	case 10: return GUIPanel::staticTypeName();
+	case 11: return GUISProgressBar::staticTypeName();
+	case 12: return GUISColorSelect::staticTypeName();
+	case 13: return GUIScrollPane::staticTypeName();
+	case 14: return GUITextureView::staticTypeName();
+	case 15: return GUITreeTable::staticTypeName();
+	case 16: return GUIVectorPanel::staticTypeName();
 	default: return "";
 	}
 }
