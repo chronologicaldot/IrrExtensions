@@ -404,6 +404,7 @@ GUIFileSelectPanel::serializeAttributes(
 	out->addBool("RestoreStartDirectoryWhenCancelled", restoreDirWhenCancelled);
 #ifndef _IRR_WCHAR_FILESYSTEM
 	out->addString("InitialWorkingDirectory", initialWorkingDir.c_str());
+	// TODO: Wait... shouldn't this be switched with the other one
 #else
 	out->addStringW("InitialWorkingDirectory", initialWorkingDir.c_str());
 #endif
@@ -420,6 +421,7 @@ GUIFileSelectPanel::deserializeAttributes(
 	if ( in->existsAttribute("InitialWorkingDirectory") ) {
 #ifndef _IRR_WCHAR_FILESYSTEM
 		initialWorkingDir = in->getAttributeAsString("InitialWorkingDirectory", initialWorkingDir.c_str());
+	// TODO: Wait... shouldn't this be switched with the other one
 #else
 		initialWorkingDir = in->getAttributeAsStringW("InitialWorkingDirectory", initialWorkingDir.c_str());
 #endif

@@ -152,8 +152,8 @@ public:
 	/* IMPORTANT NOTE:
 	If ever IGUIFileOpenDialog is to be inherited (unlikely),
 	existing function names should be available.
-	Hence, getFileName() and getDirectory() are not overridden here,
-	especially since they return const wchar_t and const io::path&
+	Hence, getFileName() and getDirectoryName() are not overridden here,
+	especially since they return const wchar_t* and const io::path&
 	respectively.
 	*/
 

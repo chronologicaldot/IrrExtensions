@@ -75,7 +75,7 @@ IrrExtGUIElementFactory::addGUIElement(const c8* typeName, IGUIElement* parent) 
 		return new GUIMatrixPanel( true, Environment, parent, core::recti() );
 	}
 	else if ( elemname == GUIPanel::staticTypeName() ) {
-		return new GUIPanel( Environment, parent, core::recti() )
+		return new GUIPanel( Environment, parent, core::recti() );
 	}
 	else if ( elemname == GUISProgressBar::staticTypeName() ) {
 		return new GUISProgressBar( Environment, parent, core::recti() );
