@@ -190,6 +190,7 @@ void irrJSON::getElements( irrTreeNode* pNode )
 				if ( ! findName )
 				{
 					getElements( &(pNode->addNode( new irrJSONElement(name.c_str()) )) );
+					name = ""; // Clear name to prevent next comma from adding empty attribute
 				}
 				break;
 
@@ -197,7 +198,7 @@ void irrJSON::getElements( irrTreeNode* pNode )
 			case ';':
 			case ',':
 				findName = true;
-				if ( name.size() && name != "" )
+				if ( name.size() > 0 && name != "" )
 					elem->addAttribute(name,value);
 				name = "";
 				value = "";
@@ -231,7 +232,8 @@ void irrJSON::getElements( irrTreeNode* pNode )
 								// Must be looking for value
 								if ( (token[0] == '}' || reader->atEOF()) && !findName )
 								{
-									elem->addAttribute(name,value);
+									if ( name.size() > 0 && name != "" )
+										elem->addAttribute(name,value);
 								}
 
 								continue;
@@ -249,7 +251,8 @@ void irrJSON::getElements( irrTreeNode* pNode )
 					// Must be looking for value
 					if ( (token[0] == '}' || reader->atEOF()) && !findName )
 					{
-						elem->addAttribute(name,value);
+						if ( name.size() > 0 && name != "" )
+							elem->addAttribute(name,value);
 					}
 
 					continue;
@@ -280,7 +283,8 @@ void irrJSON::getElements( irrTreeNode* pNode )
 		// Must be looking for value
 		if ( (token[0] == '}' || reader->atEOF()) && !findName )
 		{
-			elem->addAttribute(name,value);
+			if ( name.size() > 0 && name != "" )
+				elem->addAttribute(name,value);
 		}
 	} // end while loop
 }
