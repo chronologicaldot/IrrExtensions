@@ -66,6 +66,10 @@ protected:
 	//! Update image cache
 	/* Creates images to be drawn around the border. These are the corners. */
 	void updateImageCache();
+
+	//! Checks if a line is in the clipping rectangle and if so, bounds it
+	bool ensureVerticalLineInBounds(core::vector2di& start, core::vector2di& end);
+	bool ensureHorizontalLineInBounds(core::vector2di& start, core::vector2di& end);
 };
 
 }}

@@ -83,42 +83,48 @@ void GUIGroupingPanel::draw()
 	vline.Y += borderRadius + (textSize.Height / 2);
 	vector2di vlineEnd( AbsoluteRect.UpperLeftCorner.X, AbsoluteRect.LowerRightCorner.Y - borderRadius );
 
-	// TODO: Clipping the borders!
-	//if ( AbsoluteClippingRect.isPointInside(vline) )
-	vid->draw2DLine( vline, vlineEnd, color );
+	if ( ensureVerticalLineInBounds(vline,vlineEnd) )
+		vid->draw2DLine( vline, vlineEnd, color );
 	vline.X		+= 1;
 	vlineEnd.X	+= 1;
-	vid->draw2DLine( vline, vlineEnd, shadowColor ); // Shadow
+	if ( ensureVerticalLineInBounds(vline, vlineEnd) )
+		vid->draw2DLine( vline, vlineEnd, shadowColor ); // Shadow
 
 		// Top side
 	vector2di hline( AbsoluteRect.UpperLeftCorner );
 	hline += vector2di( borderRadius + textPad*2 + textSize.Width, textSize.Height / 2 ); // Use .move() in custom Irrlicht
 	vector2di hlineEnd( AbsoluteRect.LowerRightCorner.X - borderRadius, AbsoluteRect.UpperLeftCorner.Y + (textSize.Height / 2) );
 
-	vid->draw2DLine( hline, hlineEnd, color );
+	if ( ensureHorizontalLineInBounds(hline, hlineEnd) )
+		vid->draw2DLine( hline, hlineEnd, color );
 	hline.Y		+= 1;
 	hlineEnd.Y	+= 1;
-	vid->draw2DLine( hline, hlineEnd, shadowColor ); // Shadow
+	if ( ensureHorizontalLineInBounds(hline, hlineEnd) )
+		vid->draw2DLine( hline, hlineEnd, shadowColor ); // Shadow
 
 		// Right side
 	vline.set( AbsoluteRect.LowerRightCorner.X, AbsoluteRect.UpperLeftCorner.Y + borderRadius + (textSize.Height / 2) );
 	vlineEnd.set( AbsoluteRect.LowerRightCorner );
 	vlineEnd.Y -= borderRadius;
 
-	vid->draw2DLine( vline, vlineEnd, color );
+	if ( ensureVerticalLineInBounds(vline, vlineEnd) )
+		vid->draw2DLine( vline, vlineEnd, color );
 	vline.X		-= 1;
 	vlineEnd.X	-= 1;
-	vid->draw2DLine( vline, vlineEnd, shadowColor ); // Shadow
+	if ( ensureVerticalLineInBounds(vline, vlineEnd) )
+		vid->draw2DLine( vline, vlineEnd, shadowColor ); // Shadow
 
 		// Bottom side
 	hline.set( AbsoluteRect.UpperLeftCorner.X + borderRadius, AbsoluteRect.LowerRightCorner.Y );
 	hlineEnd.set( AbsoluteRect.LowerRightCorner );
 	hlineEnd.X -= borderRadius;
 
-	vid->draw2DLine( hline, hlineEnd, color );
+	if ( ensureHorizontalLineInBounds(hline, hlineEnd) )
+		vid->draw2DLine( hline, hlineEnd, color );
 	hline.Y		-= 1;
 	hlineEnd.Y	-= 1;
-	vid->draw2DLine( hline, hlineEnd, shadowColor ); // Shadow
+	if ( ensureHorizontalLineInBounds(hline, hlineEnd) )
+		vid->draw2DLine( hline, hlineEnd, shadowColor ); // Shadow
 
 	// Draw label text
 	recti labelRect( borderRadius + 3, 0, borderRadius + textPad, textSize.Height );
@@ -181,10 +187,34 @@ void GUIGroupingPanel::updateImageCache()
 		vid->setRenderTarget( LRtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
 		vid->draw2DPolygon( vector2di( -1 ), borderRadius, shadowColor, borderResolution );
 		vid->draw2DPolygon( vector2di( 0 ), borderRadius, color, borderResolution );
-		// ^ Works better with vector2di(-1)
+		// ^ Works better with vector2di(-1) for some reason
 	}
 
 	vid->setRenderTarget(0); // Should restore old target
+}
+
+bool
+GUIGroupingPanel::ensureVerticalLineInBounds(vector2di& start, vector2di& end) {
+	if ( start.X < AbsoluteClippingRect.UpperLeftCorner.X
+			|| start.X > AbsoluteClippingRect.LowerRightCorner.X )
+		return false;
+
+	start.Y = core::max_(core::min_(start.Y, AbsoluteClippingRect.LowerRightCorner.Y), AbsoluteClippingRect.UpperLeftCorner.Y);
+	end.Y = core::min_(core::max_(end.Y, AbsoluteClippingRect.UpperLeftCorner.Y), AbsoluteClippingRect.LowerRightCorner.Y);
+
+	return true;
+}
+
+bool
+GUIGroupingPanel::ensureHorizontalLineInBounds(vector2di& start, vector2di& end) {
+	if ( start.Y < AbsoluteClippingRect.UpperLeftCorner.Y
+			|| start.Y > AbsoluteClippingRect.LowerRightCorner.Y )
+		return false;
+
+	start.X = core::max_(core::min_(start.X, AbsoluteClippingRect.LowerRightCorner.X), AbsoluteClippingRect.UpperLeftCorner.X);
+	end.X = core::min_(core::max_(end.X, AbsoluteClippingRect.UpperLeftCorner.X), AbsoluteClippingRect.LowerRightCorner.X);
+
+	return true;
 }
 
 void
