@@ -83,6 +83,8 @@ void GUIGroupingPanel::draw()
 	vline.Y += borderRadius + (textSize.Height / 2);
 	vector2di vlineEnd( AbsoluteRect.UpperLeftCorner.X, AbsoluteRect.LowerRightCorner.Y - borderRadius );
 
+	// TODO: Clipping the borders!
+	//if ( AbsoluteClippingRect.isPointInside(vline) )
 	vid->draw2DLine( vline, vlineEnd, color );
 	vline.X		+= 1;
 	vlineEnd.X	+= 1;
@@ -133,6 +135,7 @@ void GUIGroupingPanel::updateImageCache()
 	SColor shadowColor = Environment->getSkin()->getColor( EGDC_3D_SHADOW );
 
 	dimension2du imageSize( borderRadius, borderRadius );
+	u32 borderResolution = (u32)borderRadius;
 
 	// Produces cropped circles used as end-caps / corners
 
@@ -143,8 +146,8 @@ void GUIGroupingPanel::updateImageCache()
 		//vid->setRenderTarget( ULtexture );
 		// Irrlicht 5589
 		vid->setRenderTarget( ULtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
-		vid->draw2DPolygon( vector2di( borderRadius+1 ), borderRadius, shadowColor, 40 );
-		vid->draw2DPolygon( vector2di( borderRadius, borderRadius ), borderRadius, color, 40 );
+		vid->draw2DPolygon( vector2di( borderRadius+1 ), borderRadius, shadowColor, borderResolution );
+		vid->draw2DPolygon( vector2di( borderRadius, borderRadius ), borderRadius, color, borderResolution );
 	}
 
 	URtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_UR" );
@@ -154,8 +157,8 @@ void GUIGroupingPanel::updateImageCache()
 		//vid->setRenderTarget( URtexture );
 		// Irrlicht 5589
 		vid->setRenderTarget( URtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
-		vid->draw2DPolygon( vector2di( -1, borderRadius+1 ), borderRadius, shadowColor, 40 );
-		vid->draw2DPolygon( vector2di( 0, borderRadius ), borderRadius, color, 40 );
+		vid->draw2DPolygon( vector2di( -1, borderRadius+1 ), borderRadius, shadowColor, borderResolution );
+		vid->draw2DPolygon( vector2di( 0, borderRadius ), borderRadius, color, borderResolution );
 	}
 
 	LLtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_LL" );
@@ -165,8 +168,8 @@ void GUIGroupingPanel::updateImageCache()
 		//vid->setRenderTarget( LLtexture );
 		// Irrlicht 5589
 		vid->setRenderTarget( LLtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
-		vid->draw2DPolygon( vector2di( borderRadius+1, -1 ), borderRadius, shadowColor, 40 );
-		vid->draw2DPolygon( vector2di( borderRadius, 0 ), borderRadius, color, 40 );
+		vid->draw2DPolygon( vector2di( borderRadius+1, -1 ), borderRadius, shadowColor, borderResolution );
+		vid->draw2DPolygon( vector2di( borderRadius, 0 ), borderRadius, color, borderResolution );
 	}
 
 	LRtexture = vid->addRenderTargetTexture( imageSize, "GUI_GROUPING_PANEL_CORNER_LR" );
@@ -176,8 +179,9 @@ void GUIGroupingPanel::updateImageCache()
 		//vid->setRenderTarget( LRtexture );
 		// Irrlicht 5589
 		vid->setRenderTarget( LRtexture, u16(irr::video::ECBF_COLOR), SColor(0,0,0,0) );
-		vid->draw2DPolygon( vector2di( -1 ), borderRadius, shadowColor, 40 );
-		vid->draw2DPolygon( vector2di( 0 ), borderRadius, color, 40 );
+		vid->draw2DPolygon( vector2di( -1 ), borderRadius, shadowColor, borderResolution );
+		vid->draw2DPolygon( vector2di( 0 ), borderRadius, color, borderResolution );
+		// ^ Works better with vector2di(-1)
 	}
 
 	vid->setRenderTarget(0); // Should restore old target
@@ -199,6 +203,8 @@ GUIGroupingPanel::deserializeAttributes(io::IAttributes* in, io::SAttributeReadW
 	//setText( in->getAttributeAsString("Caption", L"") );
 	showBorder = in->getAttributeAsBool("ShowBorder", showBorder);
 	borderRadius = in->getAttributeAsFloat("BorderRadius", borderRadius);
+
+	updateImageCache();
 }
 
 }}
