@@ -3,6 +3,9 @@
 #ifndef IRR_SLICK_GUI_SKIN
 #define IRR_SLICK_GUI_SKIN
 
+// Uncomment this if you want the dark-dark original colors
+//#define CLASSIC_DARK_COLORS
+
 #include <IGUISkin.h>
 #include <irrString.h>
 
@@ -16,7 +19,6 @@ namespace gui {
 
 class IGUISpriteBank;
 class IGUIEnvironment;
-
 
 class SlickGUISkin : public IGUISkin
 {

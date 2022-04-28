@@ -15,6 +15,7 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	, Environment(environment)
 	, VideoDriver(environment->getVideoDriver())
 {
+#ifdef CLASSIC_DARK_COLORS
 	Colors[EGDC_3D_DARK_SHADOW]		= 0xff000000;
 	Colors[EGDC_3D_SHADOW]			= 0xff020202;
 	Colors[EGDC_3D_FACE]			= 0xff363636;
@@ -40,11 +41,38 @@ SlickGUISkin::SlickGUISkin( IGUIEnvironment* environment, bool startIconsFromZer
 	Colors[EGDC_EDITABLE]			= 0xff051720;
 	Colors[EGDC_GRAY_EDITABLE]		= 0xff15252c;
 	Colors[EGDC_FOCUSED_EDITABLE]	= 0xff051720;
+#else
+	Colors[EGDC_3D_DARK_SHADOW]		= 0xff000000;
+	Colors[EGDC_3D_SHADOW]			= 0xff020202;
+	Colors[EGDC_3D_FACE]			= 0xff363636;
+	Colors[EGDC_3D_HIGH_LIGHT]		= 0xffb1b1b1;
+	Colors[EGDC_3D_LIGHT]			= 0xff6e6e6e;
+	Colors[EGDC_ACTIVE_BORDER]		= 0xffb1b1b1;
+	Colors[EGDC_ACTIVE_CAPTION]		= 0xfffdfdfd;
+	Colors[EGDC_APP_WORKSPACE]		= 0xff111315;
+	Colors[EGDC_BUTTON_TEXT]		= 0xffc5c5c5; //0xffa6a6a6;
+	Colors[EGDC_GRAY_TEXT]			= 0xff6e6e6e;
+	Colors[EGDC_HIGH_LIGHT]			= 0xff000000;
+	Colors[EGDC_HIGH_LIGHT_TEXT]	= 0xfff1f1f1; //0xffc5c5c5;
+	Colors[EGDC_INACTIVE_BORDER]	= 0xff6e6e6e;
+	Colors[EGDC_INACTIVE_CAPTION]	= 0xffc0c0c0;
+	Colors[EGDC_TOOLTIP]			= 0xffffffff;
+	Colors[EGDC_TOOLTIP_BACKGROUND]	= 0xff15587b;
+	Colors[EGDC_SCROLLBAR]			= 0xff1b1f24;
+	Colors[EGDC_WINDOW]				= 0xff1f1f1f;
+	Colors[EGDC_WINDOW_SYMBOL]		= 0xfffcfcfc;
+	Colors[EGDC_ICON]				= 0xffb2bac3;
+	Colors[EGDC_ICON_HIGH_LIGHT]	= 0xfffcfcfc;
+	Colors[EGDC_GRAY_WINDOW_SYMBOL]	= 0xff767b82;
+	Colors[EGDC_EDITABLE]			= 0xff188675;
+	Colors[EGDC_GRAY_EDITABLE]		= 0xff263634;
+	Colors[EGDC_FOCUSED_EDITABLE]	= 0xff1d9886;
+#endif
 
-	InactiveHeaderColor = 0xff475760;
-	ActiveHeaderColor = 0xff006078;
-	SpareBackgroundColor = 0xff051720; //0xff273740; // 0xff003344;
-	SpareBackgroundActiveColor = 0xff15252c; //0xff274848; //0xff275950;
+	InactiveHeaderColor = 0xff4e6169; // 0xff475760;
+	ActiveHeaderColor = 0xff1f5168; // 0xff006078;
+	SpareBackgroundColor = 0xff39444a; // 0xff051720; //0xff273740; // 0xff003344;
+	SpareBackgroundActiveColor = 0xff134258; // 0xff15252c; //0xff274848; //0xff275950;
 
 	Sizes[EGDS_SCROLLBAR_SIZE] = 20;
 	Sizes[EGDS_MENU_HEIGHT] = 40;
@@ -292,10 +320,7 @@ void SlickGUISkin::draw3DSunkenPane(
 	core::rect<s32> backgroundArea( rect.UpperLeftCorner + core::vector2di(1),
 								rect.LowerRightCorner - core::vector2di(1) );
 
-	// Ignore "flat" setting
-	// Ignore suggested background fill color
 	if ( fillBackGround ) {
-		//draw2DRectangle( element, getColor(EGDC_3D_DARK_SHADOW), backgroundArea, clip );
 		if ( Environment->getFocus() == element )
 			draw2DRectangle( element, SpareBackgroundActiveColor, backgroundArea, clip );
 		else {
