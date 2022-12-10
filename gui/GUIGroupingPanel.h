@@ -35,7 +35,7 @@ public:
 
 	//! Set the text
 	/* This function both sets the text and peforms some calculations for composing the client area. */
-	virtual void setText(const wchar_t* text) _IRR_OVERRIDE_;
+	virtual void setText(const wchar_t* text);
 
 	//! Set border visible
 	/* Sets if the border is visible. */
@@ -54,13 +54,13 @@ public:
 	//virtual void updateAbsolutePosition();
 
 	/* Draws the border of this element. */
-	virtual void draw() _IRR_OVERRIDE_;
+	virtual void draw();
 
 	virtual const c8* getTypeName() const { return staticTypeName(); }
 	static const c8* staticTypeName() { return "groupingPanel"; }
 
-	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const _IRR_OVERRIDE_;
-	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_;
+	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const;
+	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
 protected:
 	//! Update image cache

@@ -54,13 +54,13 @@ public:
 
 	void addItem( const wchar_t* pText, bool pEnabled=true );
 
-	virtual void updateAbsolutePosition()  _IRR_OVERRIDE_;
-	virtual bool OnEvent( const SEvent& event )  _IRR_OVERRIDE_;
-	virtual void draw()  _IRR_OVERRIDE_;
+	virtual void updateAbsolutePosition()  IRR_OVERRIDE;
+	virtual bool OnEvent( const SEvent& event )  IRR_OVERRIDE;
+	virtual void draw()  IRR_OVERRIDE;
 	virtual const c8* getTypeName() const { return staticTypeName(); }
 	static const c8* staticTypeName() { return "dropdownSelector"; }
-	virtual void serializeAttributes( io::IAttributes* out, io::SAttributeReadWriteOptions* options ) const  _IRR_OVERRIDE_;
-	virtual void deserializeAttributes( io::IAttributes* in, io::SAttributeReadWriteOptions* options )  _IRR_OVERRIDE_;
+	virtual void serializeAttributes( io::IAttributes* out, io::SAttributeReadWriteOptions* options ) const  IRR_OVERRIDE;
+	virtual void deserializeAttributes( io::IAttributes* in, io::SAttributeReadWriteOptions* options )  IRR_OVERRIDE;
 
 protected:
 	void sendGUIEvent( EGUI_EVENT_TYPE pEventType, IGUIElement* pElement=0 );

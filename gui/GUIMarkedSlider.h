@@ -22,8 +22,8 @@ public:
 	GUIMarkedSlider(bool  vertical, f32  sliderSize, core::rect<s32>  rectangle, IGUIEnvironment*  environment, IGUIElement*  parent=0, s32  id=-1 );
 	~GUIMarkedSlider();
 
-	virtual bool OnEvent( const SEvent&  event ) _IRR_OVERRIDE_;
-	virtual void draw() _IRR_OVERRIDE_;
+	virtual bool OnEvent( const SEvent&  event );
+	virtual void draw();
 
 	void setMinValue( f32 );
 	f32 getMinValue();
@@ -43,8 +43,8 @@ public:
 	virtual const c8* getTypeName() const { return staticTypeName(); }
 	static const c8* staticTypeName() { return "markedSlider"; }
 
-	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const _IRR_OVERRIDE_;
-	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_;
+	virtual void serializeAttributes(io::IAttributes*, io::SAttributeReadWriteOptions*) const;
+	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
 
 private:
 	void updateImageCache();
