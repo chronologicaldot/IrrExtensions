@@ -336,7 +336,7 @@ public:
 
 		//! Draw on the graph - Polar coord
 	/* Draws on the graph a single point whose coordinates are prepared
-	according to the graph's coordinate system but are polar corrdinates.
+	according to the graph's coordinate system but are polar coordinates.
 	\param point - A radius (X value) and an angle (Y value).
 	You should use this function for standard operations. */
 	void drawOnGraphPolar(
